@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { C, S, mono } from '../theme';
+import { C, S, mono, serif, shadow } from '../theme';
 
 export function Screen({
   children,
@@ -82,17 +82,17 @@ export function Btn({
   kind?: 'primary' | 'ghost' | 'danger';
   disabled?: boolean;
 }) {
-  const bg = kind === 'primary' ? C.accent : kind === 'danger' ? C.neg : 'transparent';
+  const bg = kind === 'primary' ? C.forest : kind === 'danger' ? C.neg : C.white;
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
       style={({ pressed }) => [
         st.btn,
-        { backgroundColor: bg, borderColor: kind === 'ghost' ? C.border : bg, opacity: disabled ? 0.4 : pressed ? 0.7 : 1 },
+        { backgroundColor: bg, borderColor: kind === 'ghost' ? C.border : bg, opacity: disabled ? 0.5 : pressed ? 0.8 : 1 },
       ]}
     >
-      <Text style={[st.btnText, kind === 'ghost' && { color: C.text }]}>{label}</Text>
+      <Text style={[st.btnText, kind === 'ghost' && { color: C.forest }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -110,10 +110,10 @@ export function Chip({
   color?: string;
   sub?: string;
 }) {
-  const border = active ? color ?? C.accent : C.border;
+  const c = color ?? C.forest;
   return (
-    <Pressable onPress={onPress} disabled={!onPress} style={[st.chip, { borderColor: border, backgroundColor: active ? (color ?? C.accent) + '33' : C.card2 }]}>
-      <Text style={[st.chipText, active && { color: C.white }]}>{label}</Text>
+    <Pressable onPress={onPress} disabled={!onPress} style={[st.chip, { borderColor: active ? c : C.border, backgroundColor: active ? c + '22' : C.card2 }]}>
+      <Text style={[st.chipText, active && { color: c, fontWeight: '600' }]}>{label}</Text>
       {sub ? <Text style={st.chipSub}>{sub}</Text> : null}
     </Pressable>
   );
@@ -204,16 +204,17 @@ export function Divider() {
 }
 
 const st = StyleSheet.create({
-  intro: { color: C.dim, fontSize: 15, lineHeight: 22 },
+  intro: { color: '#6B6B6B', fontSize: 15, lineHeight: 22 },
   card: {
     backgroundColor: C.card,
-    borderRadius: 14,
+    borderRadius: 16,
     padding: S.lg,
     gap: S.md,
     borderWidth: 1,
-    borderColor: C.border,
+    borderColor: 'rgba(156,175,152,0.15)',
+    ...shadow,
   },
-  cardTitle: { color: C.text, fontSize: 17, fontWeight: '700' },
+  cardTitle: { color: C.forest, fontSize: 20, fontFamily: serif, fontWeight: '600', letterSpacing: -0.2 },
   p: { color: C.text, fontSize: 15, lineHeight: 22 },
   small: { color: C.dim, fontSize: 13, lineHeight: 18 },
   mono: { color: C.text, fontFamily: mono, fontSize: 13 },
@@ -224,7 +225,7 @@ const st = StyleSheet.create({
     paddingHorizontal: 12,
     alignItems: 'center',
   },
-  formulaText: { color: C.accent2, fontFamily: mono, fontSize: 14, lineHeight: 22, textAlign: 'center' },
+  formulaText: { color: C.forest, fontFamily: mono, fontSize: 14, lineHeight: 22, textAlign: 'center' },
   row: { flexDirection: 'row', gap: S.sm, alignItems: 'center' },
   btn: {
     paddingVertical: 10,
@@ -232,7 +233,7 @@ const st = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
   },
-  btnText: { color: C.white, fontWeight: '600', fontSize: 14 },
+  btnText: { color: C.cream, fontWeight: '600', fontSize: 14 },
   chip: {
     paddingVertical: 6,
     paddingHorizontal: 12,

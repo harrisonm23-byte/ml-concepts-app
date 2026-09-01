@@ -64,18 +64,21 @@ export const pseudoEmbedding = (token: string, d = 8): number[] => {
   return Array.from({ length: d }, () => rnd() * 2 - 1);
 };
 
-// Colour for a signed value in [-1, 1]: red negative, green positive, dark near zero.
+// Colour for a signed value in [-1, 1]: forest positive, terracotta negative, pale near zero.
 export const signedColor = (v: number, max = 1) => {
   const t = clamp(Math.abs(v) / max, 0, 1);
-  const a = 0.15 + 0.85 * t;
-  return v >= 0 ? `rgba(76,195,138,${a.toFixed(2)})` : `rgba(239,107,115,${a.toFixed(2)})`;
+  const a = 0.12 + 0.88 * t;
+  return v >= 0 ? `rgba(30,77,58,${a.toFixed(2)})` : `rgba(139,74,47,${a.toFixed(2)})`;
 };
 
-// Colour for an unsigned activation in [0, 1]: dark to bright blue-white.
+// Text colour that stays legible on top of signedColor / heatColor fills.
+export const onFill = (v: number, max = 1) => (Math.abs(v) / max > 0.55 ? '#FAF7F2' : '#1A1A1A');
+
+// Colour for an unsigned activation in [0, 1]: warm pill grey to deep forest.
 export const heatColor = (v: number) => {
   const t = clamp(v, 0, 1);
-  const r = Math.round(30 + 200 * t);
-  const g = Math.round(40 + 180 * t);
-  const b = Math.round(70 + 185 * t);
+  const r = Math.round(237 + (30 - 237) * t);
+  const g = Math.round(234 + (77 - 234) * t);
+  const b = Math.round(229 + (58 - 229) * t);
   return `rgb(${r},${g},${b})`;
 };

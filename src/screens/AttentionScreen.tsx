@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { Bar, Card, Chip, Formula, LabeledSlider, Legend, P, Row, Screen, Small } from '../components/ui';
 import { C, S, mono } from '../theme';
-import { dot, fmt, signedColor, softmax } from '../math';
+import { dot, fmt, onFill, signedColor, softmax } from '../math';
 
 // Hand-designed 4-dim query/key/value vectors. Feature axes:
 // [thing-ness, container/object-ness, function-word-ness, verb-ness]
@@ -74,7 +74,7 @@ export default function AttentionScreen() {
               key={i}
               x={xOf(i)}
               y={H - 10}
-              fill={i === qi ? C.warn : visible[i] ? C.text : C.faint}
+              fill={i === qi ? C.neg : visible[i] ? C.text : C.faint}
               fontSize={9}
               fontFamily={mono}
               textAnchor="middle"
@@ -84,17 +84,17 @@ export default function AttentionScreen() {
             </SvgText>
           ))}
         </Svg>
-        <Small>Arc thickness = attention weight from <Text style={{ color: C.warn }}>{TOKENS[qi].t}</Text>. In the lecture's example, resolving what "it" refers to is attention at work: its query matches the keys of trophy and suitcase.</Small>
+        <Small>Arc thickness = attention weight from <Text style={{ color: C.neg }}>{TOKENS[qi].t}</Text>. In the lecture's example, resolving what "it" refers to is attention at work: its query matches the keys of trophy and suitcase.</Small>
       </Card>
 
       <Card title="Scores → softmax → weights">
         <Formula>scoreᵢ = q · kᵢ / √dₖ      wᵢ = softmax(score)ᵢ</Formula>
         {TOKENS.map((tk, i) => (
           <Row key={i} style={{ gap: 6 }}>
-            <Text style={[st.tok, !visible[i] && { color: C.faint }, i === qi && { color: C.warn }]}>{tk.t}</Text>
+            <Text style={[st.tok, !visible[i] && { color: C.faint }, i === qi && { color: C.neg }]}>{tk.t}</Text>
             <Text style={st.score}>{visible[i] ? fmt(scores[i]) : 'masked'}</Text>
             <View style={{ flex: 1 }}>
-              <Bar value={weights[i]} color={i === qi ? C.warn : C.accent2} height={10} />
+              <Bar value={weights[i]} color={i === qi ? C.neg : C.accent2} height={10} />
             </View>
             <Text style={st.pct}>{visible[i] ? `${(weights[i] * 100).toFixed(0)}%` : ''}</Text>
           </Row>
@@ -108,7 +108,7 @@ export default function AttentionScreen() {
 
       <Card title="Query, keys, and the mixed output">
         <P dim>Each token carries a query (what am I looking for?), a key (what do I contain?), and a value (what do I pass on). Axes here are hand-made features; in a real model they are learned and there are 64–128 of them per head.</P>
-        <VecRow label={`q (${TOKENS[qi].t})`} v={q} color={C.warn} />
+        <VecRow label={`q (${TOKENS[qi].t})`} v={q} color={C.neg} />
         {TOKENS.filter((_, i) => visible[i] && weights[i] > 0.04).map((tk, j) => {
           const i = TOKENS.indexOf(tk);
           return <VecRow key={i} label={`k (${tk.t})`} v={tk.k} right={`w=${fmt(weights[i])}`} />;
@@ -135,7 +135,7 @@ function VecRow({ label, v, color = C.text, right }: { label: string; v: number[
       <Text style={[st.tok, { color, width: 110 }]} numberOfLines={1}>{label}</Text>
       {v.map((x, k) => (
         <View key={k} style={[st.cell, { backgroundColor: signedColor(x, 1.2) }]}>
-          <Text style={st.cellText}>{x.toFixed(2)}</Text>
+          <Text style={[st.cellText, { color: onFill(x, 1.2) }]}>{x.toFixed(2)}</Text>
         </View>
       ))}
       {right ? <Text style={st.pct}>{right}</Text> : null}

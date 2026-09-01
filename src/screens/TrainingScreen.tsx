@@ -62,7 +62,7 @@ export default function TrainingScreen() {
       <Row style={{ gap: 6 }}>
         {PHASES.map((p, i) => (
           <View key={p} style={[st.phase, i === phase && st.phaseActive]}>
-            <Text style={[st.phaseText, i === phase && { color: C.white }]}>{i + 1}. {p}</Text>
+            <Text style={[st.phaseText, i === phase && { color: C.cream }]}>{i + 1}. {p}</Text>
           </View>
         ))}
       </Row>
@@ -189,8 +189,8 @@ function CECurve({ q }: { q: number }) {
 
 function CodeLine({ text, hot, note }: { text: string; hot: boolean; note: string }) {
   return (
-    <Row style={{ justifyContent: 'space-between', backgroundColor: hot ? C.accent + '33' : 'transparent', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 }}>
-      <Text style={[st.code, hot && { color: C.white }]}>{text}</Text>
+    <Row style={{ justifyContent: 'space-between', backgroundColor: hot ? C.forest + '22' : 'transparent', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4 }}>
+      <Text style={[st.code, hot && { color: C.forest, fontWeight: '700' }]}>{text}</Text>
       <Text style={st.note}># {note}</Text>
     </Row>
   );
@@ -198,7 +198,7 @@ function CodeLine({ text, hot, note }: { text: string; hot: boolean; note: strin
 
 const st = StyleSheet.create({
   phase: { flex: 1, paddingVertical: 8, borderRadius: 8, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, alignItems: 'center' },
-  phaseActive: { backgroundColor: C.accent, borderColor: C.accent },
+  phaseActive: { backgroundColor: C.forest, borderColor: C.forest },
   phaseText: { color: C.dim, fontSize: 13, fontWeight: '600' },
   res: { fontFamily: mono, fontSize: 12 },
   k: { color: C.text, fontFamily: mono, fontSize: 12 },

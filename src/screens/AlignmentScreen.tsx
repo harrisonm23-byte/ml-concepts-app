@@ -31,7 +31,7 @@ export default function AlignmentScreen() {
             <Chip key={s} label={`${i + 1}. ${s}`} active={i === stage} onPress={() => setStage(i)} />
           ))}
         </Row>
-        <View style={st.bubbleUser}><Text style={st.bubbleText}>{PROMPT}</Text></View>
+        <View style={st.bubbleUser}><Text style={[st.bubbleText, { color: C.cream }]}>{PROMPT}</Text></View>
         <View style={[st.bubbleModel, stage === 0 && { borderColor: C.neg }]}><Text style={st.bubbleText}>{RESPONSES[stage]}</Text></View>
         {stage === 0 && <Small>Pre-training: internet-scale next-token prediction with cross-entropy loss. Essentially all knowledge and capability comes from here. But it is a text continuer, with no persona, no refusals, no assistant format.</Small>}
         {stage === 1 && <Small>Supervised fine-tuning: continue training on human-written demonstrations of good assistant behaviour (question, helpful answer). Same loop as pre-training, different data. It teaches the format of being an assistant.</Small>}
@@ -105,7 +105,7 @@ function Dist({ label, p }: { label: string; p: number[] }) {
 }
 
 const st = StyleSheet.create({
-  bubbleUser: { alignSelf: 'flex-end', backgroundColor: C.accent, borderRadius: 14, padding: 10, maxWidth: '85%' },
+  bubbleUser: { alignSelf: 'flex-end', backgroundColor: C.forest, borderRadius: 14, padding: 10, maxWidth: '85%' },
   bubbleModel: { alignSelf: 'flex-start', backgroundColor: C.card2, borderRadius: 14, padding: 10, maxWidth: '90%', borderWidth: 1, borderColor: C.border },
   bubbleText: { color: C.text, fontSize: 14, lineHeight: 20 },
   layer: { borderWidth: 1, borderRadius: 10, padding: 10, gap: 4 },

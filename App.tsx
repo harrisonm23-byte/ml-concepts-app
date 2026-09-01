@@ -1,9 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { C } from './src/theme';
+import { C, serif } from './src/theme';
 import type { RootStackParamList } from './src/nav';
 import HomeScreen from './src/screens/HomeScreen';
 import LoopScreen from './src/screens/LoopScreen';
@@ -31,8 +31,8 @@ const linking = {
 };
 
 const theme = {
-  ...DarkTheme,
-  colors: { ...DarkTheme.colors, background: C.bg, card: C.card, text: C.text, primary: C.accent, border: C.border },
+  ...DefaultTheme,
+  colors: { ...DefaultTheme.colors, background: C.bg, card: C.card, text: C.text, primary: C.forest, border: C.border },
 };
 
 export default function App() {
@@ -42,9 +42,9 @@ export default function App() {
         <StatusBar style="light" />
         <Stack.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: C.card },
-            headerTintColor: C.text,
-            headerTitleStyle: { fontWeight: '700' },
+            headerStyle: { backgroundColor: C.forest },
+            headerTintColor: C.cream,
+            headerTitleStyle: { fontFamily: serif, fontWeight: '600', fontSize: 20, color: C.cream },
             headerBackTitle: 'Back',
             contentStyle: { backgroundColor: C.bg },
           }}

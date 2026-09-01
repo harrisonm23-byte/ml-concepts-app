@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
 import { C, S, mono } from '../theme';
 import { VOCAB, nextLogits, tokenId, tokenize } from '../toyLM';
-import { argmax, entropy, fmt, pseudoEmbedding, sampleIndex, signedColor, softmax } from '../math';
+import { argmax, entropy, fmt, onFill, pseudoEmbedding, sampleIndex, signedColor, softmax } from '../math';
 
 const STAGES = [
   { label: 'Tokenize', mov: 'II' },
@@ -83,7 +83,7 @@ export default function LoopScreen() {
           ))}
         </Text>
         <Row style={{ justifyContent: 'space-between' }}>
-          <Small>prompt · <Text style={{ color: C.pos }}>generated</Text> · <Text style={{ color: C.warn }}>just appended</Text></Small>
+          <Small>prompt · <Text style={{ color: C.accent2 }}>generated</Text> · <Text style={{ color: C.neg }}>just appended</Text></Small>
           {logP.n > 0 ? <Small>log P(generated) = {fmt(logP.sum)}</Small> : null}
         </Row>
       </Card>
@@ -283,7 +283,7 @@ function VecCells({ v }: { v: number[] }) {
     <Row style={{ gap: 3 }}>
       {v.map((x, k) => (
         <View key={k} style={{ width: 22, height: 22, borderRadius: 4, backgroundColor: signedColor(x), alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: C.white, fontSize: 8, fontFamily: mono }}>{x.toFixed(1)}</Text>
+          <Text style={{ color: onFill(x), fontSize: 8, fontFamily: mono }}>{x.toFixed(1)}</Text>
         </View>
       ))}
     </Row>
@@ -293,8 +293,8 @@ function VecCells({ v }: { v: number[] }) {
 const st = StyleSheet.create({
   seq: { color: C.text, fontFamily: mono, fontSize: 15, lineHeight: 24 },
   seqPrompt: { color: C.text },
-  seqGen: { color: C.pos },
-  seqNew: { color: C.warn, fontWeight: '700' },
+  seqGen: { color: C.accent2 },
+  seqNew: { color: C.neg, fontWeight: '700' },
   stage: {
     paddingVertical: 6,
     paddingHorizontal: 10,
@@ -306,7 +306,7 @@ const st = StyleSheet.create({
     gap: 6,
     alignItems: 'center',
   },
-  stageActive: { backgroundColor: C.accent, borderColor: C.accent },
+  stageActive: { backgroundColor: C.forest, borderColor: C.forest },
   stageNum: { color: C.accent, fontFamily: mono, fontSize: 12, fontWeight: '700' },
   stageLabel: { color: C.dim, fontSize: 12 },
   tokLabel: { color: C.text, fontFamily: mono, fontSize: 12, width: 64 },

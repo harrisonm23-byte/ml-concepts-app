@@ -67,7 +67,7 @@ export default function CrossbarScreen() {
               {row.map((v, c) => {
                 const wt = w[r][c];
                 const inA = wt !== 0;
-                const bg = mode === 'draw' ? (v ? C.white : C.card2) : wt > 0 ? C.pos : wt < 0 ? C.neg : C.card2;
+                const bg = mode === 'draw' ? (v ? C.ink : C.card2) : wt > 0 ? C.pos : wt < 0 ? C.neg : C.card2;
                 return (
                   <Pressable
                     key={c}
@@ -78,12 +78,12 @@ export default function CrossbarScreen() {
                       borderRadius: 4,
                       backgroundColor: bg,
                       borderWidth: inA ? 2 : 1,
-                      borderColor: inA ? (wt > 0 ? C.pos : C.neg) : C.border,
+                      borderColor: inA ? (wt > 0 ? C.warn : C.neg) : C.border,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}
                   >
-                    {mode === 'weights' ? <Text style={{ color: C.white, fontFamily: mono, fontSize: 11 }}>{wt > 0 ? '+1' : wt < 0 ? '−1' : '0'}</Text> : v && inA ? <Text style={{ color: C.bg, fontFamily: mono, fontSize: 10 }}>×{wt}</Text> : null}
+                    {mode === 'weights' ? <Text style={{ color: wt === 0 ? C.dim : C.cream, fontFamily: mono, fontSize: 11 }}>{wt > 0 ? '+1' : wt < 0 ? '−1' : '0'}</Text> : v && inA ? <Text style={{ color: C.bg, fontFamily: mono, fontSize: 10 }}>×{wt}</Text> : null}
                   </Pressable>
                 );
               })}

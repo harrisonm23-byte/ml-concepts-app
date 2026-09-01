@@ -143,7 +143,7 @@ function sub(i: number) {
 function Stat({ n, label }: { n: number; label: string }) {
   return (
     <View style={{ alignItems: 'center' }}>
-      <Text style={{ color: C.text, fontSize: 22, fontWeight: '700', fontFamily: mono }}>{n}</Text>
+      <Text style={{ color: C.forest, fontSize: 24, fontWeight: '600', fontFamily: 'Georgia' }}>{n}</Text>
       <Small>{label}</Small>
     </View>
   );
