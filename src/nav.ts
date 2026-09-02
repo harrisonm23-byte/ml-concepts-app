@@ -10,36 +10,36 @@ import ForwardPassScreen from './screens/ForwardPassScreen';
 import GradientScreen from './screens/GradientScreen';
 import TrainingScreen from './screens/TrainingScreen';
 
-export type ConceptEntry = { key: string; title: string; definition: string; component: ComponentType };
+export type ConceptEntry = { key: string; title: string; definition: string; reading: string; component: ComponentType };
 export type Section = { lecture: string; theme: string; items: ConceptEntry[] };
 
 export const SECTIONS: Section[] = [
   {
     lecture: 'Lecture 2',
-    theme: 'Language models',
+    theme: 'From Probability to Assistant: How Language Models Work and How They Learn to Help',
     items: [
-      { key: 'loop', title: 'Autoregressive generation', definition: 'Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.', component: LoopScreen },
-      { key: 'tokens', title: 'Tokenization and embeddings', definition: 'Text → token IDs → one-hot vectors → learned vectors in ℝᵈ.', component: TokensScreen },
-      { key: 'attention', title: 'Attention', definition: 'softmax(QKᵀ/√dₖ)V: each token weights the earlier tokens by learned relevance.', component: AttentionScreen },
-      { key: 'softmax', title: 'Softmax, temperature, and sampling', definition: 'Logits → a probability distribution → one drawn token.', component: SoftmaxScreen },
-      { key: 'alignment', title: 'Entropy, cross-entropy, and alignment', definition: 'The training loss, and the pre-training → SFT → RLHF pipeline.', component: AlignmentScreen },
+      { key: 'loop', reading: 'I. The Model Is a Probability Engine', title: 'Autoregressive generation', definition: 'Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.', component: LoopScreen },
+      { key: 'tokens', reading: 'II. How Text Becomes Math', title: 'Tokenization and embeddings', definition: 'Text → token IDs → one-hot vectors → learned vectors in ℝᵈ.', component: TokensScreen },
+      { key: 'attention', reading: 'II. How Text Becomes Math (the transformer)', title: 'Attention', definition: 'softmax(QKᵀ/√dₖ)V: each token weights the earlier tokens by learned relevance.', component: AttentionScreen },
+      { key: 'softmax', reading: 'III. How Math Becomes Text Again', title: 'Softmax, temperature, and sampling', definition: 'Logits → a probability distribution → one drawn token.', component: SoftmaxScreen },
+      { key: 'alignment', reading: 'IV. From Raw Predictor to Assistant', title: 'Entropy, cross-entropy, and alignment', definition: 'The training loss, and the pre-training → SFT → RLHF pipeline.', component: AlignmentScreen },
     ],
   },
   {
     lecture: 'Lecture 3',
-    theme: 'Neural networks',
+    theme: 'Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network',
     items: [
-      { key: 'neuron', title: 'The neuron', definition: 'a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.', component: NeuronScreen },
-      { key: 'crossbar', title: 'Feature detectors', definition: 'Why a neuron tuned to the crossbar of a 7 fires on a 5 but not a 6.', component: CrossbarScreen },
-      { key: 'forward', title: 'The forward pass', definition: 'a⁽ᴸ⁾ = σ(W⁽ᴸ⁾a⁽ᴸ⁻¹⁾ + b⁽ᴸ⁾), layer by layer, in a multilayer perceptron.', component: ForwardPassScreen },
+      { key: 'neuron', reading: 'V. Anatomy of a Neural Network', title: 'The neuron', definition: 'a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.', component: NeuronScreen },
+      { key: 'crossbar', reading: 'VI. The Forward Pass (conceptual check)', title: 'Feature detectors', definition: 'Why a neuron tuned to the crossbar of a 7 fires on a 5 but not a 6.', component: CrossbarScreen },
+      { key: 'forward', reading: 'VI. The Forward Pass', title: 'The forward pass', definition: 'a⁽ᴸ⁾ = σ(W⁽ᴸ⁾a⁽ᴸ⁻¹⁾ + b⁽ᴸ⁾), layer by layer, in a multilayer perceptron.', component: ForwardPassScreen },
     ],
   },
   {
     lecture: 'Lecture 4',
-    theme: 'Training',
+    theme: 'Predict, Measure, Update: How Neural Networks Learn',
     items: [
-      { key: 'gradient', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },
-      { key: 'training', title: 'Loss functions and the training loop', definition: 'Predict, measure (MSE or cross-entropy), update.', component: TrainingScreen },
+      { key: 'gradient', reading: 'III. The Update Step: Gradient Descent', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },
+      { key: 'training', reading: 'II. The Loss Function · V. The Loop in Code', title: 'Loss functions and the training loop', definition: 'Predict, measure (MSE or cross-entropy), update.', component: TrainingScreen },
     ],
   },
 ];

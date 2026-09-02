@@ -5,8 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import { C, S, serif } from '../theme';
 import { SECTIONS } from '../nav';
 
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-
 function initialOpen(): Set<string> {
   // On the web, ?open=key expands a section directly (handy for sharing a link).
   if (Platform.OS === 'web' && typeof window !== 'undefined') {
@@ -24,7 +22,6 @@ export default function HomeScreen() {
       n.has(k) ? n.delete(k) : n.add(k);
       return n;
     });
-  let idx = 0;
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: C.ink }} edges={['top']}>
       <StatusBar style="light" />
@@ -38,17 +35,18 @@ export default function HomeScreen() {
         </Text>
         {SECTIONS.map((sec) => (
           <View key={sec.lecture} style={{ marginTop: S.xl }}>
-            <Text style={st.sectionTitle}>{sec.lecture}. {sec.theme}</Text>
-            <View style={st.rule} />
+            <View style={st.sectionBox}>
+              <Text style={st.eyebrow}>{sec.lecture.toUpperCase()}</Text>
+              <Text style={st.sectionTitle}>{sec.theme}</Text>
+            </View>
             {sec.items.map((it) => {
-              const n = ROMAN[idx++];
               const isOpen = open.has(it.key);
               const Body = it.component;
               return (
                 <View key={it.key} style={st.item}>
                   <Pressable onPress={() => toggle(it.key)} style={({ pressed }) => [st.itemHeader, pressed && { opacity: 0.7 }]}>
-                    <Text style={st.numeral}>{n}.</Text>
                     <View style={{ flex: 1, gap: 2 }}>
+                      <Text style={st.reading}>{it.reading}</Text>
                       <Text style={st.itemTitle}>{it.title}</Text>
                       <Text style={st.definition}>{it.definition}</Text>
                     </View>
@@ -74,11 +72,12 @@ const st = StyleSheet.create({
   headerTitle: { color: C.white, fontFamily: serif, fontSize: 24, fontWeight: '700' },
   headerSub: { color: '#C7CBE0', fontFamily: serif, fontSize: 14, fontStyle: 'italic' },
   abstract: { color: C.text, fontFamily: serif, fontSize: 16, lineHeight: 24 },
-  sectionTitle: { color: C.text, fontFamily: serif, fontSize: 22, fontWeight: '700' },
-  rule: { height: 1, backgroundColor: C.text, marginTop: 6, marginBottom: S.sm },
+  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 6, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
+  eyebrow: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 1.5 },
+  sectionTitle: { color: C.text, fontFamily: serif, fontSize: 20, lineHeight: 27, fontWeight: '700' },
+  reading: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 0.5 },
   item: { borderBottomWidth: 1, borderBottomColor: C.border },
   itemHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: S.md, paddingVertical: S.md },
-  numeral: { color: C.text, fontFamily: serif, fontSize: 17, fontWeight: '700', width: 30 },
   itemTitle: { color: C.text, fontFamily: serif, fontSize: 18, fontWeight: '700' },
   definition: { color: C.dim, fontFamily: serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic' },
   chevron: { color: C.accent, fontSize: 18, paddingTop: 2 },
