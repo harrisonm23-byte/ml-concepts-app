@@ -82,3 +82,33 @@ export const heatColor = (v: number) => {
   const b = Math.round(229 + (58 - 229) * t);
   return `rgb(${r},${g},${b})`;
 };
+
+export const norm = (a: number[]) => Math.sqrt(dot(a, a));
+export const cosine = (a: number[], b: number[]) => dot(a, b) / (norm(a) * norm(b) || 1);
+export const sub = (a: number[], b: number[]) => a.map((v, i) => v - b[i]);
+export const addv = (a: number[], b: number[]) => a.map((v, i) => v + b[i]);
+
+// Principal component analysis by power iteration with deflation.
+// Returns the top-k unit eigenvectors of the covariance of `rows` (centred), plus the mean.
+export function pca(rows: number[][], k = 3): { comps: number[][]; mean: number[]; variance: number[] } {
+  const d = rows[0].length, n = rows.length;
+  const mean = Array.from({ length: d }, (_, j) => rows.reduce((s, r) => s + r[j], 0) / n);
+  const X = rows.map((r) => sub(r, mean));
+  let cov = Array.from({ length: d }, (_, i) => Array.from({ length: d }, (_, j) => X.reduce((s, r) => s + r[i] * r[j], 0) / n));
+  const comps: number[][] = [], variance: number[] = [];
+  for (let c = 0; c < k; c++) {
+    let v = Array.from({ length: d }, (_, i) => Math.cos(i + c * 1.7) + 0.3);
+    let lambda = 0;
+    for (let it = 0; it < 200; it++) {
+      const w = cov.map((row) => dot(row, v));
+      lambda = norm(w);
+      if (lambda < 1e-12) break;
+      v = w.map((x) => x / lambda);
+    }
+    comps.push(v);
+    variance.push(lambda);
+    cov = cov.map((row, i) => row.map((x, j) => x - lambda * v[i] * v[j]));
+  }
+  return { comps, mean, variance };
+}
+export const project = (v: number[], mean: number[], comps: number[][]) => comps.map((c) => dot(sub(v, mean), c));

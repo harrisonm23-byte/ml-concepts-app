@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
-import { Card, Chip, Formula, P, Row, Screen, Small } from '../components/ui';
+import VectorSpace3D from '../components/VectorSpace3D';
+import { addv, cosine, pca, project, sub as vsub, mulberry32 } from '../math';
+import { Bar, Card, Chip, Formula, P, Row, Screen, Small } from '../components/ui';
 import { C, S, mono } from '../theme';
 import { fmt, hashStr } from '../math';
 
@@ -37,15 +38,44 @@ export function toyTokenize(text: string): { text: string; id: number; wordStart
   return toks;
 }
 
-// Hand-placed 2-D embedding map. Coordinates in [0,1].
-const WORDS: Record<string, [number, number]> = {
-  man: [0.28, 0.30], woman: [0.28, 0.66], king: [0.62, 0.30], queen: [0.62, 0.66],
-  prince: [0.74, 0.20], princess: [0.74, 0.76],
-  cat: [0.10, 0.90], kitten: [0.19, 0.95], dog: [0.06, 0.78], puppy: [0.15, 0.83],
-  car: [0.86, 0.92], truck: [0.80, 0.97], carburetor: [0.95, 0.96],
+// Toy 8-dimensional embeddings. Axes are interpretable here for teaching
+// (royal, male, female, human, animal, young, vehicle, machine) plus a little
+// deterministic noise; in a real model the axes are learned and uninterpretable.
+const FEATS = ['royal', 'male', 'female', 'human', 'animal', 'young', 'vehicle', 'machine'];
+const RAW: Record<string, number[]> = {
+  king:       [1, 1, 0, 1, 0, 0, 0, 0],
+  queen:      [1, 0, 1, 1, 0, 0, 0, 0],
+  man:        [0, 1, 0, 1, 0, 0, 0, 0],
+  woman:      [0, 0, 1, 1, 0, 0, 0, 0],
+  prince:     [1, 1, 0, 1, 0, 1, 0, 0],
+  princess:   [1, 0, 1, 1, 0, 1, 0, 0],
+  boy:        [0, 1, 0, 1, 0, 1, 0, 0],
+  girl:       [0, 0, 1, 1, 0, 1, 0, 0],
+  cat:        [0, 0, 0, 0, 1, 0, 0, 0],
+  kitten:     [0, 0, 0, 0, 1, 1, 0, 0],
+  dog:        [0, 0, 0, 0, 1, 0, 0, 0.1],
+  puppy:      [0, 0, 0, 0, 1, 1, 0, 0.1],
+  car:        [0, 0, 0, 0, 0, 0, 1, 0.6],
+  truck:      [0, 0, 0, 0, 0, 0, 1, 0.7],
+  carburetor: [0, 0, 0, 0, 0, 0, 0.4, 1],
 };
+const WORDS: Record<string, number[]> = Object.fromEntries(
+  Object.entries(RAW).map(([w, v]) => {
+    const rnd = mulberry32(w.length * 131 + w.charCodeAt(0));
+    return [w, v.map((x) => x + (rnd() - 0.5) * 0.12)];
+  }),
+);
 const NAMES = Object.keys(WORDS);
-const dist = (a: string, b: string) => Math.hypot(WORDS[a][0] - WORDS[b][0], WORDS[a][1] - WORDS[b][1]);
+const PCA = pca(NAMES.map((n) => WORDS[n]), 3);
+const P3 = (v: number[]) => project(v, PCA.mean, PCA.comps) as [number, number, number];
+const explained = PCA.variance.reduce((a, b) => a + b, 0) / (() => {
+  const rows = NAMES.map((n) => WORDS[n]);
+  const d = rows[0].length;
+  const mean = PCA.mean;
+  let tot = 0;
+  for (let j = 0; j < d; j++) tot += rows.reduce((s, r) => s + (r[j] - mean[j]) ** 2, 0) / rows.length;
+  return tot;
+})();
 
 export default function TokensScreen() {
   const [text, setText] = useState("The transformer unbelievably counts strawberries.");
@@ -57,12 +87,18 @@ export default function TokensScreen() {
   const chars = text.replace(/\s/g, '').length;
   const words = text.trim().split(/\s+/).filter(Boolean).length;
 
-  const W = 320, H = 260;
-  const px = (n: string) => 20 + WORDS[n][0] * (W - 40);
-  const py = (n: string) => 20 + WORDS[n][1] * (H - 40);
-  const nearest = NAMES.filter((n) => n !== sel).sort((a, b) => dist(sel, a) - dist(sel, b)).slice(0, 3);
-  // king - man + woman: draw arrow man→king, then same arrow from woman.
-  const dx = px('king') - px('man'), dy = py('king') - py('man');
+  const sims = NAMES.filter((n) => n !== sel).map((n) => ({ n, c: cosine(WORDS[sel], WORDS[n]) })).sort((a, b) => b.c - a.c);
+  const nearest = sims.slice(0, 3).map((x) => x.n);
+  // king − man + woman, computed in the full 8-D space, then projected like everything else.
+  const analogyVec = addv(vsub(WORDS.king, WORDS.man), WORDS.woman);
+  const analogyBest = NAMES.map((n) => ({ n, c: cosine(analogyVec, WORDS[n]) })).sort((a, b) => b.c - a.c)[0];
+  const items = NAMES.map((n) => ({ name: n, p: P3(WORDS[n]), color: n === sel ? C.forest : nearest.includes(n) ? C.accent2 : C.dim }));
+  const arrows = analogy
+    ? [
+        { from: P3(WORDS.man), to: P3(WORDS.king), color: C.warn, label: 'king − man' },
+        { from: P3(WORDS.woman), to: P3(analogyVec), color: C.neg, dashed: true, label: '+ woman' },
+      ]
+    : [];
 
   return (
     <Screen intro="Neural networks compute with numbers, not words. Three steps turn text into vectors: tokenize, encode, and embed. The last one is where meaning becomes geometry.">
@@ -96,34 +132,27 @@ export default function TokensScreen() {
       </Card>
 
       <Card title="3. Embeddings (the solution)">
-        <P>Each token is mapped to a learned point in a continuous space. Tap a word to see its nearest neighbours.</P>
-        <Svg width={W} height={H} style={{ alignSelf: 'center' }}>
-          {analogy && (
-            <>
-              <Line x1={px('man')} y1={py('man')} x2={px('king')} y2={py('king')} stroke={C.warn} strokeWidth={2} />
-              <Line x1={px('woman')} y1={py('woman')} x2={px('woman') + dx} y2={py('woman') + dy} stroke={C.warn} strokeWidth={2} strokeDasharray="5,4" />
-              <Circle cx={px('woman') + dx} cy={py('woman') + dy} r={9} fill="none" stroke={C.warn} strokeWidth={2} />
-            </>
-          )}
-          {nearest.map((n) => (
-            <Line key={n} x1={px(sel)} y1={py(sel)} x2={px(n)} y2={py(n)} stroke={C.accent} strokeWidth={1} strokeDasharray="3,3" />
-          ))}
-          {NAMES.map((n) => (
-            <React.Fragment key={n}>
-              <Circle cx={px(n)} cy={py(n)} r={n === sel ? 7 : 5} fill={n === sel ? C.accent : nearest.includes(n) ? C.accent2 : C.dim} onPress={() => setSel(n)} />
-              <SvgText x={px(n) + 8} y={py(n) - 6} fill={C.text} fontSize={11} fontFamily={mono} onPress={() => setSel(n)}>{n}</SvgText>
-            </React.Fragment>
-          ))}
-        </Svg>
+        <P>Each token is a vector: an arrow from the origin in a d-dimensional space. Here d = 8 so you can read every coordinate. To draw it we project onto the three principal components (PCA), the same thing the TensorFlow Embedding Projector does. Drag to rotate.</P>
+        <VectorSpace3D items={items} arrows={arrows} selected={sel} onSelect={setSel} />
+        <Small>Depth cues: nearer points are larger and darker. The three axes PC1–PC3 capture {(explained * 100).toFixed(0)}% of the variance of these 15 vectors; the remaining {(100 - explained * 100).toFixed(0)}% is invisible in any 3-D picture. Nothing above three dimensions can be drawn; you visualize three and say "eight" to yourself loudly.</Small>
         <Row wrap>
           {NAMES.map((n) => <Chip key={n} label={n} active={n === sel} onPress={() => setSel(n)} />)}
         </Row>
-        <Small>Nearest to <Text style={{ color: C.accent }}>{sel}</Text>: {nearest.map((n) => `${n} (${fmt(dist(sel, n))})`).join(', ')}</Small>
+        <Formula>{`v_${sel} = [${WORDS[sel].map((x) => x.toFixed(2)).join(', ')}]`}</Formula>
+        <Row wrap style={{ gap: 4 }}>
+          {FEATS.map((f) => <Small key={f} style={{ fontFamily: 'Menlo', fontSize: 10 }}>{f}</Small>)}
+        </Row>
+        <P dim>Relatedness is measured in the full space, not the picture. The standard measure is cosine similarity, the cosine of the angle between two arrows:</P>
+        <Formula>cos θ = (u · v) / (‖u‖ ‖v‖)</Formula>
+        {sims.slice(0, 5).map((x) => (
+          <Bar key={x.n} label={x.n} value={Math.max(0, x.c)} color={nearest.includes(x.n) ? C.accent2 : C.dim} right={x.c.toFixed(3)} />
+        ))}
+        <Small>1 means the same direction, 0 means orthogonal (like one-hot vectors), −1 means opposite. Two arrows can look close in a projection and be far apart in the full space, which is why tools compute neighbours from the real vectors and only draw the projection.</Small>
         <Row>
           <Chip label={analogy ? 'hide king − man + woman' : 'show king − man + woman'} active={analogy} color={C.warn} onPress={() => setAnalogy(!analogy)} />
         </Row>
         <Formula>v_king − v_man + v_woman ≈ v_queen</Formula>
-        <Small>The solid arrow is the displacement man → king. Copy that same arrow onto woman (dashed) and it lands on queen: one direction in the space encodes royalty, independent of gender. Nobody told the model this; it fell out of predicting the next token.</Small>
+        <Small>Vector arithmetic, done on the 8-D vectors: the solid arrow is the displacement man → king (it isolates the "royal" direction); adding it to woman lands at the dashed arrowhead. Nearest real token to that point: <Text style={{ color: C.forest, fontWeight: '600' }}>{analogyBest.n}</Text> (cosine {analogyBest.c.toFixed(3)}). In the real model no one labels an axis "royal"; it falls out of next-token prediction.</Small>
       </Card>
 
       <Card title="4. Positional embeddings (order)">

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
 import { C, S, mono } from '../theme';
 import { VOCAB, nextLogits, tokenId, tokenize } from '../toyLM';
@@ -237,6 +238,8 @@ function SoftmaxStage({ probs, top, T, setT }: { probs: number[]; top: number[];
         <Small>Σ P = {fmt(sum, 3)}</Small>
         <Small>entropy H = {fmt(entropy(probs))} nats</Small>
       </Row>
+      <FullPMF probs={probs} />
+      <Small>The whole distribution: all V = {VOCAB.length} probabilities, sorted, on a log scale. The head is the handful of plausible continuations; the long tail is every other token, each unlikely but never zero. Sampling occasionally lands in the tail, which is where glitches come from and what top-k and top-p sampling cut off.</Small>
     </View>
   );
 }
@@ -275,6 +278,28 @@ function AppendStage({ tokens, probs }: { tokens: string[]; probs: number[] }) {
       </Text>
       <Small>Context length {tokens.length} tokens. Real models stop when they sample an end-of-sequence token or hit the context window.</Small>
     </View>
+  );
+}
+
+function FullPMF({ probs }: { probs: number[] }) {
+  const W = 320, H = 110, pad = 26;
+  const sorted = [...probs].sort((a, b) => b - a);
+  const lo = Math.log10(Math.max(1e-4, sorted[sorted.length - 1])), hi = 0;
+  const bw = (W - pad - 6) / sorted.length;
+  const Y = (p: number) => H - 16 - ((Math.log10(Math.max(1e-4, p)) - lo) / (hi - lo)) * (H - 26);
+  return (
+    <Svg width={W} height={H} style={{ alignSelf: 'center' }}>
+      {[1, 0.1, 0.01].map((t) => (
+        <React.Fragment key={t}>
+          <Line x1={pad} y1={Y(t)} x2={W - 6} y2={Y(t)} stroke={C.border} />
+          <SvgText x={pad - 3} y={Y(t) + 3} fill={C.dim} fontSize={8} fontFamily={mono} textAnchor="end">{t}</SvgText>
+        </React.Fragment>
+      ))}
+      {sorted.map((p, i) => (
+        <Rect key={i} x={pad + i * bw} y={Y(p)} width={Math.max(1, bw - 1)} height={H - 16 - Y(p)} fill={i < TOP_K ? C.forest : C.accent2} />
+      ))}
+      <SvgText x={W - 6} y={H - 4} fill={C.dim} fontSize={8} fontFamily={mono} textAnchor="end">tokens sorted by P (log scale)</SvgText>
+    </Svg>
   );
 }
 
