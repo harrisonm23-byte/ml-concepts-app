@@ -4,6 +4,8 @@ import Svg, { Circle, Line, Path, Polyline, Text as SvgText } from 'react-native
 import { Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
 import { C, S, mono } from '../theme';
 import { clamp, fmt } from '../math';
+import HtmlView from '../components/HtmlView';
+import { GD_HTML } from '../gd3d/sceneHtml';
 
 // A loss landscape with a shallow local minimum on the right and the true valley on the left.
 const L = (t: number) => 0.05 * t ** 4 - 0.5 * t ** 2 + 0.15 * t + 1.6;
@@ -52,7 +54,13 @@ export default function GradientScreen() {
 
   return (
     <Screen intro="You are on a mountain in dense fog. You cannot see the landscape, only feel the slope under your feet, and measuring it is expensive. So: take a reading, step downhill, repeat. That is gradient descent, and the fog is why nobody ever sees the whole loss surface.">
-      <Card>
+      <Card title="The loss landscape in two weights">
+        <P dim>Height is the loss L(w₁, w₂); the two horizontal axes are the weights. Higher means a worse prediction, lower a better one. The sphere is the current weights. Take steps, or tap anywhere on the terrain to move the weights there and step from that point. Switch to the ravine to see why the zigzag motivates momentum and Adam.</P>
+        <HtmlView html={GD_HTML} height={760} />
+        <Small>Requires an internet connection the first time, to fetch the 3-D engine.</Small>
+      </Card>
+
+      <Card title="One weight: the loss as a curve">
         <Landscape theta={theta} path={path} lr={lr} g={lastStep?.g ?? dL(theta)} />
         <Row style={{ justifyContent: 'space-between' }}>
           <Btn label="Step" onPress={() => { setAuto(false); step(); }} />
