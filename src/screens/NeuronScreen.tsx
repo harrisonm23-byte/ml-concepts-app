@@ -31,7 +31,7 @@ export default function NeuronScreen() {
         <Small>Edge thickness is |w|: how much this neuron cares about that input. Fill brightness is the activation.</Small>
       </Card>
 
-      <Card title="The computation, term by term">
+      <Card title="The pre-activation z">
         <Formula>zᵢ = Σⱼ wᵢⱼ aⱼ + bᵢ        aᵢ = σ(zᵢ)</Formula>
         {a.map((ai, j) => (
           <Row key={j} style={{ justifyContent: 'space-between' }}>
@@ -57,25 +57,25 @@ export default function NeuronScreen() {
         </Row>
       </Card>
 
-      <Card title="Inputs (activations of the previous layer)">
+      <Card title="Inputs">
         {a.map((ai, j) => (
           <LabeledSlider key={j} label={`a${sub(j + 1)}`} value={ai} min={0} max={1} onChange={(v) => setAi(j, v)} color={heatColor(0.7)} />
         ))}
       </Card>
 
-      <Card title="Weights (one per edge)">
+      <Card title="Weights">
         {w.map((wi, j) => (
           <LabeledSlider key={j} label={`w${sub(j + 1)}`} value={wi} min={-2} max={2} onChange={(v) => setWi(j, v)} color={wi >= 0 ? C.pos : C.neg} />
         ))}
         <Small>A weight lives on an edge, one for every pair of neurons in adjacent layers. Its magnitude is the strength of the connection. Set a weight to 0 and that input stops mattering, whatever its activation: 0 × anything is 0.</Small>
       </Card>
 
-      <Card title="Bias (one per neuron)">
+      <Card title="Bias">
         <LabeledSlider label="b" value={b} min={-2} max={2} onChange={setB} color={C.warn} />
         <Small>Two ways to see it. It is the +b in y = mx + b: an additive offset that gives the function flexibility. Or biologically: a neuron fires only when its input crosses a threshold, and w·a + b {'>'} 0 is w·a {'>'} −b, so the bias sets how hard the neuron is to turn on. Push b negative and watch how much input it takes to fire.</Small>
       </Card>
 
-      <Card title="Activation function (the nonlinearity)">
+      <Card title="Activation function">
         <Row wrap>
           {(Object.keys(ACT) as Act[]).map((k) => (
             <Chip key={k} label={ACT[k].label} active={k === act} onPress={() => setAct(k)} />

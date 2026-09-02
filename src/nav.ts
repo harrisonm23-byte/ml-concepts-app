@@ -1,54 +1,45 @@
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ComponentType } from 'react';
+import LoopScreen from './screens/LoopScreen';
+import TokensScreen from './screens/TokensScreen';
+import AttentionScreen from './screens/AttentionScreen';
+import SoftmaxScreen from './screens/SoftmaxScreen';
+import AlignmentScreen from './screens/AlignmentScreen';
+import NeuronScreen from './screens/NeuronScreen';
+import CrossbarScreen from './screens/CrossbarScreen';
+import ForwardPassScreen from './screens/ForwardPassScreen';
+import GradientScreen from './screens/GradientScreen';
+import TrainingScreen from './screens/TrainingScreen';
 
-export type RootStackParamList = {
-  Home: undefined;
-  Loop: undefined;
-  Tokens: undefined;
-  Attention: undefined;
-  Softmax: undefined;
-  Alignment: undefined;
-  Neuron: undefined;
-  Crossbar: undefined;
-  ForwardPass: undefined;
-  Gradient: undefined;
-  Training: undefined;
-};
-
-export type ScreenName = keyof RootStackParamList;
-
-export const useNav = () => useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
-export type ConceptEntry = { route: ScreenName; title: string; hook: string };
+export type ConceptEntry = { key: string; title: string; definition: string; component: ComponentType };
 export type Section = { lecture: string; theme: string; items: ConceptEntry[] };
 
 export const SECTIONS: Section[] = [
   {
     lecture: 'Lecture 2',
-    theme: 'How language models work',
+    theme: 'Language models',
     items: [
-      { route: 'Loop', title: 'The whole machine', hook: 'Step a real next-token loop: tokenize → embed → transformer → logits → softmax → sample → append.' },
-      { route: 'Tokens', title: 'Text becomes math', hook: 'Tokenization, one-hot vectors, and the moment meaning becomes geometry.' },
-      { route: 'Attention', title: 'Attention', hook: 'Pick a query token and watch softmax(QKᵀ/√d) decide what it looks at.' },
-      { route: 'Softmax', title: 'Math becomes text', hook: 'Logits, softmax, temperature, greedy vs sampling, and the NPRD glitch.' },
-      { route: 'Alignment', title: 'Predictor to assistant', hook: 'Entropy, cross-entropy, and the pre-training → SFT → RLHF pipeline.' },
+      { key: 'loop', title: 'Autoregressive generation', definition: 'Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.', component: LoopScreen },
+      { key: 'tokens', title: 'Tokenization and embeddings', definition: 'Text → token IDs → one-hot vectors → learned vectors in ℝᵈ.', component: TokensScreen },
+      { key: 'attention', title: 'Attention', definition: 'softmax(QKᵀ/√dₖ)V: each token weights the earlier tokens by learned relevance.', component: AttentionScreen },
+      { key: 'softmax', title: 'Softmax, temperature, and sampling', definition: 'Logits → a probability distribution → one drawn token.', component: SoftmaxScreen },
+      { key: 'alignment', title: 'Entropy, cross-entropy, and alignment', definition: 'The training loss, and the pre-training → SFT → RLHF pipeline.', component: AlignmentScreen },
     ],
   },
   {
     lecture: 'Lecture 3',
-    theme: 'Anatomy of a neural network',
+    theme: 'Neural networks',
     items: [
-      { route: 'Neuron', title: 'One neuron', hook: 'Weighted sum, plus bias, wrapped in a nonlinearity. Turn every knob.' },
-      { route: 'Crossbar', title: 'The crossbar check', hook: 'Why a neuron trained on the bar of a 7 fires on a 5 but not on a 6.' },
-      { route: 'ForwardPass', title: 'The forward pass', hook: 'Propagate a tiny MLP layer by layer. Tap any neuron to see its equation.' },
+      { key: 'neuron', title: 'The neuron', definition: 'a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.', component: NeuronScreen },
+      { key: 'crossbar', title: 'Feature detectors', definition: 'Why a neuron tuned to the crossbar of a 7 fires on a 5 but not a 6.', component: CrossbarScreen },
+      { key: 'forward', title: 'The forward pass', definition: 'a⁽ᴸ⁾ = σ(W⁽ᴸ⁾a⁽ᴸ⁻¹⁾ + b⁽ᴸ⁾), layer by layer, in a multilayer perceptron.', component: ForwardPassScreen },
     ],
   },
   {
     lecture: 'Lecture 4',
-    theme: 'How networks learn',
+    theme: 'Training',
     items: [
-      { route: 'Gradient', title: 'Gradient descent', hook: 'Roll a ball down a foggy loss landscape. Learning rate, local minima, SGD noise.' },
-      { route: 'Training', title: 'Predict, measure, update', hook: 'Train a line of best fit one phase at a time, and see the PyTorch loop light up.' },
+      { key: 'gradient', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },
+      { key: 'training', title: 'Loss functions and the training loop', definition: 'Predict, measure (MSE or cross-entropy), update.', component: TrainingScreen },
     ],
   },
 ];

@@ -79,7 +79,7 @@ export default function TrainingScreen() {
         {phase === 2 && <P dim>Update: the gradient says how the loss changes if each weight is nudged. Step against it, scaled by the learning rate.</P>}
       </Card>
 
-      <Card title="Measure: mean squared error">
+      <Card title="Mean squared error">
         <Formula>L = (1/n) Σᵢ (ŷᵢ − yᵢ)²  =  {fmt(loss, 3)}</Formula>
         <Row wrap style={{ gap: 4 }}>
           {residuals.map((r, i) => (
@@ -89,7 +89,7 @@ export default function TrainingScreen() {
         <Small>A cubic would keep the sign, so a negative error would reduce the loss: not a candidate. Mean absolute error is the gentler alternative when outliers dominate. If training is failing, the loss function is rarely the reason; the learning rate is the first thing to check.</Small>
       </Card>
 
-      <Card title="Update: the gradient step">
+      <Card title="The gradient step">
         <Formula>∂L/∂a = {fmt(ga, 3)}     ∂L/∂b = {fmt(gb, 3)}</Formula>
         <Row style={{ justifyContent: 'space-between' }}>
           <Text style={st.k}>a ← a − η ∂L/∂a</Text>
@@ -103,12 +103,12 @@ export default function TrainingScreen() {
         <Small>Push η past about 0.04 and watch the loss climb instead of fall: overshooting. Drop it to 0.002 and it creeps. The gradient here is computed by hand from the chain rule; in a deep network backpropagation does the same thing layer by layer, storing each intermediate once.</Small>
       </Card>
 
-      <Card title="Loss over steps">
+      <Card title="Loss curve">
         <LossChart losses={[...history, loss]} />
         <Small>{history.length} updates so far. Batch size here is the whole dataset (batch gradient descent, the clean path). With mini-batches the path is noisier and each step far cheaper: fifty one-second steps that point roughly right beat three ten-minute steps that point exactly right.</Small>
       </Card>
 
-      <Card title="The same loop in PyTorch">
+      <Card title="The loop in PyTorch">
         <CodeLine text="pred = model(X)" hot={phase === 0} note="predict" />
         <CodeLine text="loss = loss_fn(pred, y)" hot={phase === 1} note="measure" />
         <CodeLine text="loss.backward()" hot={phase === 2} note="gradient (backprop)" />
@@ -117,7 +117,7 @@ export default function TrainingScreen() {
         <Small>Four things go in (data, model, loss function, optimizer), and the body is the three verbs. The highlighted lines follow the phase above.</Small>
       </Card>
 
-      <Card title="For classification: cross-entropy">
+      <Card title="Cross-entropy">
         <Formula>L = −Σᵢ pᵢ log p̂ᵢ   →   one-hot target:  L = −log p̂(correct)</Formula>
         <LabeledSlider label="p̂ assigned to the correct class" value={q} min={0.01} max={1} step={0.01} onChange={setQ} color={C.accent} />
         <CECurve q={q} />

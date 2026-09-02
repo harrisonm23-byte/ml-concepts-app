@@ -46,7 +46,7 @@ export default function AttentionScreen() {
 
   return (
     <Screen intro="Attention is what lets the model look back and decide which earlier tokens matter for the current guess. Pick a query token; every earlier token is scored by how well its key matches the query, softmax turns the scores into weights, and the weights mix the values.">
-      <Card title="Pick the query token">
+      <Card title="Attention weights">
         <Row wrap style={{ gap: 6 }}>
           {TOKENS.map((tk, i) => (
             <Chip key={i} label={tk.t} active={i === qi} onPress={() => setQi(i)} />
@@ -87,7 +87,7 @@ export default function AttentionScreen() {
         <Small>Arc thickness = attention weight from <Text style={{ color: C.neg }}>{TOKENS[qi].t}</Text>. In the lecture's example, resolving what "it" refers to is attention at work: its query matches the keys of trophy and suitcase.</Small>
       </Card>
 
-      <Card title="Scores → softmax → weights">
+      <Card title="Scaled dot-product attention">
         <Formula>scoreᵢ = q · kᵢ / √dₖ      wᵢ = softmax(score)ᵢ</Formula>
         {TOKENS.map((tk, i) => (
           <Row key={i} style={{ gap: 6 }}>
@@ -106,7 +106,7 @@ export default function AttentionScreen() {
         <Small>Raise the scale and the softmax sharpens onto the single best match; lower it and attention spreads out. Dividing by √dₖ keeps scores in a range where softmax is neither flat nor saturated. A decoder-only language model masks future positions: when predicting the next token, it can only attend backwards.</Small>
       </Card>
 
-      <Card title="Query, keys, and the mixed output">
+      <Card title="Values and the attention output">
         <P dim>Each token carries a query (what am I looking for?), a key (what do I contain?), and a value (what do I pass on). Axes here are hand-made features; in a real model they are learned and there are 64–128 of them per head.</P>
         <VecRow label={`q (${TOKENS[qi].t})`} v={q} color={C.neg} />
         {TOKENS.filter((_, i) => visible[i] && weights[i] > 0.04).map((tk, j) => {
@@ -121,7 +121,7 @@ export default function AttentionScreen() {
         <Small>The output vector for "{TOKENS[qi].t}" is now a weighted blend of what it attended to. That blended vector is what the feed-forward layer processes next, and a stack of these blocks is the whole transformer.</Small>
       </Card>
 
-      <Card title="Where this sits in the block">
+      <Card title="The transformer block">
         <BlockDiagram />
         <Small>Each block: attention (tokens exchange information) then a feed-forward layer (each position processed on its own). Stack dozens and you have a modern language model. Multi-head attention simply runs several of these q/k/v matchings in parallel with different learned axes.</Small>
       </Card>

@@ -25,7 +25,7 @@ export default function AlignmentScreen() {
 
   return (
     <Screen intro="A model trained only to predict the next token of internet text is not an assistant. Ask it a question and it may continue with more questions, because on the internet, questions come in lists. Alignment closes the gap.">
-      <Card title="Three stages, one prompt">
+      <Card title="The training pipeline">
         <Row wrap>
           {STAGES.map((s, i) => (
             <Chip key={s} label={`${i + 1}. ${s}`} active={i === stage} onPress={() => setStage(i)} />
@@ -38,7 +38,7 @@ export default function AlignmentScreen() {
         {stage === 2 && <Small>Reinforcement learning from human feedback: humans rank pairs of outputs, a reward model learns to predict the rankings, and the policy is optimized to score well while a KL penalty keeps it near the SFT model.</Small>}
       </Card>
 
-      <Card title="RLHF: rank a pair, train a reward model">
+      <Card title="Reinforcement learning from human feedback">
         <P dim>Which reply do you prefer?</P>
         <Row style={{ alignItems: 'stretch' }}>
           <Choice label="A" text="Paris." active={pref === 'A'} onPress={() => setPref('A')} />
@@ -52,7 +52,7 @@ export default function AlignmentScreen() {
         <Small>Your one ranking nudges the reward model (illustrative numbers). Thousands of rankings from large labeler workforces train the real one, and whose preferences they encode is both a labour-ethics question and an epistemic one: the reward model defines what "helpful" means. β = 0 lets the policy chase reward anywhere, including into degenerate text; large β pins it to the SFT model. DPO reaches similar results with no separate reward model at all: your language model is secretly a reward model.</Small>
       </Card>
 
-      <Card title="Base vs aligned: why jailbreaks work">
+      <Card title="Base and aligned models">
         <Row style={{ alignItems: 'stretch' }}>
           <View style={[st.layer, { backgroundColor: C.accent + '22', borderColor: C.accent, flex: 3 }]}>
             <Text style={st.layerTitle}>Base model</Text>
@@ -66,7 +66,7 @@ export default function AlignmentScreen() {
         <Small>Capability lives in the base model; safety behaviour is a layer added afterwards. A jailbreak teaches the model nothing new: it finds a path around the layer to capabilities the base model always had. The superficial alignment hypothesis pushes this to its end (alignment only chooses what to surface and in what style); whether it holds in full is open, and reasoning models trained with RL on verifiable rewards look like a counterexample where post-training adds capability, not just style.</Small>
       </Card>
 
-      <Card title="Entropy: the uncertainty in a distribution">
+      <Card title="Entropy and cross-entropy">
         <Formula>H(p) = −Σᵢ p(xᵢ) log p(xᵢ)</Formula>
         <Dist label="one fair die (6 outcomes)" p={ONE_DIE} />
         <Dist label="sum of two dice (11 outcomes, peaked at 7)" p={TWO_DICE} />

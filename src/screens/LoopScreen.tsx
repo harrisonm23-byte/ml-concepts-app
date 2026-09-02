@@ -116,7 +116,7 @@ export default function LoopScreen() {
         <Btn label="Reset" kind="ghost" onPress={() => reset()} />
       </Row>
 
-      <Card title="Prompt: the only steering wheel">
+      <Card title="The prompt (conditioning context)">
         <TextInput
           value={prompt}
           onChangeText={setPrompt}
@@ -136,7 +136,7 @@ export default function LoopScreen() {
         <Small>Words outside the toy vocabulary get a near-uniform guess: the model can only continue text that resembles its training data. It mirrors the corpus.</Small>
       </Card>
 
-      <Card title="The formula behind the loop">
+      <Card title="The chain rule of probability">
         <Formula>{'P(x₁,…,xₙ) = ∏ₜ P(xₜ | x₍<t₎)'}</Formula>
         <P dim>Sampling one token at a time from P(xₜ | everything before) is exactly sampling the whole sequence from the joint distribution. The chain rule is why the humble loop is principled, and why after a bad draw the model can still steer back: the next prediction conditions on the full context.</P>
       </Card>

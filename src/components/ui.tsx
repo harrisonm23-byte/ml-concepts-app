@@ -18,15 +18,12 @@ export function Screen({
   children: React.ReactNode;
   intro?: string;
 }) {
+  // Rendered inline inside the accordion, so this is a plain View, not a ScrollView.
   return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: C.bg }}
-      contentContainerStyle={{ padding: S.lg, paddingBottom: 48, gap: S.lg }}
-      keyboardShouldPersistTaps="handled"
-    >
+    <View style={{ gap: S.lg, paddingBottom: S.md }}>
       {intro ? <Text style={st.intro}>{intro}</Text> : null}
       {children}
-    </ScrollView>
+    </View>
   );
 }
 
@@ -204,46 +201,46 @@ export function Divider() {
 }
 
 const st = StyleSheet.create({
-  intro: { color: '#6B6B6B', fontSize: 15, lineHeight: 22 },
+  intro: { color: C.text, fontSize: 16, lineHeight: 24, fontFamily: serif },
   card: {
     backgroundColor: C.card,
-    borderRadius: 16,
+    borderRadius: 6,
     padding: S.lg,
     gap: S.md,
     borderWidth: 1,
-    borderColor: 'rgba(156,175,152,0.15)',
+    borderColor: C.border,
     ...shadow,
   },
-  cardTitle: { color: C.forest, fontSize: 20, fontFamily: serif, fontWeight: '600', letterSpacing: -0.2 },
-  p: { color: C.text, fontSize: 15, lineHeight: 22 },
-  small: { color: C.dim, fontSize: 13, lineHeight: 18 },
+  cardTitle: { color: C.text, fontSize: 18, fontFamily: serif, fontWeight: '700' },
+  p: { color: C.text, fontSize: 16, lineHeight: 24, fontFamily: serif },
+  small: { color: C.dim, fontSize: 14, lineHeight: 20, fontFamily: serif },
   mono: { color: C.text, fontFamily: mono, fontSize: 13 },
   formula: {
     backgroundColor: C.card2,
-    borderRadius: 10,
+    borderRadius: 4,
     paddingVertical: 10,
     paddingHorizontal: 12,
     alignItems: 'center',
   },
-  formulaText: { color: C.forest, fontFamily: mono, fontSize: 14, lineHeight: 22, textAlign: 'center' },
+  formulaText: { color: C.text, fontFamily: serif, fontStyle: 'italic', fontSize: 17, lineHeight: 26, textAlign: 'center' },
   row: { flexDirection: 'row', gap: S.sm, alignItems: 'center' },
   btn: {
-    paddingVertical: 10,
+    paddingVertical: 9,
     paddingHorizontal: 16,
-    borderRadius: 999,
+    borderRadius: 6,
     borderWidth: 1,
   },
   btnText: { color: C.cream, fontWeight: '600', fontSize: 14 },
   chip: {
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 999,
+    borderRadius: 6,
     borderWidth: 1,
     alignItems: 'center',
   },
   chipText: { color: C.text, fontSize: 14, fontFamily: mono },
   chipSub: { color: C.dim, fontSize: 10, fontFamily: mono },
-  sliderLabel: { color: C.text, fontSize: 14 },
+  sliderLabel: { color: C.text, fontSize: 15, fontFamily: serif, fontStyle: 'italic' },
   sliderValue: { fontFamily: mono, fontSize: 14 },
   barLabel: { color: C.text, fontFamily: mono, fontSize: 13, width: 88 },
   barRight: { color: C.dim, fontFamily: mono, fontSize: 12, width: 52, textAlign: 'right' },

@@ -22,7 +22,7 @@ export default function SoftmaxScreen() {
 
   return (
     <Screen intro='The transformer ends with one raw score per vocabulary entry. Three operations turn those into the next word: softmax, temperature, and a decoding decision. Prompt: "The capital of France is"'>
-      <Card title="Logits: the model's unnormalized opinion">
+      <Card title="Logits">
         {CANDIDATES.map((c, i) => (
           <Bar key={c} label={c} value={logits[i] - lo + 0.5} max={hi - lo + 0.5} color={logits[i] < 0 ? C.neg : C.warn} right={fmt(logits[i])} />
         ))}
@@ -54,7 +54,7 @@ export default function SoftmaxScreen() {
         </Small>
       </Card>
 
-      <Card title="The distribution as a point: the probability simplex">
+      <Card title="The probability simplex">
         <P>A distribution over V outcomes is a vector p with pᵢ ≥ 0 and Σpᵢ = 1. The set of all such vectors is the (V−1)-simplex. For three tokens it is a triangle, and every possible distribution is exactly one point of it. Softmax is a map from logit space ℝ³ onto this triangle.</P>
         <Simplex logits={logits.slice(0, 3)} labels={CANDIDATES.slice(0, 3)} T={T} />
         <Small>
@@ -62,7 +62,7 @@ export default function SoftmaxScreen() {
         </Small>
       </Card>
 
-      <Card title="Decoding: greedy or sample">
+      <Card title="Decoding">
         <Row>
           <Btn label="Greedy: arg max" onPress={() => setHistory((h) => [...h, best])} />
           <Btn label="Sample: xₜ ~ P" kind="ghost" onPress={() => setHistory((h) => [...h, sampleIndex(probs)])} />
@@ -82,7 +82,7 @@ export default function SoftmaxScreen() {
         )}
       </Card>
 
-      <Card title="Same shape as a classifier">
+      <Card title="Next-token prediction as classification">
         <P dim>Next-token prediction is classification with V ≈ 50,000 classes instead of 10. The digit network in Lecture 3 ends with ten logits and this same softmax. And the training loss for both is cross-entropy against the correct class: −log P(correct token).</P>
         <Formula>loss at this step = −log P(x*) = {fmt(-Math.log(probs[0]))}  (if "Paris" is correct)</Formula>
       </Card>

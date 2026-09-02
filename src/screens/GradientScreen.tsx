@@ -93,13 +93,13 @@ export default function GradientScreen() {
         <Small>The sign of the slope tells you the direction of increase, so you move against it. Positive slope: step left. Negative slope: step right. Either way you head downhill, and because this holds in every dimension independently the same rule works for one weight or a hundred billion.</Small>
       </Card>
 
-      <Card title="Loss curve: the diagnostic">
+      <Card title="The loss curve">
         <LossChart losses={losses} />
         <P style={{ color: rising ? C.neg : stuck ? C.warn : C.text }}>{diag}</P>
         <Small>Flat for hundreds of iterations: η too small. Skyrocketing: η too large. In between there is a regime where steps overshoot but shrink, and the model converges anyway. The learning rate is the most consequential knob in training and the first suspect when training fails.</Small>
       </Card>
 
-      <Card title="Local minima and why noise helps">
+      <Card title="Local minima and stochastic gradients">
         <P dim>Gradient descent stops wherever the slope is zero, and that marks any minimum, local or global. Start on the right with a small learning rate and the ball settles in the shallow dip. Turn on SGD noise: a mini-batch gradient is a rough estimate of the true one, and that jostling is one of the reasons local minima matter less in practice than in theory. Momentum does the same job by carrying velocity from previous steps.</P>
         <P dim>The gradient itself comes from backpropagation: the chain rule applied layer by layer from the loss backwards, with intermediate results stored and reused. In PyTorch it is one line, loss.backward().</P>
       </Card>

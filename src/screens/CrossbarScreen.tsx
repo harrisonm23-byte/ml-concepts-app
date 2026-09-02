@@ -100,7 +100,7 @@ export default function CrossbarScreen() {
         <Small>{mode === 'draw' ? 'Tap cells to draw. Outlined cells are group A: the region this neuron has non-zero weights on.' : 'Tap cells to cycle a weight through 0 → +1 → −1. Design your own feature detector.'}</Small>
       </Card>
 
-      <Card title="This neuron's activation">
+      <Card title="Activation of the detector">
         <Formula>a = ReLU( Σⱼ wⱼ aⱼ + b )</Formula>
         <Row style={{ justifyContent: 'space-between' }}>
           <Text style={st.k}>Group A  (weights ≠ 0, {countA} cells)</Text>
@@ -130,7 +130,7 @@ export default function CrossbarScreen() {
         </Small>
       </Card>
 
-      <Card title="Try the conceptual check">
+      <Card title="Worked example">
         <P dim>1. Load digit 7: the whole row is lit, six products of 1 × 1, high activation.</P>
         <P dim>2. Load digit 6: only three cells of the crossbar row have ink, so the sum barely reaches the threshold set by b = −3 and the neuron stays off.</P>
         <P dim>3. Load digit 5: its top stroke sits exactly where the 7's crossbar lives. The feature is present, so the neuron fires, even though the digit is a 5. This neuron detects a feature, not a digit. Later layers combine features into digits.</P>

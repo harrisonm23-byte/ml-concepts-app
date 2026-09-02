@@ -100,7 +100,7 @@ export default function ForwardPassScreen() {
       </Card>
 
       {sel && selRow && selIn && (
-        <Card title={`Neuron ${sel.i + 1} of layer ${sel.layer}: its weighted sum`}>
+        <Card title={`Neuron ${sel.i + 1} of layer ${sel.layer}`}>
           <Formula>z = Σⱼ wⱼ aⱼ + b   →   a = {sel.layer === 1 ? 'ReLU(z)' : 'softmax(z)'}</Formula>
           {selRow.map((w, j) => (
             <Row key={j} style={{ justifyContent: 'space-between' }}>
@@ -134,13 +134,13 @@ export default function ForwardPassScreen() {
         </Card>
       )}
 
-      <Card title="Layer at once: the matrix form">
+      <Card title="Matrix form">
         <Formula>a⁽¹⁾ = ReLU( W⁽¹⁾ a⁽⁰⁾ + b⁽¹⁾ )     W⁽¹⁾ is {SIZES[1]}×{SIZES[0]}</Formula>
         <Formula>logits = W⁽²⁾ a⁽¹⁾ + b⁽²⁾           W⁽²⁾ is {SIZES[2]}×{SIZES[1]}</Formula>
         <Small>Same statement as the per-neuron sum, for every neuron in the layer simultaneously. Parameter count here: {SIZES[1] * SIZES[0] + SIZES[1] + SIZES[2] * SIZES[1] + SIZES[2]}. The lecture's digit network (784 → 512 → 512 → 10) has about 670,000. A frontier language model has hundreds of billions, and it is still this operation.</Small>
       </Card>
 
-      <Card title="Output layer: one neuron per class">
+      <Card title="Output layer">
         {CLASSES.map((c, i) => (
           <Bar key={c} label={c} value={shown(2) ? probs[i] : 0} color={C.accent} right={shown(2) ? `${(probs[i] * 100).toFixed(0)}%` : '?'} />
         ))}

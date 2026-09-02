@@ -120,7 +120,7 @@ export default function TokensScreen() {
         <Small>Tokens are usually word fragments (byte-pair encoding builds a vocabulary of common character sequences). Two everyday quirks follow: context windows are measured in tokens, and a model asked to count the r's in "strawberry" sees a few IDs, not ten letters. ▁ marks a token that starts a word.</Small>
       </Card>
 
-      <Card title="2. One-hot encoding (the problem)">
+      <Card title="2. One-hot encoding">
         <P>The crudest numeric form of a token ID: a vector of zeros with a single 1 at the ID's position. Tap two positions.</P>
         <Row wrap style={{ gap: 4 }}>
           {Array.from({ length: 12 }, (_, i) => (
@@ -131,7 +131,7 @@ export default function TokensScreen() {
         <Small>Every pair of distinct one-hot vectors is orthogonal, so "cat" is exactly as far from "kitten" as from "carburetor". And with V ≈ 50,000 the vectors are enormous. One-hot is best understood as the problem embeddings solve. (An embedding layer is literally eₖᵀW: a lookup of row k in a learned matrix W.)</Small>
       </Card>
 
-      <Card title="3. Embeddings (the solution)">
+      <Card title="3. Embeddings">
         <P>Each token is a vector: an arrow from the origin in a d-dimensional space. Here d = 8 so you can read every coordinate. To draw it we project onto the three principal components (PCA), the same thing the TensorFlow Embedding Projector does. Drag to rotate.</P>
         <VectorSpace3D items={items} arrows={arrows} selected={sel} onSelect={setSel} />
         <Small>Depth cues: nearer points are larger and darker. The three axes PC1–PC3 capture {(explained * 100).toFixed(0)}% of the variance of these 15 vectors; the remaining {(100 - explained * 100).toFixed(0)}% is invisible in any 3-D picture. Nothing above three dimensions can be drawn; you visualize three and say "eight" to yourself loudly.</Small>
@@ -155,7 +155,7 @@ export default function TokensScreen() {
         <Small>Vector arithmetic, done on the 8-D vectors: the solid arrow is the displacement man → king (it isolates the "royal" direction); adding it to woman lands at the dashed arrowhead. Nearest real token to that point: <Text style={{ color: C.forest, fontWeight: '600' }}>{analogyBest.n}</Text> (cosine {analogyBest.c.toFixed(3)}). In the real model no one labels an axis "royal"; it falls out of next-token prediction.</Small>
       </Card>
 
-      <Card title="4. Positional embeddings (order)">
+      <Card title="4. Positional embeddings">
         <Row style={{ justifyContent: 'space-between' }}>
           <OrderDemo words={['the', 'cat', 'chased', 'the', 'dog']} />
           <OrderDemo words={['the', 'dog', 'chased', 'the', 'cat']} />
