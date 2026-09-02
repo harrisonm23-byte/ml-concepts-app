@@ -138,7 +138,7 @@ export default function LoopScreen() {
 
       <Card title="The chain rule of probability">
         <Formula>{'P(x₁,…,xₙ) = ∏ₜ P(xₜ | x₍<t₎)'}</Formula>
-        <P dim>Sampling one token at a time from P(xₜ | everything before) is exactly sampling the whole sequence from the joint distribution. The chain rule is why the humble loop is principled, and why after a bad draw the model can still steer back: the next prediction conditions on the full context.</P>
+        <P dim>**Sampling** one token at a time from P(xₜ | everything before) is exactly sampling the whole sequence from the joint distribution. The **chain rule** is why the humble loop is principled, and why after a bad draw the model can still steer back: the next prediction conditions on the full **context**.</P>
       </Card>
     </Screen>
   );
@@ -147,7 +147,7 @@ export default function LoopScreen() {
 function TokenizeStage({ tokens }: { tokens: string[] }) {
   return (
     <View style={{ gap: S.md }}>
-      <P>Text is chopped into tokens and each is mapped to an ID in a fixed vocabulary. The model never sees letters, only these IDs.</P>
+      <P>Text is chopped into **tokens** and each is mapped to an ID in a fixed vocabulary. The model never sees letters, only these IDs.</P>
       <Row wrap>
         {tokens.map((t, i) => {
           const id = tokenId(t);
@@ -164,7 +164,7 @@ function EmbedStage({ tokens }: { tokens: string[] }) {
   const offset = tokens.length - shown.length;
   return (
     <View style={{ gap: S.md }}>
-      <P>Each ID becomes a learned vector (an embedding), and a positional embedding is added so the model knows word order.</P>
+      <P>Each ID becomes a learned vector (an **embedding**), and a **positional embedding** is added so the model knows word order.</P>
       {shown.map((t, i) => {
         const e = pseudoEmbedding(t);
         const pos = e.map((_, k) => Math.sin((offset + i + 1) / Math.pow(30, k / e.length)));
@@ -197,7 +197,7 @@ function TransformerStage({ tokens }: { tokens: string[] }) {
   const w = softmax(scores);
   return (
     <View style={{ gap: S.md }}>
-      <P>A stack of identical blocks. In each, attention lets the current position gather information from earlier positions by learned relevance, then a feed-forward layer processes each position on its own.</P>
+      <P>A stack of identical blocks. In each, **attention** lets the current position gather information from earlier positions by learned relevance, then a feed-forward layer processes each position on its own.</P>
       <Small>Attention weights from the last token "{tokens[n - 1]}" back over the context (illustrative):</Small>
       {tokens.slice(-8).map((t, j) => {
         const i = n - Math.min(8, n) + j;
@@ -215,7 +215,7 @@ function LogitsStage({ logits, top }: { logits: number[]; top: number[] }) {
   const hi = Math.max(...vals);
   return (
     <View style={{ gap: S.md }}>
-      <P>The transformer emits one raw score per vocabulary entry. Logits can be negative and do not sum to one; they are the model's unnormalized opinion.</P>
+      <P>The transformer emits one raw score per vocabulary entry. **Logits** can be negative and do not sum to one; they are the model's unnormalized opinion.</P>
       {top.map((i) => (
         <Bar key={i} label={VOCAB[i]} value={logits[i] - lo + 0.3} max={hi - lo + 0.3} color={C.warn} right={fmt(logits[i])} />
       ))}
@@ -228,7 +228,7 @@ function SoftmaxStage({ probs, top, T, setT }: { probs: number[]; top: number[];
   const sum = probs.reduce((a, b) => a + b, 0);
   return (
     <View style={{ gap: S.md }}>
-      <P>Softmax exponentiates every logit and normalizes so the scores sum to one. Now we have a genuine distribution. Temperature divides the logits first: low sharpens, high flattens.</P>
+      <P>**Softmax** exponentiates every logit and normalizes so the scores sum to one. Now we have a genuine distribution. **Temperature** divides the logits first: low sharpens, high flattens.</P>
       <Formula>P(xᵢ) = e^(zᵢ/T) / Σⱼ e^(zⱼ/T)</Formula>
       <LabeledSlider label="Temperature T" value={T} min={0.1} max={3} step={0.05} onChange={setT} color={C.warn} />
       {top.map((i) => (
@@ -248,7 +248,7 @@ function SampleStage({ probs, top, chosen, greedy, setGreedy, redraw }: { probs:
   const inTop = chosen !== null && top.includes(chosen);
   return (
     <View style={{ gap: S.md }}>
-      <P>Roll the die. Greedy always takes the arg max; sampling draws from the distribution, which is why the same prompt can give different replies.</P>
+      <P>Roll the die. **Greedy** always takes the arg max; sampling draws from the distribution, which is why the same **prompt** can give different replies.</P>
       <Row>
         <Chip label="Sample  xₜ ~ P" active={!greedy} onPress={() => setGreedy(false)} />
         <Chip label="Greedy  arg max" active={greedy} onPress={() => setGreedy(true)} />

@@ -49,7 +49,7 @@ export default function ForwardPassScreen() {
   const selVisible = sel ? shown(sel.layer) : false;
 
   return (
-    <Screen intro="A vanilla network (a multilayer perceptron): every neuron connects to every neuron in the previous layer. Which neurons fire in one layer determines which fire in the next, as governed by the weights and biases. Tap input nodes to set them, then propagate.">
+    <Screen intro="A vanilla network (a **multilayer perceptron**): every neuron connects to every neuron in the previous layer. Which neurons fire in one layer determines which fire in the next, as governed by the weights and biases. Tap input nodes to set them, then propagate.">
       <Card>
         <Svg width={W} height={H} style={{ alignSelf: 'center' }}>
           {/* edges layer 0 -> 1 */}
@@ -144,7 +144,7 @@ export default function ForwardPassScreen() {
         {CLASSES.map((c, i) => (
           <Bar key={c} label={c} value={shown(2) ? probs[i] : 0} color={C.accent} right={shown(2) ? `${(probs[i] * 100).toFixed(0)}%` : '?'} />
         ))}
-        <Small>The output is the same shape as a language model's: a score for every class, then softmax. Next-token prediction is classification with a bigger output layer. The picture we hope training produces: early neurons respond to strokes, the next layer combines strokes into loops and lines, the last layer combines parts into a digit.</Small>
+        <Small>The output is the same shape as a language model's: a score for every class, then **softmax**. Next-token prediction is **classification** with a bigger output layer. The picture we hope training produces: early neurons respond to strokes, the next layer combines strokes into loops and lines, the last layer combines parts into a digit.</Small>
       </Card>
     </Screen>
   );

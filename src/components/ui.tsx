@@ -11,6 +11,21 @@ import {
 import Slider from '@react-native-community/slider';
 import { C, S, mono, serif, shadow } from '../theme';
 
+// Minimal inline markup: **bold** for defined terms, *italic* for emphasis, as in the handouts.
+export function rich(children: React.ReactNode): React.ReactNode {
+  if (typeof children === 'string') {
+    const parts = children.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter(Boolean);
+    if (parts.length === 1 && !/^\*/.test(parts[0])) return children;
+    return parts.map((t, i) =>
+      t.startsWith('**') ? <Text key={i} style={{ fontWeight: '700' }}>{t.slice(2, -2)}</Text>
+      : t.startsWith('*') ? <Text key={i} style={{ fontStyle: 'italic' }}>{t.slice(1, -1)}</Text>
+      : t,
+    );
+  }
+  if (Array.isArray(children)) return children.map((c, i) => <React.Fragment key={i}>{rich(c)}</React.Fragment>);
+  return children;
+}
+
 export function Screen({
   children,
   intro,
@@ -21,7 +36,7 @@ export function Screen({
   // Rendered inline inside the accordion, so this is a plain View, not a ScrollView.
   return (
     <View style={{ gap: S.lg, paddingBottom: S.md }}>
-      {intro ? <Text style={st.intro}>{intro}</Text> : null}
+      {intro ? <Text style={st.intro}>{rich(intro)}</Text> : null}
       {children}
     </View>
   );
@@ -45,11 +60,11 @@ export function Card({
 }
 
 export function P({ children, dim, style }: { children: React.ReactNode; dim?: boolean; style?: TextStyle }) {
-  return <Text style={[st.p, dim && { color: C.dim }, style]}>{children}</Text>;
+  return <Text style={[st.p, dim && { color: C.dim }, style]}>{rich(children)}</Text>;
 }
 
 export function Small({ children, style }: { children: React.ReactNode; style?: TextStyle }) {
-  return <Text style={[st.small, style]}>{children}</Text>;
+  return <Text style={[st.small, style]}>{rich(children)}</Text>;
 }
 
 export function Mono({ children, style }: { children: React.ReactNode; style?: TextStyle }) {
@@ -109,7 +124,7 @@ export function Chip({
 }) {
   const c = color ?? C.forest;
   return (
-    <Pressable onPress={onPress} disabled={!onPress} style={[st.chip, { borderColor: active ? c : C.border, backgroundColor: active ? c + '22' : C.card2 }]}>
+    <Pressable onPress={onPress} disabled={!onPress} style={[st.chip, { borderColor: active ? c : C.border, backgroundColor: active ? c + '14' : C.card }]}>
       <Text style={[st.chipText, active && { color: c, fontWeight: '600' }]}>{label}</Text>
       {sub ? <Text style={st.chipSub}>{sub}</Text> : null}
     </Pressable>
@@ -204,7 +219,7 @@ const st = StyleSheet.create({
   intro: { color: C.text, fontSize: 16, lineHeight: 24, fontFamily: serif },
   card: {
     backgroundColor: C.card,
-    borderRadius: 6,
+    borderRadius: 2,
     padding: S.lg,
     gap: S.md,
     borderWidth: 1,
@@ -216,25 +231,24 @@ const st = StyleSheet.create({
   small: { color: C.dim, fontSize: 14, lineHeight: 20, fontFamily: serif },
   mono: { color: C.text, fontFamily: mono, fontSize: 13 },
   formula: {
-    backgroundColor: C.card2,
-    borderRadius: 4,
-    paddingVertical: 10,
+    backgroundColor: 'transparent',
+    paddingVertical: 6,
     paddingHorizontal: 12,
     alignItems: 'center',
   },
   formulaText: { color: C.text, fontFamily: serif, fontStyle: 'italic', fontSize: 17, lineHeight: 26, textAlign: 'center' },
   row: { flexDirection: 'row', gap: S.sm, alignItems: 'center' },
   btn: {
-    paddingVertical: 9,
-    paddingHorizontal: 16,
-    borderRadius: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 2,
     borderWidth: 1,
   },
-  btnText: { color: C.cream, fontWeight: '600', fontSize: 14 },
+  btnText: { color: C.white, fontWeight: '600', fontSize: 14, fontFamily: serif },
   chip: {
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 6,
+    borderRadius: 2,
     borderWidth: 1,
     alignItems: 'center',
   },

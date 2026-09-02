@@ -53,9 +53,9 @@ export default function GradientScreen() {
   const diag = rising ? 'Loss climbing: the learning rate is too large and each step overshoots to the far slope.' : stuck ? 'Steps are microscopic: the learning rate is too small. Convergence will take, in the lecturer\'s phrase, a million years.' : Math.abs(dL(theta)) < 0.02 ? (theta > 0 ? 'Slope ≈ 0, so the ball has stopped. But this is the shallow local minimum, not the valley floor. Try SGD noise or a larger learning rate to jostle out.' : 'Slope ≈ 0 at the global minimum. Training has converged.') : 'Loss is, on the whole, going down. That is what you want to see.';
 
   return (
-    <Screen intro="You are on a mountain in dense fog. You cannot see the landscape, only feel the slope under your feet, and measuring it is expensive. So: take a reading, step downhill, repeat. That is gradient descent, and the fog is why nobody ever sees the whole loss surface.">
+    <Screen intro="You are on a mountain in dense fog. You cannot see the landscape, only feel the slope under your feet, and measuring it is expensive. So: take a reading, step downhill, repeat. That is **gradient** descent, and the fog is why nobody ever sees the whole loss surface.">
       <Card title="The loss landscape in two weights">
-        <P dim>Height is the loss L(w₁, w₂); the two horizontal axes are the weights. Higher means a worse prediction, lower a better one. The sphere is the current weights. Take steps, or tap anywhere on the terrain to move the weights there and step from that point. Switch to the ravine to see why the zigzag motivates momentum and Adam.</P>
+        <P dim>Height is the loss L(w₁, w₂); the two horizontal axes are the weights. Higher means a worse prediction, lower a better one. The sphere is the current weights. Take steps, or tap anywhere on the terrain to move the weights there and step from that point. Switch to the ravine to see why the zigzag motivates **momentum** and Adam.</P>
         <HtmlView html={GD_HTML} height={760} />
         <Small>Requires an internet connection the first time, to fetch the 3-D engine.</Small>
       </Card>
@@ -104,12 +104,12 @@ export default function GradientScreen() {
       <Card title="The loss curve">
         <LossChart losses={losses} />
         <P style={{ color: rising ? C.neg : stuck ? C.warn : C.text }}>{diag}</P>
-        <Small>Flat for hundreds of iterations: η too small. Skyrocketing: η too large. In between there is a regime where steps overshoot but shrink, and the model converges anyway. The learning rate is the most consequential knob in training and the first suspect when training fails.</Small>
+        <Small>Flat for hundreds of iterations: η too small. Skyrocketing: η too large. In between there is a regime where steps overshoot but shrink, and the model converges anyway. The **learning rate** is the most consequential knob in training and the first suspect when training fails.</Small>
       </Card>
 
       <Card title="Local minima and stochastic gradients">
         <P dim>Gradient descent stops wherever the slope is zero, and that marks any minimum, local or global. Start on the right with a small learning rate and the ball settles in the shallow dip. Turn on SGD noise: a mini-batch gradient is a rough estimate of the true one, and that jostling is one of the reasons local minima matter less in practice than in theory. Momentum does the same job by carrying velocity from previous steps.</P>
-        <P dim>The gradient itself comes from backpropagation: the chain rule applied layer by layer from the loss backwards, with intermediate results stored and reused. In PyTorch it is one line, loss.backward().</P>
+        <P dim>The gradient itself comes from **backpropagation**: the **chain rule** applied layer by layer from the loss backwards, with intermediate results stored and reused. In PyTorch it is one line, loss.backward().</P>
       </Card>
     </Screen>
   );

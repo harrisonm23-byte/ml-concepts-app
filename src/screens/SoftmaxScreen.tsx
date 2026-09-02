@@ -39,7 +39,7 @@ export default function SoftmaxScreen() {
 
       <Card title="Softmax with temperature">
         <Formula>P(xᵢ) = e^(zᵢ/T) / Σⱼ e^(zⱼ/T)</Formula>
-        <Small>The result is a probability mass function over the vocabulary: bars are the standard picture for a discrete distribution, because the outcomes are unordered categories and each bar's height is the probability. Heights sum to 1.</Small>
+        <Small>The result is a **probability mass function** over the vocabulary: bars are the standard picture for a discrete distribution, because the outcomes are unordered categories and each bar's height is the probability. Heights sum to 1.</Small>
         <LabeledSlider label="Temperature T" value={T} min={0.05} max={3} step={0.05} onChange={setT} color={C.accent} />
         {CANDIDATES.map((c, i) => (
           <Bar key={c} label={c} value={probs[i]} color={i === best ? C.accent : C.accent + '99'} right={`${(probs[i] * 100).toFixed(1)}%`} />
@@ -50,12 +50,12 @@ export default function SoftmaxScreen() {
         </Row>
         <TempCurve logits={logits} />
         <Small>
-          As T → 0 the distribution collapses onto the top token (greedy). As T grows it flattens toward uniform. Low T is predictable and conservative; high T is more varied and more error-prone. Temperature is a literal parameter in an API call, not a metaphor.
+          As T → 0 the distribution collapses onto the top token (**greedy**). As T grows it flattens toward uniform. Low T is predictable and conservative; high T is more varied and more error-prone. **Temperature** is a literal parameter in an API call, not a metaphor.
         </Small>
       </Card>
 
       <Card title="The probability simplex">
-        <P>A distribution over V outcomes is a vector p with pᵢ ≥ 0 and Σpᵢ = 1. The set of all such vectors is the (V−1)-simplex. For three tokens it is a triangle, and every possible distribution is exactly one point of it. Softmax is a map from logit space ℝ³ onto this triangle.</P>
+        <P>A distribution over V outcomes is a vector p with pᵢ ≥ 0 and Σpᵢ = 1. The set of all such vectors is the (V−1)-**simplex**. For three tokens it is a triangle, and every possible distribution is exactly one point of it. **Softmax** is a map from **logit** space ℝ³ onto this triangle.</P>
         <Simplex logits={logits.slice(0, 3)} labels={CANDIDATES.slice(0, 3)} T={T} />
         <Small>
           Softmax over the first three logits ({CANDIDATES.slice(0, 3).join(', ')}). The red point is the distribution at the current T. The gold curve is its path as T runs from 0 (a corner: all mass on one token, greedy) to ∞ (the centre: uniform). Shading is entropy, highest at the centre and zero at the corners. Move the temperature slider above and watch the point slide along the curve.
@@ -83,7 +83,7 @@ export default function SoftmaxScreen() {
       </Card>
 
       <Card title="Next-token prediction as classification">
-        <P dim>Next-token prediction is classification with V ≈ 50,000 classes instead of 10. The digit network in Lecture 3 ends with ten logits and this same softmax. And the training loss for both is cross-entropy against the correct class: −log P(correct token).</P>
+        <P dim>Next-token prediction is classification with V ≈ 50,000 classes instead of 10. The digit network in Lecture 3 ends with ten logits and this same softmax. And the training loss for both is cross-**entropy** against the correct class: −log P(correct token).</P>
         <Formula>loss at this step = −log P(x*) = {fmt(-Math.log(probs[0]))}  (if "Paris" is correct)</Formula>
       </Card>
     </Screen>

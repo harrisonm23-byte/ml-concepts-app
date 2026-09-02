@@ -72,14 +72,14 @@ export const signedColor = (v: number, max = 1) => {
 };
 
 // Text colour that stays legible on top of signedColor / heatColor fills.
-export const onFill = (v: number, max = 1) => (Math.abs(v) / max > 0.55 ? '#FAF7F2' : '#1A1A1A');
+export const onFill = (v: number, max = 1) => (Math.abs(v) / max > 0.55 ? '#FFFFFF' : '#000000');
 
-// Colour for an unsigned activation in [0, 1]: warm pill grey to deep forest.
+// Colour for an unsigned activation in [0, 1]: light grey to deep forest.
 export const heatColor = (v: number) => {
   const t = clamp(v, 0, 1);
-  const r = Math.round(237 + (30 - 237) * t);
-  const g = Math.round(234 + (77 - 234) * t);
-  const b = Math.round(229 + (58 - 229) * t);
+  const r = Math.round(240 + (30 - 240) * t);
+  const g = Math.round(240 + (77 - 240) * t);
+  const b = Math.round(240 + (58 - 240) * t);
   return `rgb(${r},${g},${b})`;
 };
 

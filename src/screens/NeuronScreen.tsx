@@ -24,7 +24,7 @@ export default function NeuronScreen() {
   const setWi = (j: number, v: number) => setW((arr) => arr.map((x, i) => (i === j ? v : x)));
 
   return (
-    <Screen intro="The activation of a neuron is the weighted sum, over every neuron in the previous layer, of that neuron's activation times the connecting weight; plus a bias; wrapped in the activation function. That is the whole thing. Turn the knobs.">
+    <Screen intro="The **activation** of a neuron is the weighted sum, over every neuron in the previous layer, of that neuron's activation times the connecting **weight**; plus a **bias**; wrapped in the **activation function**. That is the whole thing. Turn the knobs.">
       <Card>
         <Diagram a={a} w={w} out={out} act={act} />
         <Legend items={[{ color: C.pos, label: 'positive weight' }, { color: C.neg, label: 'negative weight' }, { color: heatColor(0.9), label: 'bright = high activation' }]} />
@@ -83,7 +83,7 @@ export default function NeuronScreen() {
         </Row>
         <Formula>{ACT[act].formula}</Formula>
         <ActPlot act={act} z={z} />
-        <Small>Without a nonlinearity the whole network collapses: a weighted sum of weighted sums is just another weighted sum, linear regression with extra steps. ReLU is an if-statement (negative becomes zero, positive passes through) and it is the modern default. Sigmoid squashes to (0,1) and is almost never used in hidden layers now, partly because of vanishing gradients.</Small>
+        <Small>Without a **nonlinearity** the whole network collapses: a weighted sum of weighted sums is just another weighted sum, linear regression with extra steps. **ReLU** is an if-statement (negative becomes zero, positive passes through) and it is the modern default. **Sigmoid** squashes to (0,1) and is almost never used in hidden layers now, partly because of vanishing gradients.</Small>
       </Card>
     </Screen>
   );

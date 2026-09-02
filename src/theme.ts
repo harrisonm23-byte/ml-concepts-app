@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 
 // Two palettes. `science` is the paper-like default (white, black, blue, purple);
 // `trine` is the cream/forest/gold brand system. Flip PALETTE to switch.
-export const PALETTE = 'trine' as 'science' | 'trine';
+export const PALETTE = 'paper' as 'paper' | 'science' | 'trine';
 
 const science = {
   bg: '#FFFFFF',        // paper
@@ -24,6 +24,15 @@ const science = {
   white: '#FFFFFF',
 };
 
+// Paper: white page and black ink like the course essays, with the Trine forest, sage,
+// and gold kept for interactive controls, plots, and diagrams.
+const paper = {
+  bg: '#FFFFFF', card: '#FFFFFF', card2: '#F4F4F4', border: '#D9D9D9',
+  text: '#000000', dim: '#444444', faint: '#9A9A9A',
+  accent: '#1E4D3A', accent2: '#7BA388', pos: '#1E4D3A', neg: '#8B4A2F', warn: '#C9A344', gold: '#D4A84B',
+  cream: '#FFFFFF', forest: '#1E4D3A', ink: '#2D4739', white: '#FFFFFF',
+};
+
 const trine = {
   bg: '#FAF7F2', card: '#FFFFFF', card2: '#F0EDE6', border: '#E6E0D6',
   text: '#1A1A1A', dim: '#7E8C85', faint: '#B8A99A',
@@ -31,7 +40,7 @@ const trine = {
   cream: '#FAF7F2', forest: '#1E4D3A', ink: '#2D4739', white: '#FFFFFF',
 };
 
-export const C = PALETTE === 'science' ? science : trine;
+export const C = PALETTE === 'paper' ? paper : PALETTE === 'science' ? science : trine;
 
 export const S = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24 };
 
@@ -40,6 +49,6 @@ export const S = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24 };
 export const serif = Platform.select({ ios: 'Georgia', android: 'serif', default: 'Georgia' }) as string;
 export const mono = Platform.select({ ios: 'Menlo', android: 'monospace', default: 'Menlo' }) as string;
 
-export const shadow = PALETTE === 'science'
+export const shadow = PALETTE !== 'trine'
   ? {}
   : { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8, elevation: 2 };

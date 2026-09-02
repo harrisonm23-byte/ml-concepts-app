@@ -76,7 +76,7 @@ export default function TrainingScreen() {
         </Row>
         {phase === 0 && <P dim>Predict: run every x through the model with the current weights. ŷ = {fmt(a)}·x + {fmt(b)}. The line is the model's guess.</P>}
         {phase === 1 && <P dim>Measure: the red segments are the errors ŷᵢ − yᵢ. Square them (so over- and under-shooting both count, and big misses count a lot), average: MSE = {fmt(loss, 3)}.</P>}
-        {phase === 2 && <P dim>Update: the gradient says how the loss changes if each weight is nudged. Step against it, scaled by the learning rate.</P>}
+        {phase === 2 && <P dim>Update: the **gradient** says how the loss changes if each weight is nudged. Step against it, scaled by the **learning rate**.</P>}
       </Card>
 
       <Card title="Mean squared error">
@@ -86,7 +86,7 @@ export default function TrainingScreen() {
             <Text key={i} style={[st.res, { color: Math.abs(r) > 1.5 ? C.neg : C.dim }]}>{r >= 0 ? '+' : ''}{fmt(r, 1)}</Text>
           ))}
         </Row>
-        <Small>A cubic would keep the sign, so a negative error would reduce the loss: not a candidate. Mean absolute error is the gentler alternative when outliers dominate. If training is failing, the loss function is rarely the reason; the learning rate is the first thing to check.</Small>
+        <Small>A cubic would keep the sign, so a negative error would reduce the loss: not a candidate. **Mean absolute error** is the gentler alternative when outliers dominate. If training is failing, the **loss function** is rarely the reason; the learning rate is the first thing to check.</Small>
       </Card>
 
       <Card title="The gradient step">
@@ -100,7 +100,7 @@ export default function TrainingScreen() {
           <Text style={st.v}>{fmt(b, 3)} − {fmt(lr)}·{fmt(gb, 2)} = {fmt(b - lr * gb, 3)}</Text>
         </Row>
         <LabeledSlider label="learning rate η" value={lr} min={0.001} max={0.06} step={0.001} onChange={setLr} format={(v) => v.toFixed(3)} color={C.warn} />
-        <Small>Push η past about 0.04 and watch the loss climb instead of fall: overshooting. Drop it to 0.002 and it creeps. The gradient here is computed by hand from the chain rule; in a deep network backpropagation does the same thing layer by layer, storing each intermediate once.</Small>
+        <Small>Push η past about 0.04 and watch the loss climb instead of fall: overshooting. Drop it to 0.002 and it creeps. The gradient here is computed by hand from the chain rule; in a deep network **backpropagation** does the same thing layer by layer, storing each intermediate once.</Small>
       </Card>
 
       <Card title="Loss curve">

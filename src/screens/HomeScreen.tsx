@@ -23,11 +23,11 @@ export default function HomeScreen() {
       return n;
     });
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: C.ink }} edges={['top']}>
-      <StatusBar style="light" />
+    <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={['top']}>
+      <StatusBar style="dark" />
       <View style={st.header}>
-        <Text style={st.headerTitle}>Machine Learning</Text>
-        <Text style={st.headerSub}>Interactive notes on lectures 2–4</Text>
+        <Text style={st.headerTitle}>Machine Learning: Interactive Notes</Text>
+        <Text style={st.headerSub}>Lectures 2–4 · companion to the course essays</Text>
       </View>
       <ScrollView style={{ flex: 1, backgroundColor: C.bg }} contentContainerStyle={{ padding: S.lg, paddingBottom: 64 }} keyboardShouldPersistTaps="handled">
         <Text style={st.abstract}>
@@ -68,11 +68,11 @@ export default function HomeScreen() {
 }
 
 const st = StyleSheet.create({
-  header: { backgroundColor: C.ink, paddingHorizontal: S.lg, paddingVertical: S.md, gap: 2 },
-  headerTitle: { color: C.white, fontFamily: serif, fontSize: 24, fontWeight: '700' },
-  headerSub: { color: '#C7CBE0', fontFamily: serif, fontSize: 14, fontStyle: 'italic' },
+  header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.text },
+  headerTitle: { color: C.text, fontFamily: serif, fontSize: 22, fontWeight: '700', textAlign: 'center' },
+  headerSub: { color: C.dim, fontFamily: serif, fontSize: 14, fontStyle: 'italic', textAlign: 'center' },
   abstract: { color: C.text, fontFamily: serif, fontSize: 16, lineHeight: 24 },
-  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.border, borderRadius: 6, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
+  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.text, borderRadius: 0, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
   eyebrow: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 1.5 },
   sectionTitle: { color: C.text, fontFamily: serif, fontSize: 20, lineHeight: 27, fontWeight: '700' },
   reading: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 0.5 },
@@ -80,6 +80,6 @@ const st = StyleSheet.create({
   itemHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: S.md, paddingVertical: S.md },
   itemTitle: { color: C.text, fontFamily: serif, fontSize: 18, fontWeight: '700' },
   definition: { color: C.dim, fontFamily: serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic' },
-  chevron: { color: C.accent, fontSize: 18, paddingTop: 2 },
+  chevron: { color: C.text, fontSize: 18, paddingTop: 2 },
   body: { paddingTop: S.sm, paddingBottom: S.lg },
 });

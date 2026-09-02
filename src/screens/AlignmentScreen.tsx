@@ -33,9 +33,9 @@ export default function AlignmentScreen() {
         </Row>
         <View style={st.bubbleUser}><Text style={[st.bubbleText, { color: C.cream }]}>{PROMPT}</Text></View>
         <View style={[st.bubbleModel, stage === 0 && { borderColor: C.neg }]}><Text style={st.bubbleText}>{RESPONSES[stage]}</Text></View>
-        {stage === 0 && <Small>Pre-training: internet-scale next-token prediction with cross-entropy loss. Essentially all knowledge and capability comes from here. But it is a text continuer, with no persona, no refusals, no assistant format.</Small>}
-        {stage === 1 && <Small>Supervised fine-tuning: continue training on human-written demonstrations of good assistant behaviour (question, helpful answer). Same loop as pre-training, different data. It teaches the format of being an assistant.</Small>}
-        {stage === 2 && <Small>Reinforcement learning from human feedback: humans rank pairs of outputs, a reward model learns to predict the rankings, and the policy is optimized to score well while a KL penalty keeps it near the SFT model.</Small>}
+        {stage === 0 && <Small>**Pre-training**: internet-scale next-token prediction with **cross-entropy** loss. Essentially all knowledge and capability comes from here. But it is a text continuer, with no persona, no refusals, no assistant format.</Small>}
+        {stage === 1 && <Small>**Supervised fine-tuning**: continue training on human-written demonstrations of good assistant behaviour (question, helpful answer). Same loop as pre-training, different data. It teaches the format of being an assistant.</Small>}
+        {stage === 2 && <Small>**Reinforcement learning from human feedback**: humans rank pairs of outputs, a **reward model** learns to predict the rankings, and the policy is optimized to score well while a **KL penalty** keeps it near the SFT model.</Small>}
       </Card>
 
       <Card title="Reinforcement learning from human feedback">
@@ -49,7 +49,7 @@ export default function AlignmentScreen() {
         <Formula>max_θ  E[ r(x, y) ]  −  β · KL(π_θ ‖ π_SFT)</Formula>
         <LabeledSlider label="β (KL penalty weight)" value={beta} min={0} max={2} step={0.05} onChange={setBeta} color={C.warn} />
         <Bar label="drift from SFT" value={drift} color={C.warn} right={fmt(drift)} />
-        <Small>Your one ranking nudges the reward model (illustrative numbers). Thousands of rankings from large labeler workforces train the real one, and whose preferences they encode is both a labour-ethics question and an epistemic one: the reward model defines what "helpful" means. β = 0 lets the policy chase reward anywhere, including into degenerate text; large β pins it to the SFT model. DPO reaches similar results with no separate reward model at all: your language model is secretly a reward model.</Small>
+        <Small>Your one ranking nudges the reward model (illustrative numbers). Thousands of rankings from large labeler workforces train the real one, and whose preferences they encode is both a labour-ethics question and an epistemic one: the reward model defines what "helpful" means. β = 0 lets the policy chase reward anywhere, including into degenerate text; large β pins it to the SFT model. **DPO** reaches similar results with no separate reward model at all: your language model is secretly a reward model.</Small>
       </Card>
 
       <Card title="Base and aligned models">
@@ -63,7 +63,7 @@ export default function AlignmentScreen() {
             <Small>format, persona, refusals</Small>
           </View>
         </Row>
-        <Small>Capability lives in the base model; safety behaviour is a layer added afterwards. A jailbreak teaches the model nothing new: it finds a path around the layer to capabilities the base model always had. The superficial alignment hypothesis pushes this to its end (alignment only chooses what to surface and in what style); whether it holds in full is open, and reasoning models trained with RL on verifiable rewards look like a counterexample where post-training adds capability, not just style.</Small>
+        <Small>Capability lives in the **base model**; safety behaviour is a layer added afterwards. A jailbreak teaches the model nothing new: it finds a path around the layer to capabilities the base model always had. The **superficial alignment hypothesis** pushes this to its end (alignment only chooses what to surface and in what style); whether it holds in full is open, and reasoning models trained with RL on verifiable rewards look like a counterexample where post-training adds capability, not just style.</Small>
       </Card>
 
       <Card title="Entropy and cross-entropy">

@@ -117,7 +117,7 @@ export default function TokensScreen() {
           <Stat n={words} label="words" />
           <Stat n={toks.length} label="tokens" />
         </Row>
-        <Small>Tokens are usually word fragments (byte-pair encoding builds a vocabulary of common character sequences). Two everyday quirks follow: context windows are measured in tokens, and a model asked to count the r's in "strawberry" sees a few IDs, not ten letters. ▁ marks a token that starts a word.</Small>
+        <Small>Tokens are usually word fragments (**byte-pair encoding** builds a vocabulary of common character sequences). Two everyday quirks follow: context windows are measured in tokens, and a model asked to count the r's in "strawberry" sees a few IDs, not ten letters. ▁ marks a token that starts a word.</Small>
       </Card>
 
       <Card title="2. One-hot encoding">
@@ -128,11 +128,11 @@ export default function TokensScreen() {
           ))}
         </Row>
         <Formula>e{sub(hot)} · e{sub(hot2)} = {hot === hot2 ? '1' : '0'}</Formula>
-        <Small>Every pair of distinct one-hot vectors is orthogonal, so "cat" is exactly as far from "kitten" as from "carburetor". And with V ≈ 50,000 the vectors are enormous. One-hot is best understood as the problem embeddings solve. (An embedding layer is literally eₖᵀW: a lookup of row k in a learned matrix W.)</Small>
+        <Small>Every pair of distinct one-hot vectors is **orthogonal**, so "cat" is exactly as far from "kitten" as from "carburetor". And with V ≈ 50,000 the vectors are enormous. One-hot is best understood as the problem embeddings solve. (An **embedding** layer is literally eₖᵀW: a lookup of row k in a learned matrix W.)</Small>
       </Card>
 
       <Card title="3. Embeddings">
-        <P>Each token is a vector: an arrow from the origin in a d-dimensional space. Here d = 8 so you can read every coordinate. To draw it we project onto the three principal components (PCA), the same thing the TensorFlow Embedding Projector does. Drag to rotate.</P>
+        <P>Each token is a vector: an arrow from the origin in a d-dimensional space. Here d = 8 so you can read every coordinate. To draw it we project onto the three **principal components** (PCA), the same thing the TensorFlow Embedding Projector does. Drag to rotate.</P>
         <VectorSpace3D items={items} arrows={arrows} selected={sel} onSelect={setSel} />
         <Small>Depth cues: nearer points are larger and darker. The three axes PC1–PC3 capture {(explained * 100).toFixed(0)}% of the variance of these 15 vectors; the remaining {(100 - explained * 100).toFixed(0)}% is invisible in any 3-D picture. Nothing above three dimensions can be drawn; you visualize three and say "eight" to yourself loudly.</Small>
         <Row wrap>
@@ -142,7 +142,7 @@ export default function TokensScreen() {
         <Row wrap style={{ gap: 4 }}>
           {FEATS.map((f) => <Small key={f} style={{ fontFamily: 'Menlo', fontSize: 10 }}>{f}</Small>)}
         </Row>
-        <P dim>Relatedness is measured in the full space, not the picture. The standard measure is cosine similarity, the cosine of the angle between two arrows:</P>
+        <P dim>Relatedness is measured in the full space, not the picture. The standard measure is **cosine similarity**, the cosine of the angle between two arrows:</P>
         <Formula>cos θ = (u · v) / (‖u‖ ‖v‖)</Formula>
         {sims.slice(0, 5).map((x) => (
           <Bar key={x.n} label={x.n} value={Math.max(0, x.c)} color={nearest.includes(x.n) ? C.accent2 : C.dim} right={x.c.toFixed(3)} />
@@ -160,7 +160,7 @@ export default function TokensScreen() {
           <OrderDemo words={['the', 'cat', 'chased', 'the', 'dog']} />
           <OrderDemo words={['the', 'dog', 'chased', 'the', 'cat']} />
         </Row>
-        <Small>Both sentences contain the identical multiset of token IDs and mean opposite things. A positional embedding (absolute or relative) is added to each token's vector so the model can tell position 2 from position 5.</Small>
+        <Small>Both sentences contain the identical multiset of token IDs and mean opposite things. A **positional embedding** (absolute or relative) is added to each token's vector so the model can tell position 2 from position 5.</Small>
       </Card>
     </Screen>
   );

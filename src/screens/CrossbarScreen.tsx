@@ -126,7 +126,7 @@ export default function CrossbarScreen() {
         <Bar value={a} max={countA + Math.min(0, b) > 0 ? countA + b : countA} color={high ? C.pos : C.neg} height={16} />
         <LabeledSlider label="bias b (the firing threshold)" value={b} min={-7} max={1} step={1} onChange={setB} color={C.warn} format={(v) => v.toFixed(0)} />
         <Small>
-          The weights select a region; the activations report what is in it; the sum says whether the feature is present. Group B contributes nothing no matter what is drawn there, because 0 × anything is 0. The bias decides how many lit cells in the crossbar row it takes before the neuron fires.
+          The **weights** select a region; the **activations** report what is in it; the sum says whether the **feature** is present. Group B contributes nothing no matter what is drawn there, because 0 × anything is 0. The **bias** decides how many lit cells in the crossbar row it takes before the neuron fires.
         </Small>
       </Card>
 
@@ -134,7 +134,7 @@ export default function CrossbarScreen() {
         <P dim>1. Load digit 7: the whole row is lit, six products of 1 × 1, high activation.</P>
         <P dim>2. Load digit 6: only three cells of the crossbar row have ink, so the sum barely reaches the threshold set by b = −3 and the neuron stays off.</P>
         <P dim>3. Load digit 5: its top stroke sits exactly where the 7's crossbar lives. The feature is present, so the neuron fires, even though the digit is a 5. This neuron detects a feature, not a digit. Later layers combine features into digits.</P>
-        <P dim>4. Load digit 1, then draw a short 7 whose crossbar sits one row lower. A plain MLP cannot cope: the crossbar lands on different input neurons. That is the motivation for convolutional networks.</P>
+        <P dim>4. Load digit 1, then draw a short 7 whose crossbar sits one row lower. A plain MLP cannot cope: the crossbar lands on different input neurons. That is the motivation for **convolutional** networks.</P>
       </Card>
     </Screen>
   );

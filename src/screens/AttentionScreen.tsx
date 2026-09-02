@@ -45,7 +45,7 @@ export default function AttentionScreen() {
   const xOf = (i: number) => 14 + (i * (W - 28)) / (TOKENS.length - 1);
 
   return (
-    <Screen intro="Attention is what lets the model look back and decide which earlier tokens matter for the current guess. Pick a query token; every earlier token is scored by how well its key matches the query, softmax turns the scores into weights, and the weights mix the values.">
+    <Screen intro="**Attention** is what lets the model look back and decide which earlier tokens matter for the current guess. Pick a **query** token; every earlier token is scored by how well its **key** matches the query, **softmax** turns the scores into weights, and the weights mix the values.">
       <Card title="Attention weights">
         <Row wrap style={{ gap: 6 }}>
           {TOKENS.map((tk, i) => (
@@ -107,7 +107,7 @@ export default function AttentionScreen() {
       </Card>
 
       <Card title="Values and the attention output">
-        <P dim>Each token carries a query (what am I looking for?), a key (what do I contain?), and a value (what do I pass on). Axes here are hand-made features; in a real model they are learned and there are 64–128 of them per head.</P>
+        <P dim>Each token carries a query (what am I looking for?), a key (what do I contain?), and a **value** (what do I pass on). Axes here are hand-made features; in a real model they are learned and there are 64–128 of them per head.</P>
         <VecRow label={`q (${TOKENS[qi].t})`} v={q} color={C.neg} />
         {TOKENS.filter((_, i) => visible[i] && weights[i] > 0.04).map((tk, j) => {
           const i = TOKENS.indexOf(tk);
@@ -123,7 +123,7 @@ export default function AttentionScreen() {
 
       <Card title="The transformer block">
         <BlockDiagram />
-        <Small>Each block: attention (tokens exchange information) then a feed-forward layer (each position processed on its own). Stack dozens and you have a modern language model. Multi-head attention simply runs several of these q/k/v matchings in parallel with different learned axes.</Small>
+        <Small>Each block: attention (tokens exchange information) then a feed-forward layer (each position processed on its own). Stack dozens and you have a modern language model. **Multi-head** attention simply runs several of these q/k/v matchings in parallel with different learned axes.</Small>
       </Card>
     </Screen>
   );
