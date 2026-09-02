@@ -174,22 +174,28 @@ export const GD_HTML = `<!doctype html>
     var from={x:w.x,z:w.z}, to={x:nx,z:nz}, t0=performance.now(), dur=380;
     addCrumb(from.x, from.z);
     var y0=H(from.x,from.z), y1=H(to.x,to.z), dist=Math.hypot(to.x-from.x,to.z-from.z);
-    function tick(now){
-      var t=Math.min(1,(now-t0)/dur), e=t<0.5?2*t*t:-1+(4-2*t)*t;
-      var x=from.x+(to.x-from.x)*e, z=from.z+(to.z-from.z)*e;
-      ball.position.set(x, y0+(y1-y0)*e+Math.sin(Math.PI*t)*Math.min(0.5,0.12+0.25*dist)+0.1, z);
-      if(t<1) requestAnimationFrame(tick); else {
+    var done=false;
+    function finalize(){ if(done) return; done=true;
         w=to; iter++; lossHist.push(L(w.x,w.z)); animating=false; planeTarget=0;
         placeBall();
         if(diverged){ finish('Diverged: the learning rate is too large; each step overshoots the valley.'); }
         else if(lossHist.length>1 && lossHist[lossHist.length-1]>lossHist[lossHist.length-2]+1e-9) setStatus('Loss went up: the step overshot. Lower η.');
         else setStatus('');
-      }
+    }
+    setTimeout(finalize, dur+150);
+    function tick(now){
+      if(done) return;
+      var t=Math.min(1,(now-t0)/dur), e=t<0.5?2*t*t:-1+(4-2*t)*t;
+      var x=from.x+(to.x-from.x)*e, z=from.z+(to.z-from.z)*e;
+      ball.position.set(x, y0+(y1-y0)*e+Math.sin(Math.PI*t)*Math.min(0.5,0.12+0.25*dist)+0.1, z);
+      if(t<1) requestAnimationFrame(tick); else finalize();
     }
     requestAnimationFrame(tick);
     return true;
   }
   var lastStepAt=0;
+  function maybeStep(now){ if(running && !animating && now-lastStepAt>640){ lastStepAt=now; if(!step()) stopRun(); } }
+  setInterval(function(){ maybeStep(performance.now()); }, 300);
   function run(){ if(running){ stopRun(); return; } running=true; lastStepAt=0; el.brun.textContent='Pause'; }
   function stopRun(){ running=false; el.brun.textContent='Run'; }
   function finish(msg){ stopRun(); setStatus(msg); if(!converged){ converged=true; el.closing.style.opacity=1; pullUp(); } }
@@ -248,7 +254,7 @@ export const GD_HTML = `<!doctype html>
 
   function frame(now){
     requestAnimationFrame(frame);
-    if(running && !animating && now-lastStepAt>640){ lastStepAt=now; if(!step()) stopRun(); }
+    maybeStep(now);
     if(camAnim){ var t=Math.min(1,(now-camAnim.t0)/camAnim.dur), e=1-Math.pow(1-t,3); cam.r=camAnim.from.r+(camAnim.to.r-camAnim.from.r)*e; cam.phi=camAnim.from.phi+(camAnim.to.phi-camAnim.from.phi)*e; target.copy(camAnim.from.tgt).lerp(camAnim.to.tgt,e); if(t>=1) camAnim=null; }
     else if(running||animating){ target.lerp(new THREE.Vector3(ball.position.x*0.6, ball.position.y*0.6, ball.position.z*0.6), 0.03); }
     camera.position.set(target.x+cam.r*Math.cos(cam.phi)*Math.sin(cam.theta), target.y+cam.r*Math.sin(cam.phi), target.z+cam.r*Math.cos(cam.phi)*Math.cos(cam.theta));
