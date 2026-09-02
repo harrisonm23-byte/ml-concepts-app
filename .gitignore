@@ -40,3 +40,4 @@ yarn-error.*
 /ios
 /android
 .claude/launch.json
+dist/

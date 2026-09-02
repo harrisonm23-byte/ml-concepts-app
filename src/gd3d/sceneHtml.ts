@@ -65,7 +65,7 @@ export const GD_HTML = `<!doctype html>
   <div class="explain"><i>Gradient</i> ∇L = direction of steepest increase. <i>Negative gradient</i> −∇L = direction of steepest decrease. The gradient tells us which way to go; the learning rate tells us how far. Step: <i>θ ← θ − η ∇L</i>.</div>
 </div>
 </div>
-<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
 <script>
 (function(){
   var DOM = 3.0, SEG = 96;
