@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { C, S, serif } from '../theme';
+import { C, PALETTE_LABELS, PaletteName, S, applyPalette, currentPalette, serif, themed } from '../theme';
 import { SECTIONS } from '../nav';
 
 function initialOpen(): Set<string> {
@@ -11,11 +11,21 @@ function initialOpen(): Set<string> {
     const k = new URLSearchParams(window.location.search).get('open');
     if (k) return new Set([k]);
   }
-  return new Set();
+  // Every entry open by default, so the page reads top to bottom like the essays.
+  return new Set(SECTIONS.flatMap((sec) => sec.items.map((it) => it.key)));
 }
 
 export default function HomeScreen() {
   const [open, setOpen] = useState<Set<string>>(initialOpen);
+  const [palette, setPalette] = useState<PaletteName>(() => {
+    // On the web, ?theme=paper|trine|dark picks the palette up front.
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      const t = new URLSearchParams(window.location.search).get('theme') as PaletteName | null;
+      if (t && PALETTE_LABELS[t]) { applyPalette(t); return t; }
+    }
+    return currentPalette();
+  });
+  const choose = (name: PaletteName) => { applyPalette(name); setPalette(name); };
   const toggle = (k: string) =>
     setOpen((o) => {
       const n = new Set(o);
@@ -24,12 +34,19 @@ export default function HomeScreen() {
     });
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={['top']}>
-      <StatusBar style="dark" />
+      <StatusBar style={C.statusBar} />
       <View style={st.header}>
         <Text style={st.headerTitle}>Machine Learning: Interactive Notes</Text>
         <Text style={st.headerSub}>Lectures 2–4 · companion to the course essays</Text>
+        <View style={st.switch}>
+          {(Object.keys(PALETTE_LABELS) as PaletteName[]).map((name) => (
+            <Pressable key={name} onPress={() => choose(name)} style={[st.switchBtn, palette === name && st.switchBtnActive]}>
+              <Text style={[st.switchText, palette === name && st.switchTextActive]}>{PALETTE_LABELS[name]}</Text>
+            </Pressable>
+          ))}
+        </View>
       </View>
-      <ScrollView style={{ flex: 1, backgroundColor: C.bg }} contentContainerStyle={{ padding: S.lg, paddingBottom: 64 }} keyboardShouldPersistTaps="handled">
+      <ScrollView key={palette} style={{ flex: 1, backgroundColor: C.bg }} contentContainerStyle={{ padding: S.lg, paddingBottom: 64 }} keyboardShouldPersistTaps="handled">
         <Text style={st.abstract}>
           Each entry below is a definition from the course, followed by a demonstration you can operate. Every number on screen is computed live from the stated formula; the models are small enough to see through.
         </Text>
@@ -67,7 +84,7 @@ export default function HomeScreen() {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.text },
   headerTitle: { color: C.text, fontFamily: serif, fontSize: 22, fontWeight: '700', textAlign: 'center' },
   headerSub: { color: C.dim, fontFamily: serif, fontSize: 14, fontStyle: 'italic', textAlign: 'center' },
@@ -82,4 +99,9 @@ const st = StyleSheet.create({
   definition: { color: C.dim, fontFamily: serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic' },
   chevron: { color: C.text, fontSize: 18, paddingTop: 2 },
   body: { paddingTop: S.sm, paddingBottom: S.lg },
-});
+  switch: { flexDirection: 'row', gap: 6, marginTop: 6 },
+  switchBtn: { paddingVertical: 3, paddingHorizontal: 10, borderWidth: 1, borderColor: C.border, borderRadius: 2 },
+  switchBtnActive: { backgroundColor: C.forest, borderColor: C.forest },
+  switchText: { color: C.dim, fontFamily: serif, fontSize: 12 },
+  switchTextActive: { color: C.cream },
+}));

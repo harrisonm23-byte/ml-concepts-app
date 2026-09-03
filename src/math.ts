@@ -1,3 +1,5 @@
+import { C } from './theme';
+
 export const softmax = (z: number[], T = 1): number[] => {
   const scaled = z.map((v) => v / T);
   const m = Math.max(...scaled);
@@ -64,23 +66,21 @@ export const pseudoEmbedding = (token: string, d = 8): number[] => {
   return Array.from({ length: d }, () => rnd() * 2 - 1);
 };
 
-// Colour for a signed value in [-1, 1]: forest positive, terracotta negative, pale near zero.
+// Colour for a signed value in [-1, 1]: palette positive/negative hue, pale near zero.
 export const signedColor = (v: number, max = 1) => {
   const t = clamp(Math.abs(v) / max, 0, 1);
   const a = 0.12 + 0.88 * t;
-  return v >= 0 ? `rgba(30,77,58,${a.toFixed(2)})` : `rgba(139,74,47,${a.toFixed(2)})`;
+  return `rgba(${v >= 0 ? C.posRGB : C.negRGB},${a.toFixed(2)})`;
 };
 
 // Text colour that stays legible on top of signedColor / heatColor fills.
-export const onFill = (v: number, max = 1) => (Math.abs(v) / max > 0.55 ? '#FFFFFF' : '#000000');
+export const onFill = (v: number, max = 1) => (Math.abs(v) / max > 0.55 ? C.onHi : C.onLo);
 
-// Colour for an unsigned activation in [0, 1]: light grey to deep forest.
+// Colour for an unsigned activation in [0, 1]: palette low tone to high tone.
 export const heatColor = (v: number) => {
   const t = clamp(v, 0, 1);
-  const r = Math.round(240 + (30 - 240) * t);
-  const g = Math.round(240 + (77 - 240) * t);
-  const b = Math.round(240 + (58 - 240) * t);
-  return `rgb(${r},${g},${b})`;
+  const c = C.heatLo.map((lo, i) => Math.round(lo + (C.heatHi[i] - lo) * t));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
 };
 
 export const norm = (a: number[]) => Math.sqrt(dot(a, a));

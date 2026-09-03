@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Line, Path, Circle, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { argmax, entropy, fmt, sampleIndex, softmax } from '../math';
 import Simplex from '../components/Simplex';
 
@@ -116,4 +116,4 @@ function TempCurve({ logits }: { logits: number[] }) {
   );
 }
 
-const st = StyleSheet.create({});
+const st = themed(() => StyleSheet.create({}));

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { fmt, relu } from '../math';
 
 const N = 8;
@@ -140,7 +140,7 @@ export default function CrossbarScreen() {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   k: { color: C.text, fontFamily: mono, fontSize: 13 },
   v: { color: C.text, fontFamily: mono, fontSize: 13 },
-});
+}));

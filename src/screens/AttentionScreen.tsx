@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { Bar, Card, Chip, Formula, LabeledSlider, Legend, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { dot, fmt, onFill, signedColor, softmax } from '../math';
 
 // Hand-designed 4-dim query/key/value vectors. Feature axes:
@@ -165,10 +165,10 @@ function BlockDiagram() {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   tok: { color: C.text, fontFamily: mono, fontSize: 12, width: 66 },
   score: { color: C.dim, fontFamily: mono, fontSize: 11, width: 48, textAlign: 'right' },
   pct: { color: C.dim, fontFamily: mono, fontSize: 11, width: 56, textAlign: 'right' },
   cell: { width: 44, height: 22, borderRadius: 4, alignItems: 'center', justifyContent: 'center' },
   cellText: { color: C.white, fontSize: 9, fontFamily: mono },
-});
+}));

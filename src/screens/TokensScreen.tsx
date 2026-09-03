@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import VectorSpace3D from '../components/VectorSpace3D';
 import { addv, cosine, pca, project, sub as vsub, mulberry32 } from '../math';
 import { Bar, Card, Chip, Formula, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { fmt, hashStr } from '../math';
 
 // A toy byte-pair-ish tokenizer: whole short words, common suffixes split off,
@@ -194,10 +194,10 @@ function OrderDemo({ words }: { words: string[] }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   input: { backgroundColor: C.card2, color: C.text, borderRadius: 10, padding: 10, fontSize: 15, borderWidth: 1, borderColor: C.border, minHeight: 44 },
   tok: { backgroundColor: C.card2, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4, borderWidth: 1, borderColor: C.border, alignItems: 'center' },
   tokStart: { borderColor: C.accent + '88' },
   tokText: { color: C.text, fontFamily: mono, fontSize: 13 },
   tokId: { color: C.faint, fontFamily: mono, fontSize: 9 },
-});
+}));

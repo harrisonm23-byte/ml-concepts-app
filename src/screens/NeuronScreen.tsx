@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Path, Text as SvgText } from 'react-native-svg';
 import { Card, Chip, Formula, LabeledSlider, Legend, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { fmt, heatColor, relu, sigmoid, signedColor } from '../math';
 
 type Act = 'relu' | 'sigmoid' | 'none';
@@ -141,6 +141,6 @@ function ActPlot({ act, z }: { act: Act; z: number }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   term: { color: C.text, fontFamily: mono, fontSize: 13, minWidth: 80 },
-});
+}));

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { VOCAB, nextLogits, tokenId, tokenize } from '../toyLM';
 import { argmax, entropy, fmt, onFill, pseudoEmbedding, sampleIndex, signedColor, softmax } from '../math';
 
@@ -315,7 +315,7 @@ function VecCells({ v }: { v: number[] }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   seq: { color: C.text, fontFamily: mono, fontSize: 15, lineHeight: 24 },
   seqPrompt: { color: C.text },
   seqGen: { color: C.accent2 },
@@ -348,4 +348,4 @@ const st = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.border,
   },
-});
+}));

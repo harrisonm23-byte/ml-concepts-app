@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, Legend, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { fmt, heatColor, mulberry32, relu, signedColor, softmax } from '../math';
 
 const SIZES = [4, 5, 3];
@@ -154,6 +154,6 @@ function sub(i: number) {
   return '₀₁₂₃₄₅₆₇₈₉'[i % 10];
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   term: { color: C.text, fontFamily: mono, fontSize: 13, minWidth: 64 },
-});
+}));

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Path, Polyline, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { clamp, fmt, mulberry32 } from '../math';
 
 // Ten noisy points around y = 0.7x + 2.
@@ -196,7 +196,7 @@ function CodeLine({ text, hot, note }: { text: string; hot: boolean; note: strin
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   phase: { flex: 1, paddingVertical: 8, borderRadius: 8, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, alignItems: 'center' },
   phaseActive: { backgroundColor: C.forest, borderColor: C.forest },
   phaseText: { color: C.dim, fontSize: 13, fontWeight: '600' },
@@ -205,4 +205,4 @@ const st = StyleSheet.create({
   v: { color: C.text, fontFamily: mono, fontSize: 12 },
   code: { color: C.text, fontFamily: mono, fontSize: 12 },
   note: { color: C.faint, fontFamily: mono, fontSize: 10 },
-});
+}));

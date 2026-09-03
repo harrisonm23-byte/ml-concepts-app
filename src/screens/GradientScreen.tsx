@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Path, Polyline, Text as SvgText } from 'react-native-svg';
 import { Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { clamp, fmt } from '../math';
 import HtmlView from '../components/HtmlView';
 import { GD_HTML } from '../gd3d/sceneHtml';
@@ -162,7 +162,7 @@ function LossChart({ losses }: { losses: number[] }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   k: { color: C.text, fontFamily: mono, fontSize: 13 },
   v: { color: C.text, fontFamily: mono, fontSize: 13 },
-});
+}));

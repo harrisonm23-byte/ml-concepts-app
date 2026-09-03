@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { C, S, mono, serif, shadow } from '../theme';
+import { C, S, mono, serif, shadowFor, themed } from '../theme';
 
 // Minimal inline markup: **bold** for defined terms, *italic* for emphasis, as in the handouts.
 export function rich(children: React.ReactNode): React.ReactNode {
@@ -215,7 +215,7 @@ export function Divider() {
   return <View style={{ height: 1, backgroundColor: C.border, marginVertical: S.sm }} />;
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   intro: { color: C.text, fontSize: 16, lineHeight: 24, fontFamily: serif },
   card: {
     backgroundColor: C.card,
@@ -224,7 +224,7 @@ const st = StyleSheet.create({
     gap: S.md,
     borderWidth: 1,
     borderColor: C.border,
-    ...shadow,
+    ...shadowFor(),
   },
   cardTitle: { color: C.text, fontSize: 18, fontFamily: serif, fontWeight: '700' },
   p: { color: C.text, fontSize: 16, lineHeight: 24, fontFamily: serif },
@@ -258,4 +258,4 @@ const st = StyleSheet.create({
   sliderValue: { fontFamily: mono, fontSize: 14 },
   barLabel: { color: C.text, fontFamily: mono, fontSize: 13, width: 88 },
   barRight: { color: C.dim, fontFamily: mono, fontSize: 12, width: 52, textAlign: 'right' },
-});
+}));

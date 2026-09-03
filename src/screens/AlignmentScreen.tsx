@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono } from '../theme';
+import { C, S, mono, themed } from '../theme';
 import { entropy, fmt } from '../math';
 
 const STAGES = ['Base (pre-trained)', 'SFT', 'RLHF'] as const;
@@ -104,10 +104,10 @@ function Dist({ label, p }: { label: string; p: number[] }) {
   );
 }
 
-const st = StyleSheet.create({
+const st = themed(() => StyleSheet.create({
   bubbleUser: { alignSelf: 'flex-end', backgroundColor: C.forest, borderRadius: 14, padding: 10, maxWidth: '85%' },
   bubbleModel: { alignSelf: 'flex-start', backgroundColor: C.card2, borderRadius: 14, padding: 10, maxWidth: '90%', borderWidth: 1, borderColor: C.border },
   bubbleText: { color: C.text, fontSize: 14, lineHeight: 20 },
   layer: { borderWidth: 1, borderRadius: 10, padding: 10, gap: 4 },
   layerTitle: { color: C.text, fontWeight: '700', fontSize: 14 },
-});
+}));
