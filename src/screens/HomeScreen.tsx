@@ -37,7 +37,6 @@ export default function HomeScreen() {
       <StatusBar style={C.statusBar} />
       <View style={st.header}>
         <Text style={st.headerTitle}>Machine Learning: Interactive Notes</Text>
-        <Text style={st.headerSub}>Lectures 2–4 · companion to the course essays</Text>
         <View style={st.switch}>
           {(Object.keys(PALETTE_LABELS) as PaletteName[]).map((name) => (
             <Pressable key={name} onPress={() => choose(name)} style={[st.switchBtn, palette === name && st.switchBtnActive]}>
@@ -87,7 +86,6 @@ export default function HomeScreen() {
 const st = themed(() => StyleSheet.create({
   header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.text },
   headerTitle: { color: C.text, fontFamily: serif, fontSize: 22, fontWeight: '700', textAlign: 'center' },
-  headerSub: { color: C.dim, fontFamily: serif, fontSize: 14, fontStyle: 'italic', textAlign: 'center' },
   abstract: { color: C.text, fontFamily: serif, fontSize: 16, lineHeight: 24 },
   sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.text, borderRadius: 0, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
   eyebrow: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 1.5 },
