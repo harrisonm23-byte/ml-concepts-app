@@ -9,7 +9,7 @@ import PdfPane from '../components/PdfPane';
 // On the web the notes are laid out as a US-letter sheet (8.5 in at 96 px/in), centered on a neutral desk.
 const WEB = Platform.OS === 'web';
 const PAGE_W = 816;
-const PDF_W = 600; // the lecture PDF column, shown beside the notes when the window is wide enough
+const PDF_W = 600; // the lecture PDF column, shown to the right of the notes when the window is wide enough
 
 function initialOpen(): Set<string> {
   // On the web, ?open=key expands a section directly (handy for sharing a link).
@@ -54,7 +54,7 @@ export default function HomeScreen() {
   };
   const headerSec = SECTIONS.find((sec) => sec.lecture === current);
 
-  // Wide web windows show the lecture PDF for the current section in a column to the left of the notes.
+  // Wide web windows show the lecture PDF for the current section in a column to the right of the notes.
   const { width, height } = useWindowDimensions();
   const showPdf = WEB && width >= PAGE_W + PDF_W + 48;
   const pdfSec = headerSec ?? SECTIONS[0];
@@ -70,21 +70,6 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: WEB ? C.card2 : C.bg }} edges={['top']}>
       <StatusBar style={C.statusBar} />
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-      {showPdf && (
-        <View style={[st.pdfCol, { width: PDF_W }]}>
-          <View style={st.pdfHead}>
-            <Text style={st.eyebrow}>{pdfSec.lecture.toUpperCase()}</Text>
-            <View style={st.switch}>
-              {pdfSec.pdfs.map((p) => (
-                <Pressable key={p.id} onPress={() => setPdfPick((m) => ({ ...m, [pdfSec.lecture]: p.id }))} style={[st.switchBtn, pdfId === p.id && st.switchBtnActive]}>
-                  <Text style={[st.switchText, pdfId === p.id && st.switchTextActive]}>{p.label}</Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-          <PdfPane id={pdfId} height={height - 120} />
-        </View>
-      )}
       <View style={{ flex: 1, maxWidth: WEB ? PAGE_W : undefined }}>
       <View style={[st.header, WEB && st.sheet, WEB && { borderTopWidth: 0 }]}>
         <Pressable onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })} style={{ alignSelf: 'stretch' }}>
@@ -150,6 +135,21 @@ export default function HomeScreen() {
         ))}
       </ScrollView>
       </View>
+      {showPdf && (
+        <View style={[st.pdfCol, { width: PDF_W }]}>
+          <View style={st.pdfHead}>
+            <Text style={st.eyebrow}>{pdfSec.lecture.toUpperCase()}</Text>
+            <View style={st.switch}>
+              {pdfSec.pdfs.map((p) => (
+                <Pressable key={p.id} onPress={() => setPdfPick((m) => ({ ...m, [pdfSec.lecture]: p.id }))} style={[st.switchBtn, pdfId === p.id && st.switchBtnActive]}>
+                  <Text style={[st.switchText, pdfId === p.id && st.switchTextActive]}>{p.label}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+          <PdfPane id={pdfId} height={height - 120} />
+        </View>
+      )}
       </View>
     </SafeAreaView>
   );
@@ -182,7 +182,7 @@ const st = themed(() => StyleSheet.create({
   switchText: { color: C.dim, fontFamily: serif, fontSize: 12 },
   switchTextActive: { color: C.cream },
   sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
-  pdfCol: { paddingTop: S.md, paddingRight: S.lg, paddingLeft: S.md, gap: S.sm },
+  pdfCol: { paddingTop: S.md, paddingLeft: S.lg, paddingRight: S.md, gap: S.sm },
   pdfHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2 },
   sheetBody: { paddingHorizontal: 56, paddingTop: S.xl, minHeight: '100%' },
 }));
