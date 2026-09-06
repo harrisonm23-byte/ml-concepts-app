@@ -11,12 +11,14 @@ import GradientScreen from './screens/GradientScreen';
 import TrainingScreen from './screens/TrainingScreen';
 
 export type ConceptEntry = { key: string; title: string; definition: string; reading: string; component: ComponentType };
-export type Section = { lecture: string; theme: string; items: ConceptEntry[] };
+export type LecturePdf = { id: string; label: string };
+export type Section = { lecture: string; theme: string; pdfs: LecturePdf[]; items: ConceptEntry[] };
 
 export const SECTIONS: Section[] = [
   {
     lecture: 'Language Models',
     theme: 'From Probability to Assistant: How Language Models Work and How They Learn to Help',
+    pdfs: [{ id: 'language-models-essay', label: 'Essay' }, { id: 'language-models-handout', label: 'Handout' }],
     items: [
       { key: 'loop', reading: 'I. The Model Is a Probability Engine', title: 'Autoregressive generation', definition: 'Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.', component: LoopScreen },
       { key: 'tokens', reading: 'II. How Text Becomes Math', title: 'Tokenization and embeddings', definition: 'Text → token IDs → one-hot vectors → learned vectors in ℝᵈ.', component: TokensScreen },
@@ -28,6 +30,7 @@ export const SECTIONS: Section[] = [
   {
     lecture: 'Neural Networks',
     theme: 'Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network',
+    pdfs: [{ id: 'neural-networks-essay', label: 'Essay' }],
     items: [
       { key: 'neuron', reading: 'V. Anatomy of a Neural Network', title: 'The neuron', definition: 'a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.', component: NeuronScreen },
       { key: 'crossbar', reading: 'VI. The Forward Pass (conceptual check)', title: 'Feature detectors', definition: 'Why a neuron tuned to the crossbar of a 7 fires on a 5 but not a 6.', component: CrossbarScreen },
@@ -37,6 +40,7 @@ export const SECTIONS: Section[] = [
   {
     lecture: 'Training',
     theme: 'Predict, Measure, Update: How Neural Networks Learn',
+    pdfs: [{ id: 'training-essay', label: 'Essay' }],
     items: [
       { key: 'gradient', reading: 'III. The Update Step: Gradient Descent', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },
       { key: 'training', reading: 'II. The Loss Function · V. The Loop in Code', title: 'Loss functions and the training loop', definition: 'Predict, measure (MSE or cross-entropy), update.', component: TrainingScreen },

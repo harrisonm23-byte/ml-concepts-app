@@ -3,7 +3,7 @@ import { Platform, View } from 'react-native';
 import { C } from '../theme';
 
 // Renders a self-contained HTML document: an iframe on web, react-native-webview on iOS/Android.
-export default function HtmlView({ html, height }: { html: string; height: number }) {
+export default function HtmlView({ html, height, scroll = false }: { html: string; height: number; scroll?: boolean }) {
   if (Platform.OS === 'web') {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { unstable_createElement } = require('react-native-web');
@@ -22,7 +22,7 @@ export default function HtmlView({ html, height }: { html: string; height: numbe
         source={{ html }}
         originWhitelist={['*']}
         javaScriptEnabled
-        scrollEnabled={false}
+        scrollEnabled={scroll}
         bounces={false}
         allowsInlineMediaPlayback
         nestedScrollEnabled
