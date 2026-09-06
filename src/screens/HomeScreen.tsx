@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { C, PALETTE_LABELS, PaletteName, S, applyPalette, currentPalette, serif, themed } from '../theme';
@@ -30,6 +30,27 @@ export default function HomeScreen() {
     return currentPalette();
   });
   const choose = (name: PaletteName) => { applyPalette(name); setPalette(name); };
+
+  // Sticky header: shows the title of the lecture currently under the reader's eye.
+  const scrollRef = useRef<ScrollView>(null);
+  const sectionY = useRef<Record<string, number>>({});
+  const itemY = useRef<Record<string, number>>({}); // local to the section
+  const [current, setCurrent] = useState<string | null>(null);
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const y = e.nativeEvent.contentOffset.y + 8;
+    let hit: string | null = null;
+    for (const sec of SECTIONS) {
+      const top = sectionY.current[sec.lecture];
+      if (top !== undefined && top <= y) hit = sec.lecture;
+    }
+    if (hit !== current) setCurrent(hit);
+  };
+  const jumpTo = (lecture: string, key?: string) => {
+    const base = sectionY.current[lecture] ?? 0;
+    const y = key ? base + (itemY.current[key] ?? 0) : base;
+    scrollRef.current?.scrollTo({ y: Math.max(0, y - S.sm), animated: true });
+  };
+  const headerSec = SECTIONS.find((sec) => sec.lecture === current);
   const toggle = (k: string) =>
     setOpen((o) => {
       const n = new Set(o);
@@ -40,7 +61,10 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: WEB ? C.card2 : C.bg }} edges={['top']}>
       <StatusBar style={C.statusBar} />
       <View style={[st.header, WEB && st.sheet, WEB && { borderTopWidth: 0 }]}>
-        <Text style={st.headerTitle}>Machine Learning: Interactive Notes</Text>
+        <Pressable onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}>
+          {headerSec && <Text style={st.headerEyebrow}>{headerSec.lecture.toUpperCase()}</Text>}
+          <Text style={st.headerTitle} numberOfLines={1}>{headerSec ? headerSec.theme : 'Machine Learning: Interactive Notes'}</Text>
+        </Pressable>
         <View style={st.switch}>
           {(Object.keys(PALETTE_LABELS) as PaletteName[]).map((name) => (
             <Pressable key={name} onPress={() => choose(name)} style={[st.switchBtn, palette === name && st.switchBtnActive]}>
@@ -49,12 +73,28 @@ export default function HomeScreen() {
           ))}
         </View>
       </View>
-      <ScrollView key={palette} style={{ flex: 1 }} contentContainerStyle={[{ padding: S.lg, paddingBottom: 64, backgroundColor: C.bg }, WEB && st.sheet, WEB && st.sheetBody]} keyboardShouldPersistTaps="handled">
+      <ScrollView ref={scrollRef} onScroll={onScroll} scrollEventThrottle={64} key={palette} style={{ flex: 1 }} contentContainerStyle={[{ padding: S.lg, paddingBottom: 64, backgroundColor: C.bg }, WEB && st.sheet, WEB && st.sheetBody]} keyboardShouldPersistTaps="handled">
         <Text style={st.abstract}>
           Each entry below is a definition from the course, followed by a demonstration you can operate. Every number on screen is computed live from the stated formula; the models are small enough to see through.
         </Text>
+        <View style={st.toc}>
+          <Text style={st.tocHeading}>Contents</Text>
+          {SECTIONS.map((sec) => (
+            <View key={sec.lecture} style={{ gap: 2 }}>
+              <Pressable onPress={() => jumpTo(sec.lecture)}>
+                <Text style={st.tocLecture}>{sec.lecture} · {sec.theme}</Text>
+              </Pressable>
+              {sec.items.map((it) => (
+                <Pressable key={it.key} onPress={() => jumpTo(sec.lecture, it.key)} style={({ pressed }) => [st.tocItem, pressed && { opacity: 0.6 }]}>
+                  <Text style={st.tocItemText}>{it.title}</Text>
+                  <Text style={st.tocReading} numberOfLines={1}>{it.reading}</Text>
+                </Pressable>
+              ))}
+            </View>
+          ))}
+        </View>
         {SECTIONS.map((sec) => (
-          <View key={sec.lecture} style={{ marginTop: S.xl }}>
+          <View key={sec.lecture} style={{ marginTop: S.xl }} onLayout={(e: LayoutChangeEvent) => { sectionY.current[sec.lecture] = e.nativeEvent.layout.y; }}>
             <View style={st.sectionBox}>
               <Text style={st.eyebrow}>{sec.lecture.toUpperCase()}</Text>
               <Text style={st.sectionTitle}>{sec.theme}</Text>
@@ -63,7 +103,7 @@ export default function HomeScreen() {
               const isOpen = open.has(it.key);
               const Body = it.component;
               return (
-                <View key={it.key} style={st.item}>
+                <View key={it.key} style={st.item} onLayout={(e: LayoutChangeEvent) => { itemY.current[it.key] = e.nativeEvent.layout.y; }}>
                   <Pressable onPress={() => toggle(it.key)} style={({ pressed }) => [st.itemHeader, pressed && { opacity: 0.7 }]}>
                     <View style={{ flex: 1, gap: 2 }}>
                       <Text style={st.reading}>{it.reading}</Text>
@@ -90,6 +130,13 @@ export default function HomeScreen() {
 const st = themed(() => StyleSheet.create({
   header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.text },
   headerTitle: { color: C.text, fontFamily: serif, fontSize: 22, fontWeight: '700', textAlign: 'center' },
+  headerEyebrow: { color: C.dim, fontFamily: serif, fontSize: 11, letterSpacing: 1.5, textAlign: 'center' },
+  toc: { marginTop: S.xl, borderWidth: 1, borderColor: C.text, paddingHorizontal: S.lg, paddingVertical: S.md, gap: S.md },
+  tocHeading: { color: C.text, fontFamily: serif, fontSize: 18, fontWeight: '700' },
+  tocLecture: { color: C.text, fontFamily: serif, fontSize: 15, fontWeight: '700', lineHeight: 21 },
+  tocItem: { flexDirection: 'row', alignItems: 'baseline', gap: S.sm, paddingLeft: S.lg, paddingVertical: 2 },
+  tocItemText: { color: C.forest, fontFamily: serif, fontSize: 15, textDecorationLine: 'underline' },
+  tocReading: { color: C.dim, fontFamily: serif, fontSize: 12, flexShrink: 1 },
   abstract: { color: C.text, fontFamily: serif, fontSize: 16, lineHeight: 24 },
   sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.text, borderRadius: 0, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
   eyebrow: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 1.5 },
