@@ -15,7 +15,7 @@ export type Section = { lecture: string; theme: string; items: ConceptEntry[] };
 
 export const SECTIONS: Section[] = [
   {
-    lecture: 'Lecture 2',
+    lecture: 'Language Models',
     theme: 'From Probability to Assistant: How Language Models Work and How They Learn to Help',
     items: [
       { key: 'loop', reading: 'I. The Model Is a Probability Engine', title: 'Autoregressive generation', definition: 'Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.', component: LoopScreen },
@@ -26,7 +26,7 @@ export const SECTIONS: Section[] = [
     ],
   },
   {
-    lecture: 'Lecture 3',
+    lecture: 'Neural Networks',
     theme: 'Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network',
     items: [
       { key: 'neuron', reading: 'V. Anatomy of a Neural Network', title: 'The neuron', definition: 'a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.', component: NeuronScreen },
@@ -35,7 +35,7 @@ export const SECTIONS: Section[] = [
     ],
   },
   {
-    lecture: 'Lecture 4',
+    lecture: 'Training',
     theme: 'Predict, Measure, Update: How Neural Networks Learn',
     items: [
       { key: 'gradient', reading: 'III. The Update Step: Gradient Descent', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },

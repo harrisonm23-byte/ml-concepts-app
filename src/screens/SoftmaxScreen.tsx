@@ -83,7 +83,7 @@ export default function SoftmaxScreen() {
       </Card>
 
       <Card title="Next-token prediction as classification">
-        <P dim>Next-token prediction is classification with V ≈ 50,000 classes instead of 10. The digit network in Lecture 3 ends with ten logits and this same softmax. And the training loss for both is cross-**entropy** against the correct class: −log P(correct token).</P>
+        <P dim>Next-token prediction is classification with V ≈ 50,000 classes instead of 10. The digit network in the neural-networks essay ends with ten logits and this same softmax. And the training loss for both is cross-**entropy** against the correct class: −log P(correct token).</P>
         <Formula>loss at this step = −log P(x*) = {fmt(-Math.log(probs[0]))}  (if "Paris" is correct)</Formula>
       </Card>
     </Screen>

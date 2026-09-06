@@ -61,9 +61,9 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: WEB ? C.card2 : C.bg }} edges={['top']}>
       <StatusBar style={C.statusBar} />
       <View style={[st.header, WEB && st.sheet, WEB && { borderTopWidth: 0 }]}>
-        <Pressable onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })}>
+        <Pressable onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })} style={{ alignSelf: 'stretch' }}>
           {headerSec && <Text style={st.headerEyebrow}>{headerSec.lecture.toUpperCase()}</Text>}
-          <Text style={st.headerTitle} numberOfLines={1}>{headerSec ? headerSec.theme : 'Machine Learning: Interactive Notes'}</Text>
+          <Text style={st.headerTitle}>{headerSec ? headerSec.theme : 'Machine Learning: Interactive Notes'}</Text>
         </Pressable>
         <View style={st.switch}>
           {(Object.keys(PALETTE_LABELS) as PaletteName[]).map((name) => (
@@ -129,7 +129,7 @@ export default function HomeScreen() {
 
 const st = themed(() => StyleSheet.create({
   header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.text },
-  headerTitle: { color: C.text, fontFamily: serif, fontSize: 22, fontWeight: '700', textAlign: 'center' },
+  headerTitle: { color: C.text, fontFamily: serif, fontSize: 20, lineHeight: 26, fontWeight: '700', textAlign: 'center' },
   headerEyebrow: { color: C.dim, fontFamily: serif, fontSize: 11, letterSpacing: 1.5, textAlign: 'center' },
   toc: { marginTop: S.xl, borderWidth: 1, borderColor: C.text, paddingHorizontal: S.lg, paddingVertical: S.md, gap: S.md },
   tocHeading: { color: C.text, fontFamily: serif, fontSize: 18, fontWeight: '700' },

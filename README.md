@@ -15,7 +15,7 @@ inside the accordion, in the order listed in `src/nav.ts`.
 
 ## What is on the page
 
-### Lecture 2 · From Probability to Assistant: How Language Models Work and How They Learn to Help
+### Language Models · From Probability to Assistant: How Language Models Work and How They Learn to Help
 
 **Autoregressive generation** (`LoopScreen`) — *Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.*
 A real, tiny language model: a bigram model built from a hand-written corpus of 22 sentences
@@ -66,7 +66,7 @@ max E[r(x,y)] − β·KL(π_θ ‖ π_SFT). A base-vs-aligned card on where capa
 jailbreaks work. An entropy card comparing one die, two dice, and a point mass with computed
 values, then cross-entropy as the training loss that collapses to −log q(x*).
 
-### Lecture 3 · Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network
+### Neural Networks · Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network
 
 **The neuron** (`NeuronScreen`) — *a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.*
 A single neuron with four inputs, drawn as an SVG diagram where edge thickness is |w|, edge color is
@@ -87,7 +87,7 @@ cycle it through 0 → 0.5 → 1, then propagate one layer at a time with the "C
 incoming edges. A matrix-form card shows the layer equations, the parameter count, and the
 comparison to the lecture's 784 → 512 → 512 → 10 digit network. "Random weights" re-seeds the network.
 
-### Lecture 4 · Predict, Measure, Update: How Neural Networks Learn
+### Training · Predict, Measure, Update: How Neural Networks Learn
 
 **Gradient descent** (`GradientScreen`) — *θ ← θ − η∇L(θ): step against the slope of the loss.*
 Two views. First, a self-contained Three.js scene (`src/gd3d/sceneHtml.ts`, rendered in an iframe
