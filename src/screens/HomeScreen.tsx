@@ -5,6 +5,10 @@ import { StatusBar } from 'expo-status-bar';
 import { C, PALETTE_LABELS, PaletteName, S, applyPalette, currentPalette, serif, themed } from '../theme';
 import { SECTIONS } from '../nav';
 
+// On the web the notes are laid out as a US-letter sheet (8.5 in at 96 px/in), centered on a neutral desk.
+const WEB = Platform.OS === 'web';
+const PAGE_W = 816;
+
 function initialOpen(): Set<string> {
   // On the web, ?open=key expands a section directly (handy for sharing a link).
   if (Platform.OS === 'web' && typeof window !== 'undefined') {
@@ -33,9 +37,9 @@ export default function HomeScreen() {
       return n;
     });
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={['top']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: WEB ? C.card2 : C.bg }} edges={['top']}>
       <StatusBar style={C.statusBar} />
-      <View style={st.header}>
+      <View style={[st.header, WEB && st.sheet, WEB && { borderTopWidth: 0 }]}>
         <Text style={st.headerTitle}>Machine Learning: Interactive Notes</Text>
         <View style={st.switch}>
           {(Object.keys(PALETTE_LABELS) as PaletteName[]).map((name) => (
@@ -45,7 +49,7 @@ export default function HomeScreen() {
           ))}
         </View>
       </View>
-      <ScrollView key={palette} style={{ flex: 1, backgroundColor: C.bg }} contentContainerStyle={{ padding: S.lg, paddingBottom: 64 }} keyboardShouldPersistTaps="handled">
+      <ScrollView key={palette} style={{ flex: 1 }} contentContainerStyle={[{ padding: S.lg, paddingBottom: 64, backgroundColor: C.bg }, WEB && st.sheet, WEB && st.sheetBody]} keyboardShouldPersistTaps="handled">
         <Text style={st.abstract}>
           Each entry below is a definition from the course, followed by a demonstration you can operate. Every number on screen is computed live from the stated formula; the models are small enough to see through.
         </Text>
@@ -102,4 +106,6 @@ const st = themed(() => StyleSheet.create({
   switchBtnActive: { backgroundColor: C.forest, borderColor: C.forest },
   switchText: { color: C.dim, fontFamily: serif, fontSize: 12 },
   switchTextActive: { color: C.cream },
+  sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
+  sheetBody: { paddingHorizontal: 56, paddingTop: S.xl, minHeight: '100%' },
 }));
