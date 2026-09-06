@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { C, PALETTE_LABELS, PaletteName, S, applyPalette, currentPalette, serif, themed } from '../theme';
 import { SECTIONS } from '../nav';
-import PdfPane from '../components/PdfPane';
+import PdfPane, { PdfPaneHandle } from '../components/PdfPane';
 
 // On the web the notes are laid out as a US-letter sheet (8.5 in at 96 px/in), centered on a neutral desk.
 const WEB = Platform.OS === 'web';
@@ -38,14 +38,24 @@ export default function HomeScreen() {
   const sectionY = useRef<Record<string, number>>({});
   const itemY = useRef<Record<string, number>>({}); // local to the section
   const [current, setCurrent] = useState<string | null>(null);
+  const [currentItem, setCurrentItem] = useState<string | null>(null);
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const y = e.nativeEvent.contentOffset.y + 8;
     let hit: string | null = null;
+    let item: string | null = null;
     for (const sec of SECTIONS) {
       const top = sectionY.current[sec.lecture];
-      if (top !== undefined && top <= y) hit = sec.lecture;
+      if (top !== undefined && top <= y) {
+        hit = sec.lecture;
+        item = null;
+        for (const it of sec.items) {
+          const iy = itemY.current[it.key];
+          if (iy !== undefined && top + iy <= y + 120) item = it.key;
+        }
+      }
     }
     if (hit !== current) setCurrent(hit);
+    if (item !== currentItem) setCurrentItem(item);
   };
   const jumpTo = (lecture: string, key?: string) => {
     const base = sectionY.current[lecture] ?? 0;
@@ -60,6 +70,12 @@ export default function HomeScreen() {
   const pdfSec = headerSec ?? SECTIONS[0];
   const [pdfPick, setPdfPick] = useState<Record<string, string>>({});
   const pdfId = pdfPick[pdfSec.lecture] ?? pdfSec.pdfs[0].id;
+  // Follow the reader: when a new entry comes into view, scroll the PDF to the essay section it cites.
+  const pdfRef = useRef<PdfPaneHandle>(null);
+  const reading = pdfSec.items.find((it) => it.key === currentItem)?.reading ?? null;
+  const heading = reading ? reading.split(' · ')[0].replace(/\s*\(.*\)\s*$/, '') : null;
+  const syncPdf = useCallback(() => { if (heading) pdfRef.current?.goTo(heading); }, [heading]);
+  useEffect(() => { syncPdf(); }, [syncPdf, pdfId]);
   const toggle = (k: string) =>
     setOpen((o) => {
       const n = new Set(o);
@@ -147,7 +163,7 @@ export default function HomeScreen() {
               ))}
             </View>
           </View>
-          <PdfPane id={pdfId} height={height - 120} />
+          <PdfPane ref={pdfRef} id={pdfId} height={height - 120} onReady={syncPdf} />
         </View>
       )}
       </View>
