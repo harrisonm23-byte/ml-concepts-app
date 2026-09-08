@@ -1,0 +1,125 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Predict, Measure, Update — Outline</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="style.css">
+<style>@page { @bottom-center { content: counter(page); font-family: KaTeX_Main, serif; font-size: 9.5pt; } }</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+</head><body>
+
+<h1>Predict, Measure, Update: How Neural Networks Learn</h1>
+<p class="sub">Lecture 4 essay — Outline</p>
+
+<h2>The Core Idea</h2>
+<ul>
+<li>Every network ever trained — a two-parameter line fit or a frontier language model — learns by repeating three steps: <b>make a prediction, measure how wrong it was, adjust the weights</b> so that next time it is a little less wrong. <i>Predict, measure, update</i>. Everything else is detail on those verbs, and most of it is detail on the third</li>
+<li>Order of the essay: what goes in and out $\to$ the <b>loss function</b> (“how wrong” as a single number) $\to$ <b>gradient descent</b> (which way to move) $\to$ batching and backpropagation (feasibility at scale) $\to$ the loop in PyTorch $\to$ how the same loop trains a language model, and what changes when you fine-tune instead of starting from scratch</li>
+</ul>
+
+<h2>I. Inputs and Outputs</h2>
+<ul>
+<li>A deep learning model is general in a way classical models are not: image, sound, or text in; a category, a number, or a different modality out (speech $\to$ text, caption $\to$ image). The model never sees pixels or words — only vectors of numbers</li>
+<li>Two translation steps bracket every model. <b>Encoding</b>: real-world input $\to$ mathematical object (image $\to$ grid of brightness values; sentence $\to$ token IDs $\to$ embeddings). <b>Decoding</b>: output vector $\to$ something usable (ten scores $\to$ “ankle boot”; a distribution $\to$ the next word). The scales need not match: 0–255 in, a 0/1 verdict out</li>
+<li>Call the guess $\hat y$ and the truth $y$. Training is about the gap between them</li>
+</ul>
+
+<h2>II. Measuring Performance: The Loss Function</h2>
+<ul>
+<li>A <b>loss function</b> collapses a whole set of predictions into one non-negative number: near zero is good, large is bad, negative never happens. In supervised learning $y$ comes from the answer key and the loss is summed over every example</li>
+<li><b>Mean squared error</b>, the workhorse for regression:
+$$\mathcal{L}_{\mathrm{MSE}} = \sum_i \left(\hat y_i - y_i\right)^2.$$
+Subtract, square, add up. Why square: of necessity, errors must be positive — overshooting by 7 and undershooting by 7 are equally wrong and must not cancel; of taste, squaring punishes large errors disproportionately — $70^2$ is a hundred times $7^2$, not ten. A cubic keeps the sign and is not a candidate. The cost: outliers get amplified, so filter extreme points (beyond $\approx 3.5$ standard deviations) first. The gentler alternative is <b>mean absolute error</b>, $\sum_i |\hat y_i - y_i|$. MSE vs. MAE is a low-priority choice: when training fails, the loss function is rarely the reason — check the learning rate first</li>
+<li><b>Cross-entropy</b>, the loss for classification:
+$$\mathcal{L}_{\mathrm{CE}} = -\sum_i p_i \log \hat p_i,$$
+with $p$ the true distribution and $\hat p$ the predicted one. Same behavior as MSE: close costs little, far costs a lot (10% sun on a rainy day is cheap; 95% sun costs about 3.5). Preferred over $1 - \hat p$ because it falls out of information theory rather than being invented. It matters here because <i>it is the loss language models are trained on</i>: next-token prediction is classification over fifty thousand categories instead of ten</li>
+</ul>
+
+<h2>III. The Update Step: Gradient Descent</h2>
+<ul>
+<li>Training, precisely: the loss depends on the weights, and training is the search for the weights that minimize it. “Line of best fit” is this phrase — <i>best</i> means minimum loss — for two parameters instead of billions. The search algorithms are <b>optimizers</b>, and every modern one (Momentum, RMSProp, Adam, AdamW) is gradient descent with sprinkles</li>
+<li><b>The gradient</b>: the derivative in every dimension at once — a vector whose $j$th entry is the slope with respect to the $j$th weight:
+$$\nabla_\theta \mathcal{L} = \left[\frac{\partial \mathcal{L}}{\partial \theta_1},\ \frac{\partial \mathcal{L}}{\partial \theta_2},\ \ldots,\ \frac{\partial \mathcal{L}}{\partial \theta_n}\right].$$
+Core principle: <i>the sign of the slope tells you the direction of increase</i>, so to lower the loss, step against it. Left of the minimum the slope is negative and you step right; right of it, positive and you step left. It holds in every dimension independently, so the same rule works for one weight or a hundred billion. One step:
+$$\theta \leftarrow \theta - \eta\, \nabla_\theta \mathcal{L}(\theta).$$</li>
+<li><b>The loss landscape</b>: be clear which graph is drawn. Lecture one plotted data against predictions; this lecture’s axes are the <i>weights</i> and the height is the <i>loss</i>. For $y = ax + b$ the loss is a surface over a plane and training is a ball rolling toward the lowest valley; $y = ax$ gives a curve. The classic worry: zero slope marks any minimum, local or global, so the ball can settle in a shallow dip. It matters less than intuition suggests — momentum and the noise of small batches jostle the ball out, and in very high dimension true traps are rarer than they look on a 3-D plot</li>
+<li><b>The learning rate</b> $\eta$: a scalar that scales how far each step moves. The most consequential knob in training and the hardest to set by reasoning. Too small: microscopic steps, loss flat for hundreds of iterations (“a million years”). Too large: each step overshoots to the far slope, and if the overshoot grows the loss climbs. In between: overshoots that shrink, and convergence anyway. Read the regime off the loss curve — what you want is a loss that is, on the whole, going down. Refinements: <b>learning-rate decay</b> shrinks $\eta$ late in training; <b>momentum</b> carries velocity from earlier steps; AdamW manages per-parameter scaling on its own</li>
+<li><b>The foggy mountain</b>: you want the valley but can only feel the ground under your feet, and measuring steepness needs a slow, expensive instrument, so you take a reading, walk downhill a while, and read again. The mapping is exact — you are the algorithm; the path is the sequence of weights; the steepness is the gradient; the instrument is differentiation; the distance between readings is learning rate $\times$ gradient. The fog is why nobody sees the whole landscape: in millions of dimensions there is no map, only the slope where you stand. Knowing the minimum in advance is like finding the largest element of a 50,000-entry array without looking through it</li>
+</ul>
+
+<h2>IV. Making It Feasible: Batches and Backpropagation</h2>
+<ul>
+<li>Two practical questions: how much data per gradient reading, and how the gradient is actually computed</li>
+<li><b>Batch size</b>. <b>Batch gradient descent</b> averages over the whole dataset — the true gradient, a clean direct path. <b>Stochastic gradient descent</b> (SGD) uses one example — noisy, zigzagging, each gradient a rough estimate. <b>Mini-batch</b> sits in between (32, say) and is what almost everyone runs; powers of two for GPU memory layout. The trade-off is efficiency against accuracy: computing the gradient is the bottleneck, and fifty one-second steps that point roughly right beat three ten-minute steps that point exactly right. The noise also jostles the ball — one reason local minima are less of a problem in practice. Lecturer’s preference: 32, 64, or 128; in most research and production settings hundreds to thousands are standard, and batch size 1 is usually a memory workaround. The binding constraint: the batch must fit on the GPU</li>
+<li>Vocabulary: in lecture “epoch” meant one update; standard usage reserves <b>epoch</b> for a full pass through the dataset and calls each update a <b>step</b> or <b>iteration</b></li>
+<li><b>Backpropagation</b>: in practice one line, <code>loss.backward()</code>. What is wanted is $\partial \mathcal{L}/\partial \theta$ for every weight. A network is a nested composition — weighted sum, activation, weighted sum, activation — so the derivative is the chain rule applied repeatedly:
+$$\frac{\partial \mathcal{L}}{\partial \theta^{(1)}} = \frac{\partial \mathcal{L}}{\partial h^{(L)}} \cdot \frac{\partial h^{(L)}}{\partial h^{(L-1)}} \cdots \frac{\partial h^{(2)}}{\partial h^{(1)}} \cdot \frac{\partial h^{(1)}}{\partial \theta^{(1)}}.$$
+Each factor is one layer’s derivative with respect to the layer before it. Each layer’s contribution depends on the layers <i>after</i> it, and only the last layer’s derivative — the loss — is known at the outset, so you work backwards from output to input. Hence the name. Efficient because intermediates are shared: the derivative through layer 5 is needed for layers 4, 3, 2, 1. Backpropagation is <b>dynamic programming</b> over a directed acyclic graph — compute each intermediate once, store it, look it up. The calculus needed is small (any intro series plus 3Blue1Brown’s third and fourth videos)</li>
+<li>Honest caveat: none of this comes with guarantees. That noise helps, that the ball escapes dips, that the loss falls — empirical regularities, not theorems. The discipline is to watch the loss and the validation accuracy; accuracy at the chance baseline (25% on four classes) means something is broken, and the learning rate is the first suspect</li>
+</ul>
+
+<h2>V. The Loop in Code</h2>
+<ul>
+<li>Setup: a hosted GPU on Colab (a free T4 suffices), <code>torch</code> and <code>torch.nn</code>, FashionMNIST (ten clothing classes, sibling of MNIST). A <code>DataLoader</code> handles batching, shuffling, and parallel loading — a convenience, not a concept. First sanity check is shape: a batch is <code>[64, 1, 28, 28]</code> — batch, channels, height, width — with 64 labels; dimension mismatches are the first thing to look for</li>
+<li>Model: <code>Linear(784→512)</code>, ReLU, <code>Linear(512→512)</code>, ReLU, <code>Linear(512→10)</code>, with $784 = 28 \times 28$ the flattened image; <code>forward</code> flattens, applies the stack, returns <b>logits</b>. In real projects you import a pretrained architecture</li>
+<li>The training loop reads best as instructions to objects:
+<pre>loss_fn   = nn.CrossEntropyLoss()              <span class="c"># classification -> cross-entropy</span>
+optimizer = SGD(model.parameters(), lr=1e-3)   <span class="c"># optimizer: weights + learning rate</span>
+
+model.train()                                  <span class="c"># model, switch to learning mode</span>
+for batch, (X, y) in enumerate(dataloader):
+    X, y = X.to(device), y.to(device)          <span class="c"># data, move onto the GPU</span>
+    pred = model(X)                            <span class="c"># model, make your prediction</span>
+    loss = loss_fn(pred, y)                    <span class="c"># loss function, score vs. truth</span>
+    loss.backward()                            <span class="c"># loss, compute the gradient (backprop)</span>
+    optimizer.step()                           <span class="c"># optimizer, move the weights one step</span>
+    optimizer.zero_grad()                      <span class="c"># optimizer, clear the gradient</span></pre>
+The four inputs — data, model, loss function, optimizer — are the four boxes in the training diagram; the body is the three steps: predict, compute the loss, compute the gradient and step. The one non-obvious line is <code>zero_grad</code>: PyTorch accumulates gradients by default</li>
+<li>Validation is the same loop with learning turned off: <code>model.eval()</code>, wrap in <code>torch.no_grad()</code>, accuracy = fraction with <code>pred.argmax(1) == y</code>. (The notebook calls it the test loop; it is really validation.) Five epochs took validation accuracy from 48% to 53% with validation loss falling — unimpressive, but the curve heads the right way; print both losses</li>
+<li>Housekeeping: <code>torch.save(model.state_dict(), path)</code> and <code>model.load_state_dict(torch.load(path))</code>; save to a mounted Drive, because Colab wipes local storage when the runtime dies</li>
+</ul>
+
+<h2>VI. Training a Language Model</h2>
+<ul>
+<li>Everything so far assumed an answer key; the internet has none. The answer is <b>self-supervised learning</b>, between supervised and unsupervised: the model labels the data itself by predicting one part of the input from another. Hide a word, predict it from what came before; an $n$-token sentence yields $n-1$ examples with built-in answers. Pipeline: the internet $\to$ basic filtering $\to$ next-token problems by the trillion. No labelers, though frontier labs invest heavily in data triage and upsampling</li>
+<li>But what is the ground truth? “The plate was a beautiful shade of ___” — the true distribution (30% gray, 50% blue) is unknowable. The surrogate: treat the token that appeared as 100% correct, a <b>one-hot</b> target. Cross-entropy against a one-hot collapses to a single term,
+$$\mathcal{L}_t = -\log \hat p\!\left(x^*_t\right),$$
+the negative log-probability assigned to the token that came next. Each individual target is wrong, but at internet scale the errors average out — exactly as Monte Carlo sampling estimates a distribution from draws. The cost: it rewards confidence, pushing the model toward certainty on every example — one contributor to the <b>miscalibration</b> of trained language models</li>
+<li>The lecture-2 picture is now complete: that lecture covered post-training (SFT, RLHF, RLVR), this one pre-training and the mechanics of training. The only component still a black box is attention</li>
+</ul>
+
+<h2>VII. Fine-Tuning, and the Art of Practice</h2>
+<ul>
+<li>You will almost never train from scratch: frontier pre-training costs billions. Exception: small <b>model organisms</b> for interpretability research, with the caveat that what holds for a tiny model need not hold at scale</li>
+<li><b>Fine-tuning</b> = take an existing model’s final weights and train a few more epochs on your own data. Not a different kind of training — the same loop with a different starting point: weights that already understand language or images instead of random ones. Also called <b>transfer learning</b>; why 5,000 math problems can teach a model math — but only a model that already reads English (the brilliant exchange student who cannot read the word problems)</li>
+<li>Clearest case: the messy middle — a hospital’s 10,000 clinical notes dense with local acronyms, where a general model underperforms and a from-scratch model memorizes or is too weak. The alternative worth knowing is <b>RAG</b>: leave the model alone and hand it the relevant notes at query time</li>
+<li>Two risks: <b>overfitting</b>, the familiar one; and <b>catastrophic forgetting</b>, subtler and unsolved — learning the new thing degrades the old things. The field attacking it is <b>continual learning</b>; its lack of a clean solution is a standard argument in the skeptic’s case</li>
+<li><b>Practical guidelines</b>, hard-won rather than derived: <i>the learning rate is the biggest lever</i> and nearly impossible to reason out ($10^{-3}$ to $10^{-15}$) — ask mentors and PIs; when fine-tuning, start from the <i>final</i>, decayed rate the pretrained model ended on. Use AdamW. Start the batch size at 1 and grow it. Deliberately overfit first: underfitting tells you nothing, overfitting proves the pipeline works and you can pull back. Monitor validation loss with Weights &amp; Biases, not print statements. Save weights every epoch to permanent storage. Inference memory $\approx$ twice the parameter count in GB (a 7B model wants 14–15 GB in half precision, far less at 4-bit)</li>
+<li><b>Hyperparameters</b>: settings fixed before training that training cannot learn — the learning rate (how training proceeds), the number of layers and neurons (what is being trained). One meta-level above the loop. <b>Grid search</b> tries every combination and the arithmetic is unkind: 10 learning rates $\times$ 3 depths $\times$ 3 widths $= 90$ runs, at five hours each 450 hours, exponential in each added dimension. <b>Random search</b> (ten of the 90) is, naive as it sounds, the practical default. <b>Bayesian optimization</b> (Meta’s labs) and Optuna are usually overkill</li>
+</ul>
+
+<h2>One Loop, Billions of Weights</h2>
+<ul>
+<li><b>Predict</b>: encode the input, run it through the network, decode a guess. <b>Measure</b>: compare to the truth with a loss — squared error for numbers, cross-entropy for categories, cross-entropy against a one-hot next token for language. <b>Update</b>: compute the gradient by backpropagation, scale it by the learning rate, step against it, repeat — one example at a time or a thousand, from random weights or from a model someone else trained</li>
+<li>The four foundation lectures — ML basics, post-training, neural networks, training — are the complete picture, with attention the single remaining black box. Do not keep learning horizontally. The foundation is laid; go straight into research</li>
+</ul>
+
+<h2>Quick review</h2>
+<div class="review">
+<p><b>What’s strong:</b> Organizing the lecture around three verbs and then spending the essay on the third is honest about where the difficulty is, and the essay keeps the promise — batching, backpropagation, the learning rate, and fine-tuning are each explicitly a refinement of “update.” The foggy-mountain analogy is mapped term by term rather than left as an image, and it pre-empts the “why not just look up the minimum” question the previous lecture’s Q&amp;A raised. Being explicit about which graph is being drawn (weights against loss, not data against prediction) fixes the single most common confusion in this material. The one-hot surrogate passage is the best in the four essays: it says plainly that every individual training target is wrong, explains why the procedure works anyway, and draws the consequence — miscalibration — instead of leaving it as trivia.</p>
+<p><b>Where to push:</b> (1) Cross-entropy’s derivation is declared out of scope, but the lecture-2 essay already built it from entropy; a cross-reference would let the reader close the loop rather than take it on faith twice. (2) “Backpropagation is dynamic programming” is right, but the chain-rule display shows a single path, so the sharing that makes it efficient is invisible — each $\partial h^{(k+1)}/\partial h^{(k)}$ is a Jacobian reused by every parameter upstream of it, and one sentence naming that reuse would earn the claim. (3) “Local minima matter less than intuition suggests” rests on two informal mechanisms; the citable version — that in high dimension most zero-gradient points are saddles, not minima — is absent and is the form the reader will meet next. (4) The range $10^{-3}$ to $10^{-15}$ is doing rhetorical work; the practical range for fine-tuning is far narrower, and the essay’s own advice to start from the pretrained model’s final decayed rate already implies it. (5) “Start the batch size at 1 and grow it” sits beside the earlier remark that batch size 1 is usually a memory workaround; the two are compatible (debugging versus production) but the essay should say which regime each belongs to. (6) Minor: MAE is offered as the “gentler alternative” without its real disadvantage — a gradient of constant magnitude that never shrinks near the minimum and is undefined at zero — which is the actual reason MSE is the default, rather than taste.</p>
+<p><b>Connection to your work:</b> Two hooks. First, training is search without a map: nobody, the developer included, sees the loss landscape, and the outcome depends on learning rate, batch size, and initialization in ways that are set by intuition and confirmed only by watching the curve. That is the technical content behind “the developer cannot fully predict the model’s behaviour” — not evasion but the foggy mountain — and it bears on any standard that presumes foreseeability. Second, fine-tuning is the same loop from a different starting point, so the line between training a model and adapting one is a matter of degree; catastrophic forgetting shows that adaptation can remove behaviours the original training installed, safety behaviours included, without anyone intending it. A regime that attaches obligations to the act of training has to decide whether a hospital fine-tuning on 10,000 notes is training, and the essay’s own framing says it is. The self-supervised section is the smaller hook: the “label” for pre-training is the internet itself, which is why provenance and consent questions about training data cannot be answered by pointing at an annotation process — there is none.</p>
+</div>
+
+<p class="colophon">The lecture material is from the Algoverse AI Research program, courtesy of Algoverse. The essay and this outline are the author’s own writing from those lectures, not copied from the lecture materials.</p>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  renderMathInElement(document.body, {
+    delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }],
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+    throwOnError: false
+  });
+});
+</script>
+</body></html>

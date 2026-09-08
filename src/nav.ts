@@ -30,7 +30,7 @@ export const SECTIONS: Section[] = [
   {
     lecture: 'Neural Networks',
     theme: 'Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network',
-    pdfs: [{ id: 'neural-networks-essay', label: 'Essay' }],
+    pdfs: [{ id: 'neural-networks-essay', label: 'Essay' }, { id: 'neural-networks-handout', label: 'Handout' }],
     items: [
       { key: 'neuron', reading: 'V. Anatomy of a Neural Network', title: 'The neuron', definition: 'a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.', component: NeuronScreen },
       { key: 'crossbar', reading: 'VI. The Forward Pass (conceptual check)', title: 'Feature detectors', definition: 'Why a neuron tuned to the crossbar of a 7 fires on a 5 but not a 6.', component: CrossbarScreen },
@@ -40,7 +40,7 @@ export const SECTIONS: Section[] = [
   {
     lecture: 'Training',
     theme: 'Predict, Measure, Update: How Neural Networks Learn',
-    pdfs: [{ id: 'training-essay', label: 'Essay' }],
+    pdfs: [{ id: 'training-essay', label: 'Essay' }, { id: 'training-handout', label: 'Handout' }],
     items: [
       { key: 'gradient', reading: 'III. The Update Step: Gradient Descent', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },
       { key: 'training', reading: 'II. The Loss Function · V. The Loop in Code', title: 'Loss functions and the training loop', definition: 'Predict, measure (MSE or cross-entropy), update.', component: TrainingScreen },
