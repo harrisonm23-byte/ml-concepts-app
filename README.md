@@ -32,9 +32,7 @@ Every number on screen is computed live from the stated formula; the models are 
 
 ## Essays and handouts
 
-Each lecture comes with two PDFs, shown beside the notes on wide screens: the **essay**, a prose write-up of the lecture, and the **handout**, a one-glance outline of the essay with the formulas, followed by a short review of what the essay does well and where it could push further.
-
-The essays and handouts are the author's own writing. The underlying material comes from the [Algoverse](https://algoverseairesearch.org/) AI Research program lectures, courtesy of Algoverse; the essays and handouts are written from those lectures, not copied from the lecture materials.
+Each lecture comes with two PDFs, shown beside the notes on wide screens: the **essay**, a prose write-up of the lecture, and the **handout**, a condensed outline of the essay with the formulas.
 
 The handouts are built from `handouts/*.html` with `sh scripts-build-handouts.sh` (headless Chromium plus KaTeX, so the typesetting matches the LaTeX essays).
 

@@ -83,31 +83,8 @@ It looks worse than it is; ten minutes of staring resolves it into the English s
 <li>Second: <b>polysemanticity</b>. A single neuron in a modern transformer often responds to many unrelated things at once — the loop of a 9, dogs, the letter A. The current untangling technique is the <b>sparse autoencoder</b>, which decomposes polysemantic activations into a sparser one-feature-per-direction representation (Anthropic’s interpretability publications; a mentor’s recording in the Drive)</li>
 </ul>
 
-<h2>VIII. From the Q&amp;A</h2>
-<ul>
-<li><i>Which activation function?</i> ReLU or GELU; almost nothing else. Reason previews the next lecture: training multiplies many numbers, and small products vanish while large ones explode — the <b>vanishing and exploding gradient</b> problems. ReLU-family functions are better behaved than the sigmoid, however well-motivated the sigmoid is in theory</li>
-<li><i>What determines the weights?</i> Nothing you set: random initialization, then the training loop</li>
-<li><i>Does importance determine activation?</i> No. Activation is only how present the feature is; importance is a separate question (pruning research reaches the same performance with far fewer neurons)</li>
-<li><i>A short 7 versus a tall 7?</i> The crossbar lands on different pixels, so different input neurons see it; a plain MLP copes imperfectly. This is the motivation for the <b>CNN</b>: convolving and pooling over neighborhoods learns patterns that survive small translations</li>
-<li><i>Why not set the weights to the minimum directly?</i> You cannot see the loss surface — millions of dimensions, no map. Finding the maximum of a 100,000-element array by inspection is not possible; you follow the slope (tomorrow’s topic)</li>
-<li><i>Deliberately overfit first?</i> Yes — it is in Karpathy’s training recipe — because it confirms the pipeline can learn at all before you pull back</li>
-</ul>
 
-<h2>Where to Go From Here</h2>
-<ul>
-<li>Watch the 3Blue1Brown video; it covers the second half a different way. Attention remains a black box: the recommended series takes hours and is optional — benchmarking, prompting, and decoding projects can treat the model as a box, interpretability and efficiency projects cannot</li>
-<li>Use the models: running BERT, a segmentation model, or a diffusion model is now a natural-language request to a coding agent, and fifteen minutes of trying beats an hour of watching. Do not master every architecture horizontally; pick a project and go deep. Research ideas begin with auditions at the start of week 3 and lock in by week 5 or 6</li>
-<li>One sentence: a neural network is a stack of layers in which every neuron computes a weighted sum of the layer before it, adds a bias, and applies a nonlinearity — and, trained well, that repeated operation turns pixels into strokes, strokes into loops, and loops into a 9</li>
-</ul>
 
-<h2>Quick review</h2>
-<div class="review">
-<p><b>What’s strong:</b> The crossbar conceptual check is the essay’s load-bearing device. It turns the formula into a two-group arithmetic argument (group A weights 1, group B weights 0) that a reader can run in their head, and it is placed immediately after the notation so the symbols are grounded before they can intimidate. Distinguishing the course-wide sense of “weights” (every tunable number) from the in-network sense heads off a confusion that otherwise lasts weeks. The argument for nonlinearity — a weighted sum of weighted sums is a weighted sum — is pitched at exactly the right level: no theorem, just algebra the reader already owns. The modality field guide is honestly labelled as exposure rather than derivation, and “use a pretrained model” is repeated at every point where a student might be tempted not to.</p>
-<p><b>Where to push:</b> (1) Section II lists expressiveness as a third way networks differ from classical models, but expressiveness is a consequence of the nonlinearity introduced in Section V; a forward pointer would let the reader meet the same fact twice and recognize it. (2) The bias discussion offers two stories and says both “point the same way,” but the threshold story is a rename of the $y = mx + b$ story, not independent support; saying so is more honest than presenting two arguments. (3) Scalability is asserted without the caveat from lecture one that it holds in the double-descent regime and not before, so a reader could take it as unconditional. (4) The strokes-to-loops-to-digits picture is presented in V as what a trained network does and walked back only in VII; one clause of foreshadowing would prevent the reader from over-committing. (5) The RL section notes the reward “does not have to be differentiable” without saying what that buys — it is precisely why RL can optimize human preference rankings and pass/fail checkers, which is the entire reason RLHF and RLVR exist. (6) Minor: “fully connected” is introduced without its contrast — local or sparse connectivity, which is what a convolution is — so the CNN arrives in the Q&amp;A tied to a question rather than to the anatomy.</p>
-<p><b>Connection to your work:</b> Automatic feature extraction is the fact that governance keeps tripping over. A network is handed raw data and decides for itself what to attend to, so “which features does the model use” is an empirical question answered after training, not a design specification anyone can be required to disclose in advance — which bounds what a documentation or transparency mandate can literally ask for. Section VII is the second hook: training does not guarantee interpretable features, and polysemanticity means a neuron is not a unit of meaning, which is the technical reason literal “explainability” requirements are hard to satisfy and why the sparse-autoencoder line of work matters for any audit regime. And the pretrained-then-fine-tune default in IV is the structural fact behind supply-chain questions: the party who fine-tunes is rarely the party who trained, so responsibility has two natural attachment points, not one.</p>
-</div>
-
-<p class="colophon">The lecture material is from the Algoverse AI Research program, courtesy of Algoverse. The essay and this outline are the author’s own writing from those lectures, not copied from the lecture materials.</p>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {

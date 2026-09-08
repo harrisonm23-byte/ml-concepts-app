@@ -104,9 +104,6 @@ export default function HomeScreen() {
         <Text style={st.abstract}>
           Each entry below is a definition from the course, followed by a demonstration you can operate. Every number on screen is computed live from the stated formula; the models are small enough to see through.
         </Text>
-        <Text style={st.colophon}>
-          The essays and handouts read alongside these notes are the author's own writing. The material comes from the Algoverse AI Research program lectures, courtesy of Algoverse; the essays and handouts are written from those lectures, not copied from the lecture materials.
-        </Text>
         <View style={st.toc}>
           <Text style={st.tocHeading}>Contents</Text>
           {SECTIONS.map((sec) => (
@@ -184,9 +181,7 @@ const st = themed(() => StyleSheet.create({
   tocItem: { flexDirection: 'row', alignItems: 'baseline', gap: S.sm, paddingLeft: S.lg, paddingVertical: 2 },
   tocItemText: { color: C.forest, fontFamily: serif, fontSize: 15, textDecorationLine: 'underline' },
   tocReading: { color: C.dim, fontFamily: serif, fontSize: 12, flexShrink: 1 },
-  abstract: { color: C.text, fontFamily: serif, fontSize: 16, lineHeight: 24 },
-  colophon: { color: C.dim, fontFamily: serif, fontSize: 13, lineHeight: 19, fontStyle: 'italic', marginTop: S.md },
-  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.text, borderRadius: 0, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
+  abstract: { color: C.text, fontFamily: serif, fontSize: 16, lineHeight: 24 },  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.text, borderRadius: 0, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
   eyebrow: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 1.5 },
   sectionTitle: { color: C.text, fontFamily: serif, fontSize: 20, lineHeight: 27, fontWeight: '700' },
   reading: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 0.5 },
