@@ -9,7 +9,9 @@ import PdfPane, { PdfPaneHandle } from '../components/PdfPane';
 // On the web the notes are laid out as a US-letter sheet (8.5 in at 96 px/in), centered on a neutral desk.
 const WEB = Platform.OS === 'web';
 const PAGE_W = 816;
-const PDF_W = 600; // the lecture PDF column, shown to the right of the notes when the window is wide enough
+const PDF_MIN = 360; // the lecture PDF column, shown to the right of the notes when the window is wide enough
+const PDF_MAX = 600;
+const NOTES_MIN = 600;
 
 function initialOpen(): Set<string> {
   // On the web, ?open=key expands a section directly (handy for sharing a link).
@@ -66,7 +68,9 @@ export default function HomeScreen() {
 
   // Wide web windows show the lecture PDF for the current section in a column to the right of the notes.
   const { width, height } = useWindowDimensions();
-  const showPdf = WEB && width >= PAGE_W + PDF_W + 48;
+  const showPdf = WEB && width >= NOTES_MIN + PDF_MIN + 40;
+  // Give the notes their letter width when there is room, otherwise share the window between the two columns.
+  const pdfW = Math.min(PDF_MAX, Math.max(PDF_MIN, width - PAGE_W - 40));
   const pdfSec = headerSec ?? SECTIONS[0];
   const [pdfPick, setPdfPick] = useState<Record<string, string>>({});
   const pdfId = pdfPick[pdfSec.lecture] ?? pdfSec.pdfs[0].id;
@@ -86,7 +90,7 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: WEB ? C.card2 : C.bg }} edges={['top']}>
       <StatusBar style={C.statusBar} />
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-      <View style={{ flex: 1, maxWidth: WEB ? PAGE_W : undefined }}>
+      <View style={{ flex: 1, maxWidth: WEB ? PAGE_W : undefined, minWidth: showPdf ? NOTES_MIN : undefined }}>
       <View style={[st.header, WEB && st.sheet, WEB && { borderTopWidth: 0 }]}>
         <Pressable onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })} style={{ alignSelf: 'stretch' }}>
           {headerSec && <Text style={st.headerEyebrow}>{headerSec.lecture.toUpperCase()}</Text>}
@@ -152,7 +156,7 @@ export default function HomeScreen() {
       </ScrollView>
       </View>
       {showPdf && (
-        <View style={[st.pdfCol, { width: PDF_W }]}>
+        <View style={[st.pdfCol, { width: pdfW }]}>
           <View style={st.pdfHead}>
             <Text style={st.eyebrow}>{pdfSec.lecture.toUpperCase()}</Text>
             <View style={st.switch}>
