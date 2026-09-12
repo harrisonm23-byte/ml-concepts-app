@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { C, PALETTE_LABELS, PaletteName, S, applyPalette, currentPalette, serif, themed } from '../theme';
 import { SECTIONS } from '../nav';
 import PdfPane, { PdfPaneHandle } from '../components/PdfPane';
+import SplitHandle from '../components/SplitHandle';
 
 // On the web the notes are laid out as a US-letter sheet (8.5 in at 96 px/in), centered on a neutral desk.
 const WEB = Platform.OS === 'web';
@@ -70,7 +71,17 @@ export default function HomeScreen() {
   const { width, height } = useWindowDimensions();
   const showPdf = WEB && width >= NOTES_MIN + PDF_MIN + 40;
   // Give the notes their letter width when there is room, otherwise share the window between the two columns.
-  const pdfW = Math.min(PDF_MAX, Math.max(PDF_MIN, width - PAGE_W - 40));
+  // Once the reader drags the divider, their chosen PDF width wins (and is remembered).
+  const [split, setSplit] = useState<number | null>(() => {
+    try { const v = WEB ? window.localStorage.getItem('pdfW') : null; return v ? Number(v) : null; } catch { return null; }
+  });
+  const dragBase = useRef<number>(0);
+  const pdfMaxW = Math.max(PDF_MIN, width - NOTES_MIN - 40);
+  const pdfW = Math.min(pdfMaxW, Math.max(PDF_MIN, split ?? Math.min(PDF_MAX, width - PAGE_W - 40)));
+  const onDragStartWidth = () => { dragBase.current = pdfW; };
+  const onDrag = (dx: number) => setSplit(Math.min(pdfMaxW, Math.max(PDF_MIN, dragBase.current - dx)));
+  const onDragEnd = () => { try { if (split !== null) window.localStorage.setItem('pdfW', String(split)); } catch { /* ignore */ } };
+  const resetSplit = () => { setSplit(null); try { window.localStorage.removeItem('pdfW'); } catch { /* ignore */ } };
   const pdfSec = headerSec ?? SECTIONS[0];
   const [pdfPick, setPdfPick] = useState<Record<string, string>>({});
   const pdfId = pdfPick[pdfSec.lecture] ?? pdfSec.pdfs[0].id;
@@ -90,7 +101,7 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: WEB ? C.card2 : C.bg }} edges={['top']}>
       <StatusBar style={C.statusBar} />
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-      <View style={{ flex: 1, maxWidth: WEB ? PAGE_W : undefined, minWidth: showPdf ? NOTES_MIN : undefined }}>
+      <View style={{ flex: 1, maxWidth: WEB && split === null ? PAGE_W : undefined, minWidth: showPdf ? NOTES_MIN : undefined }}>
       <View style={[st.header, WEB && st.sheet, WEB && { borderTopWidth: 0 }]}>
         <Pressable onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })} style={{ alignSelf: 'stretch' }}>
           {headerSec && <Text style={st.headerEyebrow}>{headerSec.lecture.toUpperCase()}</Text>}
@@ -155,6 +166,7 @@ export default function HomeScreen() {
         ))}
       </ScrollView>
       </View>
+      {showPdf && <SplitHandle onDrag={(dx) => { if (dragBase.current === 0) onDragStartWidth(); onDrag(dx); }} onEnd={() => { dragBase.current = 0; onDragEnd(); }} onReset={resetSplit} />}
       {showPdf && (
         <View style={[st.pdfCol, { width: pdfW }]}>
           <View style={st.pdfHead}>
@@ -202,7 +214,7 @@ const st = themed(() => StyleSheet.create({
   switchText: { color: C.dim, fontFamily: serif, fontSize: 12 },
   switchTextActive: { color: C.cream },
   sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
-  pdfCol: { paddingTop: S.md, paddingLeft: S.lg, paddingRight: S.md, gap: S.sm },
+  pdfCol: { paddingTop: S.md, paddingLeft: S.xs, paddingRight: S.md, gap: S.sm },
   pdfHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2 },
   sheetBody: { paddingHorizontal: 56, paddingTop: S.xl, minHeight: '100%' },
 }));
