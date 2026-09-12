@@ -9,6 +9,7 @@ import CrossbarScreen from './screens/CrossbarScreen';
 import ForwardPassScreen from './screens/ForwardPassScreen';
 import GradientScreen from './screens/GradientScreen';
 import TrainingScreen from './screens/TrainingScreen';
+import { ExternalityScreen, FairnessScreen, RaceScreen, ReturnsScreen } from './screens/GovernanceScreens';
 
 export type ConceptEntry = { key: string; title: string; definition: string; reading: string; component: ComponentType };
 export type LecturePdf = { id: string; label: string };
@@ -44,6 +45,17 @@ export const SECTIONS: Section[] = [
     items: [
       { key: 'gradient', reading: 'III. The Update Step: Gradient Descent', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },
       { key: 'training', reading: 'II. The Loss Function · V. The Loop in Code', title: 'Loss functions and the training loop', definition: 'Predict, measure (MSE or cross-entropy), update.', component: TrainingScreen },
+    ],
+  },
+  {
+    lecture: 'Governance',
+    theme: 'General Purpose, Information, Intelligence: AI Governance and the Anatomy of a Race',
+    pdfs: [{ id: 'governance-essay', label: 'Essay' }],
+    items: [
+      { key: 'returns', reading: 'II. Three Lenses (Lens 2: information technology)', title: 'Increasing returns', definition: 'Fixed cost F to train, marginal cost c to serve: average cost F/n + c falls without limit, so markets concentrate.', component: ReturnsScreen },
+      { key: 'externality', reading: 'III. Governance and Anarchy', title: 'Externalities', definition: 'A by-product of one actor\'s behaviour on others; institutions exist to internalize them.', component: ExternalityScreen },
+      { key: 'fairness', reading: 'III. Governance and Anarchy (deeply politicized issues)', title: 'Algorithmic fairness', definition: 'With different base rates and an imperfect classifier, equal false-positive rates, false-negative rates, and calibration cannot all hold.', component: FairnessScreen },
+      { key: 'race', reading: 'IV. The AI Race', title: 'The AI race', definition: 'A war of attrition: rational, informed players bid risk up to E[bid] = ⅓V, and every failed assumption pushes toward the bottom.', component: RaceScreen },
     ],
   },
 ];

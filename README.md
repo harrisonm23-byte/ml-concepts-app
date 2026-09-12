@@ -28,6 +28,14 @@ The app displays three lectures' worth of interactive demonstrations, each with 
 - **Gradient descent** — θ ← θ − η∇L(θ): step against the slope of the loss.
 - **Loss functions and the training loop** — Predict, measure (MSE or cross-entropy), update.
 
+### Governance: General Purpose, Information, Intelligence
+*AI Governance and the Anatomy of a Race*
+
+- **Increasing returns** — Fixed cost F to train, marginal cost c to serve: average cost F/n + c falls without limit, so markets concentrate.
+- **Externalities** — A by-product of one actor's behaviour on others; institutions exist to internalize them.
+- **Algorithmic fairness** — With different base rates and an imperfect classifier, equal false-positive rates, false-negative rates, and calibration cannot all hold.
+- **The AI race** — A war of attrition: rational, informed players bid risk up to E[bid] = ⅓V, and every failed assumption pushes toward the bottom.
+
 Every number on screen is computed live from the stated formula; the models are small enough to finish instantly.
 
 ## Run on your phone
@@ -38,7 +46,7 @@ Every number on screen is computed live from the stated formula; the models are 
 
 ## Run in a browser
 
-`npx expo start --web --port 8090` then open http://localhost:8090. `?open=key` expands a single entry (`loop`, `tokens`, `attention`, `softmax`, `alignment`, `neuron`, `crossbar`, `forward`, `gradient`, `training`).
+`npx expo start --web --port 8090` then open http://localhost:8090. `?open=key` expands a single entry (`loop`, `tokens`, `attention`, `softmax`, `alignment`, `neuron`, `crossbar`, `forward`, `gradient`, `training`, `returns`, `externality`, `fairness`, `race`).
 
 ## Project layout
 
