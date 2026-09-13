@@ -73,6 +73,18 @@ export const signedColor = (v: number, max = 1) => {
   return `rgba(${v >= 0 ? C.posRGB : C.negRGB},${a.toFixed(2)})`;
 };
 
+const hexRGB = (h: string): [number, number, number] => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+const mix = (a: [number, number, number], b: [number, number, number], t: number) => a.map((x, i) => Math.round(x + (b[i] - x) * t)) as [number, number, number];
+
+// Fill for a signed value shown in a cell: a pale gold near zero, blending into the positive or negative hue as |v| grows.
+export const cellColor = (v: number, max = 1) => {
+  const t = Math.pow(clamp(Math.abs(v) / max, 0, 1), 0.85);
+  const gold = mix(hexRGB(C.card2), hexRGB(C.gold), 0.55);
+  const hue = (v >= 0 ? C.posRGB : C.negRGB).split(',').map(Number) as [number, number, number];
+  const c = mix(gold, hue, t);
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+};
+
 // Text colour that stays legible on top of signedColor / heatColor fills.
 export const onFill = (v: number, max = 1) => (Math.abs(v) / max > 0.55 ? C.onHi : C.onLo);
 

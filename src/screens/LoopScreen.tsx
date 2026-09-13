@@ -4,7 +4,7 @@ import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
 import { C, S, mono, themed } from '../theme';
 import { VOCAB, nextLogits, tokenId, tokenize } from '../toyLM';
-import { argmax, entropy, fmt, onFill, pseudoEmbedding, sampleIndex, signedColor, softmax } from '../math';
+import { argmax, cellColor, entropy, fmt, onFill, pseudoEmbedding, sampleIndex, softmax } from '../math';
 
 const STAGES = [
   { label: 'Tokenize', mov: 'II' },
@@ -307,7 +307,7 @@ function VecCells({ v }: { v: number[] }) {
   return (
     <Row style={{ gap: 3 }}>
       {v.map((x, k) => (
-        <View key={k} style={{ width: 22, height: 22, borderRadius: 4, backgroundColor: signedColor(x), alignItems: 'center', justifyContent: 'center' }}>
+        <View key={k} style={{ width: 22, height: 22, borderRadius: 4, backgroundColor: cellColor(x), alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ color: onFill(x), fontSize: 8, fontFamily: mono }}>{x.toFixed(1)}</Text>
         </View>
       ))}

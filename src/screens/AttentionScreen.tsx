@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { Bar, Card, Chip, Formula, LabeledSlider, Legend, P, Row, Screen, Small } from '../components/ui';
 import { C, S, mono, themed } from '../theme';
-import { dot, fmt, onFill, signedColor, softmax } from '../math';
+import { cellColor, dot, fmt, onFill, softmax } from '../math';
 
 // Hand-designed 4-dim query/key/value vectors. Feature axes:
 // [thing-ness, container/object-ness, function-word-ness, verb-ness]
@@ -134,7 +134,7 @@ function VecRow({ label, v, color = C.text, right }: { label: string; v: number[
     <Row style={{ gap: 6 }}>
       <Text style={[st.tok, { color, width: 110 }]} numberOfLines={1}>{label}</Text>
       {v.map((x, k) => (
-        <View key={k} style={[st.cell, { backgroundColor: signedColor(x, 1.2) }]}>
+        <View key={k} style={[st.cell, { backgroundColor: cellColor(x, 1.2) }]}>
           <Text style={[st.cellText, { color: onFill(x, 1.2) }]}>{x.toFixed(2)}</Text>
         </View>
       ))}
