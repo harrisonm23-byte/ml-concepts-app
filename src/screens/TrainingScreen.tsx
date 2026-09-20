@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Path, Polyline, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { clamp, fmt, mulberry32 } from '../math';
 
 // Ten noisy points around y = 0.7x + 2.
@@ -149,8 +149,8 @@ function Plot({ a, b, phase, preds }: { a: number; b: number; phase: number; pre
       {DATA.map((d, i) => (
         <Circle key={`p${i}`} cx={X(d.x)} cy={Y(preds[i])} r={3} fill={C.accent} />
       ))}
-      <SvgText x={W - pad} y={H - 6} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={mono}>x →</SvgText>
-      <SvgText x={pad + 4} y={pad - 8} fill={C.dim} fontSize={9} fontFamily={mono}>y ↑   ● data   ● ŷ</SvgText>
+      <SvgText x={W - pad} y={H - 6} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={C.mono}>x →</SvgText>
+      <SvgText x={pad + 4} y={pad - 8} fill={C.dim} fontSize={9} fontFamily={C.mono}>y ↑   ● data   ● ŷ</SvgText>
     </Svg>
   );
 }
@@ -165,7 +165,7 @@ function LossChart({ losses }: { losses: number[] }) {
     <Svg width={W} height={H} style={{ alignSelf: 'center' }}>
       <Line x1={pad} y1={Y(0)} x2={W - pad} y2={Y(0)} stroke={C.border} />
       <Polyline points={losses.map((l, i) => `${X(i)},${Y(l)}`).join(' ')} stroke={C.warn} strokeWidth={2} fill="none" />
-      <SvgText x={pad} y={12} fill={C.dim} fontSize={9} fontFamily={mono}>MSE {fmt(losses[losses.length - 1], 3)}</SvgText>
+      <SvgText x={pad} y={12} fill={C.dim} fontSize={9} fontFamily={C.mono}>MSE {fmt(losses[losses.length - 1], 3)}</SvgText>
     </Svg>
   );
 }
@@ -181,8 +181,8 @@ function CECurve({ q }: { q: number }) {
       <Line x1={pad} y1={Y(0)} x2={W - pad} y2={Y(0)} stroke={C.border} />
       <Path d={d} stroke={C.accent} strokeWidth={2} fill="none" />
       <Circle cx={X(q)} cy={Y(-Math.log(q))} r={5} fill={C.warn} />
-      <SvgText x={W - pad} y={H - 6} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={mono}>p̂(correct) →</SvgText>
-      <SvgText x={pad} y={12} fill={C.dim} fontSize={9} fontFamily={mono}>−log p̂ ↑</SvgText>
+      <SvgText x={W - pad} y={H - 6} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={C.mono}>p̂(correct) →</SvgText>
+      <SvgText x={pad} y={12} fill={C.dim} fontSize={9} fontFamily={C.mono}>−log p̂ ↑</SvgText>
     </Svg>
   );
 }
@@ -200,9 +200,9 @@ const st = themed(() => StyleSheet.create({
   phase: { flex: 1, paddingVertical: 8, borderRadius: 8, backgroundColor: C.card, borderWidth: 1, borderColor: C.border, alignItems: 'center' },
   phaseActive: { backgroundColor: C.forest, borderColor: C.forest },
   phaseText: { color: C.dim, fontSize: 13, fontWeight: '600' },
-  res: { fontFamily: mono, fontSize: 12 },
-  k: { color: C.text, fontFamily: mono, fontSize: 12 },
-  v: { color: C.text, fontFamily: mono, fontSize: 12 },
-  code: { color: C.text, fontFamily: mono, fontSize: 12 },
-  note: { color: C.faint, fontFamily: mono, fontSize: 10 },
+  res: { fontFamily: C.mono, fontSize: 12 },
+  k: { color: C.text, fontFamily: C.mono, fontSize: 12 },
+  v: { color: C.text, fontFamily: C.mono, fontSize: 12 },
+  code: { color: C.text, fontFamily: C.mono, fontSize: 12 },
+  note: { color: C.faint, fontFamily: C.mono, fontSize: 10 },
 }));

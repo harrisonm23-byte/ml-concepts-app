@@ -1,7 +1,24 @@
 import { Platform, StyleSheet } from 'react-native';
 
-// Three palettes, switchable at runtime from the header.
-export type PaletteName = 'paper' | 'trine' | 'dark';
+// Four palettes, switchable at runtime from the header.
+export type PaletteName = 'report' | 'paper' | 'trine' | 'dark';
+
+// Font families per platform. On the web these are CSS stacks (the first two are loaded from Google Fonts below).
+const fam = (web: string, ios: string, android: string) => Platform.select({ web, ios, android, default: web }) as string;
+const F = {
+  georgia: fam('Georgia, "Times New Roman", serif', 'Georgia', 'serif'),
+  sourceSerif: fam('"Source Serif 4", Georgia, "Times New Roman", serif', 'Georgia', 'serif'),
+  publicSans: fam('"Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif', 'Helvetica Neue', 'sans-serif'),
+  menlo: fam('Menlo, Consolas, "Liberation Mono", monospace', 'Menlo', 'monospace'),
+};
+
+if (Platform.OS === 'web' && typeof document !== 'undefined' && !document.getElementById('ml-fonts')) {
+  const link = document.createElement('link');
+  link.id = 'ml-fonts';
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap';
+  document.head.appendChild(link);
+}
 
 type Palette = {
   bg: string; card: string; card2: string; border: string;
@@ -11,6 +28,16 @@ type Palette = {
   heatLo: [number, number, number]; heatHi: [number, number, number];
   posRGB: string; negRGB: string; onHi: string; onLo: string;
   statusBar: 'light' | 'dark'; shadow: boolean;
+  // Typography and shape.
+  serif: string; sans: string; head: string; ui: string; mono: string;
+  headWeight: '600' | '700'; headTracking: number; bodySize: number; bodyLine: number;
+  radius: number; cardRadius: number; rule: string; link: string;
+};
+
+// The essay look: serif everywhere, black rules, square corners.
+const essayType = {
+  serif: F.georgia, sans: F.publicSans, head: F.georgia, ui: F.georgia, mono: F.menlo,
+  headWeight: '700' as const, headTracking: 0, bodySize: 16, bodyLine: 24, radius: 2, cardRadius: 2,
 };
 
 // Paper: white page and black ink like the course essays; Trine forest, sage and gold for controls and plots.
@@ -20,7 +47,20 @@ const paper: Palette = {
   accent: '#1E4D3A', accent2: '#7BA388', pos: '#1E4D3A', neg: '#8B4A2F', warn: '#C9A344', gold: '#D4A84B',
   cream: '#FFFFFF', forest: '#1E4D3A', ink: '#2D4739', white: '#FFFFFF',
   heatLo: [240, 240, 240], heatHi: [30, 77, 58], posRGB: '30,77,58', negRGB: '139,74,47', onHi: '#FFFFFF', onLo: '#000000',
+  statusBar: 'dark', shadow: false, ...essayType, rule: '#000000', link: '#1E4D3A',
+};
+
+// Report: the look of a research report page. Warm off-white ground, near-black ink, sans headings with tight
+// tracking, a serif body at 17/26, soft rules, rounded panels. Demo colours are unchanged so the diagrams read the same.
+const report: Palette = {
+  bg: '#FAF9F5', card: '#FFFFFF', card2: '#F0EEE6', border: '#DEDBD1',
+  text: '#141413', dim: '#5E5D59', faint: '#B0AEA5',
+  accent: '#1E4D3A', accent2: '#7BA388', pos: '#1E4D3A', neg: '#8B4A2F', warn: '#C9A344', gold: '#D4A84B',
+  cream: '#FAF9F5', forest: '#1E4D3A', ink: '#141413', white: '#FFFFFF',
+  heatLo: [240, 238, 230], heatHi: [30, 77, 58], posRGB: '30,77,58', negRGB: '139,74,47', onHi: '#FAF9F5', onLo: '#141413',
   statusBar: 'dark', shadow: false,
+  serif: F.sourceSerif, sans: F.publicSans, head: F.publicSans, ui: F.publicSans, mono: F.menlo,
+  headWeight: '600', headTracking: -0.3, bodySize: 17, bodyLine: 26, radius: 6, cardRadius: 12, rule: '#DEDBD1', link: '#141413',
 };
 
 // Trine: cream room, white furniture, forest does the work, gold is decorative.
@@ -30,7 +70,7 @@ const trine: Palette = {
   accent: '#1E4D3A', accent2: '#7BA388', pos: '#1E4D3A', neg: '#8B4A2F', warn: '#C9A344', gold: '#D4A84B',
   cream: '#FAF7F2', forest: '#1E4D3A', ink: '#2D4739', white: '#FFFFFF',
   heatLo: [237, 234, 229], heatHi: [30, 77, 58], posRGB: '30,77,58', negRGB: '139,74,47', onHi: '#FAF7F2', onLo: '#1A1A1A',
-  statusBar: 'dark', shadow: true,
+  statusBar: 'dark', shadow: true, ...essayType, rule: '#1A1A1A', link: '#1E4D3A',
 };
 
 // Dark: the original look; activations read as brightness.
@@ -40,17 +80,17 @@ const dark: Palette = {
   accent: '#5b8def', accent2: '#a78bfa', pos: '#4cc38a', neg: '#ef6b73', warn: '#f5a524', gold: '#f5a524',
   cream: '#ffffff', forest: '#5b8def', ink: '#ffffff', white: '#ffffff',
   heatLo: [30, 40, 70], heatHi: [230, 220, 255], posRGB: '76,195,138', negRGB: '239,107,115', onHi: '#0e1016', onLo: '#e9ecf3',
-  statusBar: 'light', shadow: false,
+  statusBar: 'light', shadow: false, ...essayType, rule: '#e9ecf3', link: '#5b8def',
 };
 
-export const PALETTES: Record<PaletteName, Palette> = { paper, trine, dark };
-export const PALETTE_LABELS: Record<PaletteName, string> = { paper: 'Paper', trine: 'Trine', dark: 'Dark' };
+export const PALETTES: Record<PaletteName, Palette> = { report, paper, trine, dark };
+export const PALETTE_LABELS: Record<PaletteName, string> = { report: 'Report', paper: 'Paper', trine: 'Trine', dark: 'Dark' };
 
-let current: PaletteName = 'paper';
+let current: PaletteName = 'report';
 export const currentPalette = () => current;
 
 // C is mutated in place so every `C.x` read at render time sees the active palette.
-export const C: Palette = { ...paper };
+export const C: Palette = { ...report };
 export function applyPalette(name: PaletteName) {
   current = name;
   Object.assign(C, PALETTES[name]);
@@ -69,10 +109,8 @@ export function themed<T extends object>(factory: () => T): T {
 
 export const S = { xs: 4, sm: 8, md: 12, lg: 16, xl: 24 };
 
-// LaTeX-like typography: a serif for text and headings, italic serif for formulas,
-// monospace only for code and raw numbers.
-export const serif = Platform.select({ ios: 'Georgia', android: 'serif', default: 'Georgia' }) as string;
-export const mono = Platform.select({ ios: 'Menlo', android: 'monospace', default: 'Menlo' }) as string;
+// Typography lives on the palette: C.serif for text, C.head for headings, C.ui for labels and controls,
+// C.mono for code and raw numbers, italic serif for formulas.
 
 export const shadowFor = () =>
   C.shadow ? { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 8, elevation: 2 } : {};

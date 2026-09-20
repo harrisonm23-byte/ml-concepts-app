@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { PanResponder, View } from 'react-native';
 import Svg, { Circle, Line, Path, Text as SvgText } from 'react-native-svg';
-import { C, mono } from '../theme';
+import { C } from '../theme';
 
 export type Vec3Item = { name: string; p: [number, number, number]; color?: string };
 export type Vec3Arrow = { from: [number, number, number]; to: [number, number, number]; color: string; dashed?: boolean; label?: string };
@@ -85,7 +85,7 @@ export default function VectorSpace3D({
           return (
             <React.Fragment key={i}>
               <Line x1={o.sx} y1={o.sy} x2={e.sx} y2={e.sy} stroke={C.faint} strokeWidth={1} strokeOpacity={0.7} />
-              <SvgText x={e.sx} y={e.sy - 4} fill={C.dim} fontSize={9} fontFamily={mono} textAnchor="middle">{axes[i]}</SvgText>
+              <SvgText x={e.sx} y={e.sy - 4} fill={C.dim} fontSize={9} fontFamily={C.mono} textAnchor="middle">{axes[i]}</SvgText>
             </React.Fragment>
           );
         })}
@@ -97,7 +97,7 @@ export default function VectorSpace3D({
             <React.Fragment key={i}>
               <Line x1={f.sx} y1={f.sy} x2={t.sx} y2={t.sy} stroke={a.color} strokeWidth={2} strokeDasharray={a.dashed ? '5,4' : undefined} />
               <Path d={`M ${t.sx} ${t.sy} L ${hx + 4 * Math.sin(ang)} ${hy - 4 * Math.cos(ang)} L ${hx - 4 * Math.sin(ang)} ${hy + 4 * Math.cos(ang)} Z`} fill={a.color} />
-              {a.label ? <SvgText x={(f.sx + t.sx) / 2 + 4} y={(f.sy + t.sy) / 2 - 4} fill={a.color} fontSize={9} fontFamily={mono}>{a.label}</SvgText> : null}
+              {a.label ? <SvgText x={(f.sx + t.sx) / 2 + 4} y={(f.sy + t.sy) / 2 - 4} fill={a.color} fontSize={9} fontFamily={C.mono}>{a.label}</SvgText> : null}
             </React.Fragment>
           );
         })}
@@ -109,7 +109,7 @@ export default function VectorSpace3D({
               <Line x1={o.sx} y1={o.sy} x2={sx} y2={sy} stroke={it.color ?? C.forest} strokeWidth={sel ? 1.5 : 0.6} strokeOpacity={fog(depth) * (sel ? 0.9 : 0.35)} />
               <Circle cx={sx} cy={sy} r={r} fill={it.color ?? C.forest} fillOpacity={fog(depth)} stroke={sel ? C.warn : 'none'} strokeWidth={2} onPress={() => onSelect?.(it.name)} />
               {labelled.has(it.name) && (
-                <SvgText x={sx + r + 3} y={sy + 3} fill={sel ? C.forest : C.text} fillOpacity={fog(depth)} fontSize={10} fontWeight={sel ? 'bold' : 'normal'} fontFamily={mono} onPress={() => onSelect?.(it.name)}>{it.name}</SvgText>
+                <SvgText x={sx + r + 3} y={sy + 3} fill={sel ? C.forest : C.text} fillOpacity={fog(depth)} fontSize={10} fontWeight={sel ? 'bold' : 'normal'} fontFamily={C.mono} onPress={() => onSelect?.(it.name)}>{it.name}</SvgText>
               )}
             </React.Fragment>
           );

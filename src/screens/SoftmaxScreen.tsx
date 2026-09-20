@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Line, Path, Circle, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { argmax, entropy, fmt, sampleIndex, softmax } from '../math';
 import Simplex from '../components/Simplex';
 
@@ -107,11 +107,11 @@ function TempCurve({ logits }: { logits: number[] }) {
       <Line x1={pad} y1={y(1)} x2={pad} y2={y(0)} stroke={C.border} />
       <Path d={path('top')} stroke={C.accent} strokeWidth={2} fill="none" />
       <Path d={path('h')} stroke={C.accent2} strokeWidth={2} fill="none" strokeDasharray="4,3" />
-      <SvgText x={pad - 4} y={y(1) + 4} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={mono}>1</SvgText>
-      <SvgText x={pad - 4} y={y(0) + 4} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={mono}>0</SvgText>
-      <SvgText x={W / 2} y={Hh - 4} fill={C.dim} fontSize={9} textAnchor="middle" fontFamily={mono}>temperature T →</SvgText>
-      <SvgText x={W - 10} y={14} fill={C.accent} fontSize={9} textAnchor="end" fontFamily={mono}>P(top token)</SvgText>
-      <SvgText x={W - 10} y={26} fill={C.accent2} fontSize={9} textAnchor="end" fontFamily={mono}>entropy / max</SvgText>
+      <SvgText x={pad - 4} y={y(1) + 4} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={C.mono}>1</SvgText>
+      <SvgText x={pad - 4} y={y(0) + 4} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={C.mono}>0</SvgText>
+      <SvgText x={W / 2} y={Hh - 4} fill={C.dim} fontSize={9} textAnchor="middle" fontFamily={C.mono}>temperature T →</SvgText>
+      <SvgText x={W - 10} y={14} fill={C.accent} fontSize={9} textAnchor="end" fontFamily={C.mono}>P(top token)</SvgText>
+      <SvgText x={W - 10} y={26} fill={C.accent2} fontSize={9} textAnchor="end" fontFamily={C.mono}>entropy / max</SvgText>
     </Svg>
   );
 }

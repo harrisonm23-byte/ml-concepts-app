@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, Legend, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { fmt, heatColor, mulberry32, relu, signedColor, softmax } from '../math';
 
 const SIZES = [4, 5, 3];
@@ -71,25 +71,25 @@ export default function ForwardPassScreen() {
           {a0.map((v, j) => (
             <React.Fragment key={`n0-${j}`}>
               <Circle cx={xs[0]} cy={yOf(0, j)} r={16} fill={heatColor(v)} stroke={C.border} strokeWidth={1.5} onPress={() => cycleInput(j)} />
-              <SvgText x={xs[0]} y={yOf(0, j) + 4} fill={v > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={mono} onPress={() => cycleInput(j)}>{v.toFixed(1)}</SvgText>
+              <SvgText x={xs[0]} y={yOf(0, j) + 4} fill={v > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={C.mono} onPress={() => cycleInput(j)}>{v.toFixed(1)}</SvgText>
             </React.Fragment>
           ))}
           {a1.map((v, i) => (
             <React.Fragment key={`n1-${i}`}>
               <Circle cx={xs[1]} cy={yOf(1, i)} r={16} fill={shown(1) ? heatColor(Math.min(1, v / 2)) : C.card2} stroke={sel?.layer === 1 && sel.i === i ? C.warn : C.border} strokeWidth={sel?.layer === 1 && sel.i === i ? 3 : 1.5} onPress={() => setSel({ layer: 1, i })} />
-              <SvgText x={xs[1]} y={yOf(1, i) + 4} fill={shown(1) && v / 2 > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={mono} onPress={() => setSel({ layer: 1, i })}>{shown(1) ? v.toFixed(1) : '?'}</SvgText>
+              <SvgText x={xs[1]} y={yOf(1, i) + 4} fill={shown(1) && v / 2 > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={C.mono} onPress={() => setSel({ layer: 1, i })}>{shown(1) ? v.toFixed(1) : '?'}</SvgText>
             </React.Fragment>
           ))}
           {probs.map((p, i) => (
             <React.Fragment key={`n2-${i}`}>
               <Circle cx={xs[2]} cy={yOf(2, i)} r={16} fill={shown(2) ? heatColor(p) : C.card2} stroke={sel?.layer === 2 && sel.i === i ? C.warn : C.border} strokeWidth={sel?.layer === 2 && sel.i === i ? 3 : 1.5} onPress={() => setSel({ layer: 2, i })} />
-              <SvgText x={xs[2]} y={yOf(2, i) + 4} fill={shown(2) && p > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={mono} onPress={() => setSel({ layer: 2, i })}>{shown(2) ? p.toFixed(2) : '?'}</SvgText>
-              <SvgText x={xs[2] + 22} y={yOf(2, i) + 4} fill={C.dim} fontSize={10} fontFamily={mono}>{CLASSES[i]}</SvgText>
+              <SvgText x={xs[2]} y={yOf(2, i) + 4} fill={shown(2) && p > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={C.mono} onPress={() => setSel({ layer: 2, i })}>{shown(2) ? p.toFixed(2) : '?'}</SvgText>
+              <SvgText x={xs[2] + 22} y={yOf(2, i) + 4} fill={C.dim} fontSize={10} fontFamily={C.mono}>{CLASSES[i]}</SvgText>
             </React.Fragment>
           ))}
-          <SvgText x={xs[0]} y={14} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={mono}>input a⁽⁰⁾</SvgText>
-          <SvgText x={xs[1]} y={14} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={mono}>hidden a⁽¹⁾ (ReLU)</SvgText>
-          <SvgText x={xs[2]} y={14} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={mono}>output (softmax)</SvgText>
+          <SvgText x={xs[0]} y={14} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={C.mono}>input a⁽⁰⁾</SvgText>
+          <SvgText x={xs[1]} y={14} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={C.mono}>hidden a⁽¹⁾ (ReLU)</SvgText>
+          <SvgText x={xs[2]} y={14} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={C.mono}>output (softmax)</SvgText>
         </Svg>
         <Row style={{ justifyContent: 'space-between' }}>
           <Btn label={reveal === 0 ? 'Compute hidden layer →' : reveal === 1 ? 'Compute output →' : 'Start over'} onPress={() => setReveal((r) => (r + 1) % 3)} />
@@ -155,5 +155,5 @@ function sub(i: number) {
 }
 
 const st = themed(() => StyleSheet.create({
-  term: { color: C.text, fontFamily: mono, fontSize: 13, minWidth: 64 },
+  term: { color: C.text, fontFamily: C.mono, fontSize: 13, minWidth: 64 },
 }));

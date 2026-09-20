@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import Svg, { Line, Polygon, Polyline, Rect, Text as SvgText } from 'react-native-svg';
 import { Btn, Card, Formula, LabeledSlider, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, serif, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { fmt, mulberry32 } from '../math';
 
 // Four entries for the governance essay. Each is a small, exact model of one claim in the text.
@@ -32,12 +32,12 @@ export function ReturnsScreen() {
           <Line x1={L} y1={py(c)} x2={W - 8} y2={py(c)} stroke={C.gold} strokeDasharray="4 3" />
           <Rect x={px(logN) - 4} y={py(avg) - 4} width={8} height={8} fill={C.gold} stroke={C.forest} />
           {[2, 4, 6, 8].map((lg) => (
-            <SvgText key={lg} x={px(lg)} y={H - 8} fontSize={10} fill={C.dim} textAnchor="middle" fontFamily={serif}>
+            <SvgText key={lg} x={px(lg)} y={H - 8} fontSize={10} fill={C.dim} textAnchor="middle" fontFamily={C.serif}>
               {lg === 2 ? '100' : lg === 4 ? '10k' : lg === 6 ? '1M' : '100M'}
             </SvgText>
           ))}
-          <SvgText x={W - 10} y={py(c) - 4} fontSize={10} fill={C.dim} textAnchor="end" fontFamily={serif}>marginal cost c</SvgText>
-          <SvgText x={L - 4} y={16} fontSize={10} fill={C.dim} textAnchor="end" fontFamily={serif}>$ / user</SvgText>
+          <SvgText x={W - 10} y={py(c) - 4} fontSize={10} fill={C.dim} textAnchor="end" fontFamily={C.serif}>marginal cost c</SvgText>
+          <SvgText x={L - 4} y={16} fontSize={10} fill={C.dim} textAnchor="end" fontFamily={C.serif}>$ / user</SvgText>
         </Svg>
         <LabeledSlider label="fixed cost F (training)" value={F} min={1} max={1000} step={1} onChange={setF} format={(v) => `$${v}M`} />
         <LabeledSlider label="marginal cost c (one more user)" value={c} min={0} max={5} step={0.05} onChange={setC} format={(v) => `$${v.toFixed(2)}`} color={C.gold} />
@@ -76,11 +76,11 @@ export function ExternalityScreen() {
           {tax > 0 && <Line x1={px(0)} y1={py(tax)} x2={px(10 - Math.max(0, tax - 4))} y2={py(Math.min(14, 10 + tax))} stroke={C.gold} strokeWidth={1.5} />}
           <Line x1={px(qPriv)} y1={py(0)} x2={px(qPriv)} y2={py(mb(qPriv))} stroke={C.dim} strokeDasharray="2 2" />
           <Line x1={px(qSoc)} y1={py(0)} x2={px(qSoc)} y2={py(mb(qSoc))} stroke={C.dim} strokeDasharray="2 2" />
-          <SvgText x={px(10) - 2} y={py(0) - 4} fontSize={10} fill={C.text} textAnchor="end" fontFamily={serif}>marginal benefit</SvgText>
-          <SvgText x={px(10) - 2} y={py(10) + 12} fontSize={10} fill={C.forest} textAnchor="end" fontFamily={serif}>private cost</SvgText>
-          <SvgText x={px(0) + 4} y={py(e) - 4} fontSize={10} fill={C.neg} fontFamily={serif}>+ external cost e</SvgText>
-          <SvgText x={px(qPriv)} y={H - 8} fontSize={10} fill={C.dim} textAnchor="middle" fontFamily={serif}>q firm</SvgText>
-          <SvgText x={px(qSoc)} y={H - 8} fontSize={10} fill={C.dim} textAnchor={qSoc < qPriv - 1 ? 'middle' : 'end'} fontFamily={serif}>q social</SvgText>
+          <SvgText x={px(10) - 2} y={py(0) - 4} fontSize={10} fill={C.text} textAnchor="end" fontFamily={C.serif}>marginal benefit</SvgText>
+          <SvgText x={px(10) - 2} y={py(10) + 12} fontSize={10} fill={C.forest} textAnchor="end" fontFamily={C.serif}>private cost</SvgText>
+          <SvgText x={px(0) + 4} y={py(e) - 4} fontSize={10} fill={C.neg} fontFamily={C.serif}>+ external cost e</SvgText>
+          <SvgText x={px(qPriv)} y={H - 8} fontSize={10} fill={C.dim} textAnchor="middle" fontFamily={C.serif}>q firm</SvgText>
+          <SvgText x={px(qSoc)} y={H - 8} fontSize={10} fill={C.dim} textAnchor={qSoc < qPriv - 1 ? 'middle' : 'end'} fontFamily={C.serif}>q social</SvgText>
         </Svg>
         <Row style={{ justifyContent: 'space-between' }}>
           <Text style={st.k}>firm produces</Text>
@@ -229,10 +229,10 @@ export function RaceScreen() {
           ))}
           <Line x1={L + (V / 3 / sim.maxT) * (W - 2 * L)} y1={8} x2={L + (V / 3 / sim.maxT) * (W - 2 * L)} y2={H - B} stroke={C.gold} strokeWidth={2} />
           <Line x1={L + (1 / sim.maxT) * (W - 2 * L)} y1={8} x2={L + (1 / sim.maxT) * (W - 2 * L)} y2={H - B} stroke={C.neg} strokeWidth={1.5} strokeDasharray="4 3" />
-          <SvgText x={L + (V / 3 / sim.maxT) * (W - 2 * L) + 4} y={16} fontSize={10} fill={C.gold} fontFamily={serif}>V/3</SvgText>
-          <SvgText x={L + (1 / sim.maxT) * (W - 2 * L) - 4} y={16} fontSize={10} fill={C.neg} textAnchor="end" fontFamily={serif}>nuclear war</SvgText>
-          <SvgText x={L} y={H - 6} fontSize={10} fill={C.dim} fontFamily={serif}>0</SvgText>
-          <SvgText x={W - L} y={H - 6} fontSize={10} fill={C.dim} textAnchor="end" fontFamily={serif}>risk accepted by the race →</SvgText>
+          <SvgText x={L + (V / 3 / sim.maxT) * (W - 2 * L) + 4} y={16} fontSize={10} fill={C.gold} fontFamily={C.serif}>V/3</SvgText>
+          <SvgText x={L + (1 / sim.maxT) * (W - 2 * L) - 4} y={16} fontSize={10} fill={C.neg} textAnchor="end" fontFamily={C.serif}>nuclear war</SvgText>
+          <SvgText x={L} y={H - 6} fontSize={10} fill={C.dim} fontFamily={C.serif}>0</SvgText>
+          <SvgText x={W - L} y={H - 6} fontSize={10} fill={C.dim} textAnchor="end" fontFamily={C.serif}>risk accepted by the race →</SvgText>
         </Svg>
         <Row style={{ justifyContent: 'space-between' }}>
           <Text style={st.k}>chance of catastrophe a rational leader accepts</Text>
@@ -255,7 +255,7 @@ export function RaceScreen() {
 }
 
 const st = themed(() => StyleSheet.create({
-  k: { color: C.dim, fontFamily: serif, fontSize: 14, flex: 1 },
-  v: { color: C.text, fontFamily: mono, fontSize: 13, minWidth: 64, textAlign: 'right' },
-  hdr: { color: C.dim, fontFamily: serif, fontSize: 12, minWidth: 64, textAlign: 'right', letterSpacing: 0.5 },
+  k: { color: C.dim, fontFamily: C.serif, fontSize: 14, flex: 1 },
+  v: { color: C.text, fontFamily: C.mono, fontSize: 13, minWidth: 64, textAlign: 'right' },
+  hdr: { color: C.dim, fontFamily: C.serif, fontSize: 12, minWidth: 64, textAlign: 'right', letterSpacing: 0.5 },
 }));

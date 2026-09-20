@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, Path, Polygon, Polyline, Text as SvgText } from 'react-native-svg';
-import { C, mono } from '../theme';
+import { C } from '../theme';
 import { entropy, softmax } from '../math';
 
 // The probability simplex for three outcomes: every distribution (p1,p2,p3) with
@@ -42,11 +42,11 @@ export default function Simplex({ logits, labels, T, width = 320 }: { logits: nu
         ))}
         <Polyline points={path.map((q) => q.join(',')).join(' ')} stroke={C.warn} strokeWidth={2} fill="none" />
         <Circle cx={center[0]} cy={center[1]} r={3} fill={C.dim} />
-        <SvgText x={center[0] + 6} y={center[1] + 3} fill={C.dim} fontSize={8} fontFamily={mono}>T→∞ (uniform)</SvgText>
+        <SvgText x={center[0] + 6} y={center[1] + 3} fill={C.dim} fontSize={8} fontFamily={C.mono}>T→∞ (uniform)</SvgText>
         <Circle cx={px} cy={py} r={7} fill={C.neg} stroke={C.card} strokeWidth={2} />
-        <SvgText x={A[0]} y={A[1] - 6} fill={C.forest} fontSize={10} fontFamily={mono} textAnchor="middle">{labels[0]}  (1,0,0)</SvgText>
-        <SvgText x={B[0]} y={B[1] + 12} fill={C.forest} fontSize={10} fontFamily={mono} textAnchor="start">{labels[1]}  (0,1,0)</SvgText>
-        <SvgText x={Cc[0]} y={Cc[1] + 12} fill={C.forest} fontSize={10} fontFamily={mono} textAnchor="end">{labels[2]}  (0,0,1)</SvgText>
+        <SvgText x={A[0]} y={A[1] - 6} fill={C.forest} fontSize={10} fontFamily={C.mono} textAnchor="middle">{labels[0]}  (1,0,0)</SvgText>
+        <SvgText x={B[0]} y={B[1] + 12} fill={C.forest} fontSize={10} fontFamily={C.mono} textAnchor="start">{labels[1]}  (0,1,0)</SvgText>
+        <SvgText x={Cc[0]} y={Cc[1] + 12} fill={C.forest} fontSize={10} fontFamily={C.mono} textAnchor="end">{labels[2]}  (0,0,1)</SvgText>
       </Svg>
     </View>
   );

@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { C, S, mono, serif, shadowFor, themed } from '../theme';
+import { C, S, shadowFor, themed } from '../theme';
 
 // Minimal inline markup: **bold** for defined terms, *italic* for emphasis, as in the handouts.
 export function rich(children: React.ReactNode): React.ReactNode {
@@ -216,46 +216,46 @@ export function Divider() {
 }
 
 const st = themed(() => StyleSheet.create({
-  intro: { color: C.text, fontSize: 16, lineHeight: 24, fontFamily: serif },
+  intro: { color: C.text, fontSize: C.bodySize, lineHeight: C.bodyLine, fontFamily: C.serif },
   card: {
     backgroundColor: C.card,
-    borderRadius: 2,
+    borderRadius: C.cardRadius,
     padding: S.lg,
     gap: S.md,
     borderWidth: 1,
     borderColor: C.border,
     ...shadowFor(),
   },
-  cardTitle: { color: C.text, fontSize: 18, fontFamily: serif, fontWeight: '700' },
-  p: { color: C.text, fontSize: 16, lineHeight: 24, fontFamily: serif },
-  small: { color: C.dim, fontSize: 14, lineHeight: 20, fontFamily: serif },
-  mono: { color: C.text, fontFamily: mono, fontSize: 13 },
+  cardTitle: { color: C.text, fontSize: 18, fontFamily: C.head, fontWeight: C.headWeight, letterSpacing: C.headTracking },
+  p: { color: C.text, fontSize: C.bodySize, lineHeight: C.bodyLine, fontFamily: C.serif },
+  small: { color: C.dim, fontSize: 14, lineHeight: 20, fontFamily: C.serif },
+  mono: { color: C.text, fontFamily: C.mono, fontSize: 13 },
   formula: {
     backgroundColor: 'transparent',
     paddingVertical: 6,
     paddingHorizontal: 12,
     alignItems: 'center',
   },
-  formulaText: { color: C.text, fontFamily: serif, fontStyle: 'italic', fontSize: 17, lineHeight: 26, textAlign: 'center' },
+  formulaText: { color: C.text, fontFamily: C.serif, fontStyle: 'italic', fontSize: 17, lineHeight: 26, textAlign: 'center' },
   row: { flexDirection: 'row', gap: S.sm, alignItems: 'center' },
   btn: {
     paddingVertical: 8,
     paddingHorizontal: 14,
-    borderRadius: 2,
+    borderRadius: C.radius,
     borderWidth: 1,
   },
-  btnText: { color: C.white, fontWeight: '600', fontSize: 14, fontFamily: serif },
+  btnText: { color: C.white, fontWeight: '600', fontSize: 14, fontFamily: C.ui },
   chip: {
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 2,
+    borderRadius: C.radius,
     borderWidth: 1,
     alignItems: 'center',
   },
-  chipText: { color: C.text, fontSize: 14, fontFamily: mono },
-  chipSub: { color: C.dim, fontSize: 10, fontFamily: mono },
-  sliderLabel: { color: C.text, fontSize: 15, fontFamily: serif, fontStyle: 'italic' },
-  sliderValue: { fontFamily: mono, fontSize: 14 },
-  barLabel: { color: C.text, fontFamily: mono, fontSize: 13, width: 88 },
-  barRight: { color: C.dim, fontFamily: mono, fontSize: 12, width: 52, textAlign: 'right' },
+  chipText: { color: C.text, fontSize: 14, fontFamily: C.mono },
+  chipSub: { color: C.dim, fontSize: 10, fontFamily: C.mono },
+  sliderLabel: { color: C.text, fontSize: C.ui === C.serif ? 15 : 14, fontFamily: C.ui, fontStyle: C.ui === C.serif ? 'italic' : 'normal' },
+  sliderValue: { fontFamily: C.mono, fontSize: 14 },
+  barLabel: { color: C.text, fontFamily: C.mono, fontSize: 13, width: 88 },
+  barRight: { color: C.dim, fontFamily: C.mono, fontSize: 12, width: 52, textAlign: 'right' },
 }));

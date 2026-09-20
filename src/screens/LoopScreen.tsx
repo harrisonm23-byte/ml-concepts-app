@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { VOCAB, nextLogits, tokenId, tokenize } from '../toyLM';
 import { argmax, cellColor, entropy, fmt, onFill, pseudoEmbedding, sampleIndex, softmax } from '../math';
 
@@ -292,13 +292,13 @@ function FullPMF({ probs }: { probs: number[] }) {
       {[1, 0.1, 0.01].map((t) => (
         <React.Fragment key={t}>
           <Line x1={pad} y1={Y(t)} x2={W - 6} y2={Y(t)} stroke={C.border} />
-          <SvgText x={pad - 3} y={Y(t) + 3} fill={C.dim} fontSize={8} fontFamily={mono} textAnchor="end">{t}</SvgText>
+          <SvgText x={pad - 3} y={Y(t) + 3} fill={C.dim} fontSize={8} fontFamily={C.mono} textAnchor="end">{t}</SvgText>
         </React.Fragment>
       ))}
       {sorted.map((p, i) => (
         <Rect key={i} x={pad + i * bw} y={Y(p)} width={Math.max(1, bw - 1)} height={H - 16 - Y(p)} fill={i < TOP_K ? C.forest : C.accent2} />
       ))}
-      <SvgText x={W - 6} y={H - 4} fill={C.dim} fontSize={8} fontFamily={mono} textAnchor="end">tokens sorted by P (log scale)</SvgText>
+      <SvgText x={W - 6} y={H - 4} fill={C.dim} fontSize={8} fontFamily={C.mono} textAnchor="end">tokens sorted by P (log scale)</SvgText>
     </Svg>
   );
 }
@@ -308,7 +308,7 @@ function VecCells({ v }: { v: number[] }) {
     <Row style={{ gap: 3 }}>
       {v.map((x, k) => (
         <View key={k} style={{ width: 22, height: 22, borderRadius: 4, backgroundColor: cellColor(x), alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ color: onFill(x), fontSize: 8, fontFamily: mono }}>{x.toFixed(1)}</Text>
+          <Text style={{ color: onFill(x), fontSize: 8, fontFamily: C.mono }}>{x.toFixed(1)}</Text>
         </View>
       ))}
     </Row>
@@ -316,7 +316,7 @@ function VecCells({ v }: { v: number[] }) {
 }
 
 const st = themed(() => StyleSheet.create({
-  seq: { color: C.text, fontFamily: mono, fontSize: 15, lineHeight: 24 },
+  seq: { color: C.text, fontFamily: C.mono, fontSize: 15, lineHeight: 24 },
   seqPrompt: { color: C.text },
   seqGen: { color: C.accent2 },
   seqNew: { color: C.neg, fontWeight: '700' },
@@ -332,9 +332,9 @@ const st = themed(() => StyleSheet.create({
     alignItems: 'center',
   },
   stageActive: { backgroundColor: C.forest, borderColor: C.forest },
-  stageNum: { color: C.accent, fontFamily: mono, fontSize: 12, fontWeight: '700' },
+  stageNum: { color: C.accent, fontFamily: C.mono, fontSize: 12, fontWeight: '700' },
   stageLabel: { color: C.dim, fontSize: 12 },
-  tokLabel: { color: C.text, fontFamily: mono, fontSize: 12, width: 64 },
+  tokLabel: { color: C.text, fontFamily: C.mono, fontSize: 12, width: 64 },
   drawBox: { backgroundColor: C.card2, borderRadius: 10, padding: S.md, gap: 4 },
   drawText: { color: C.text, fontSize: 15 },
   input: {
@@ -343,7 +343,7 @@ const st = themed(() => StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    fontFamily: mono,
+    fontFamily: C.mono,
     fontSize: 14,
     borderWidth: 1,
     borderColor: C.border,

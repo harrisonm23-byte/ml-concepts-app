@@ -62,10 +62,11 @@ Every number on screen is computed live from the stated formula; the models are 
 
 ## Themes
 
-Switch between three themes directly in the app header:
+Switch between four themes directly in the app header:
 
-- **Paper** — Light, serif, analog feel
+- **Report** — The default: warm off-white ground, sans headings, serif body, soft rules and rounded panels, in the manner of a research report page
+- **Paper** — White page and black ink like the course PDFs, serif throughout
 - **Trine** — Medium, geometric, balanced
 - **Dark** — Dark mode, comfortable for low-light viewing
 
-On web, use `?theme=paper|trine|dark` in the URL.
+On web, use `?theme=report|paper|trine|dark` in the URL.

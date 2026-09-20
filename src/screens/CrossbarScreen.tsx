@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { fmt, relu } from '../math';
 
 const N = 8;
@@ -83,7 +83,7 @@ export default function CrossbarScreen() {
                       justifyContent: 'center',
                     }}
                   >
-                    {mode === 'weights' ? <Text style={{ color: wt === 0 ? C.dim : C.cream, fontFamily: mono, fontSize: 11 }}>{wt > 0 ? '+1' : wt < 0 ? '−1' : '0'}</Text> : v && inA ? <Text style={{ color: C.bg, fontFamily: mono, fontSize: 10 }}>×{wt}</Text> : null}
+                    {mode === 'weights' ? <Text style={{ color: wt === 0 ? C.dim : C.cream, fontFamily: C.mono, fontSize: 11 }}>{wt > 0 ? '+1' : wt < 0 ? '−1' : '0'}</Text> : v && inA ? <Text style={{ color: C.bg, fontFamily: C.mono, fontSize: 10 }}>×{wt}</Text> : null}
                   </Pressable>
                 );
               })}
@@ -141,6 +141,6 @@ export default function CrossbarScreen() {
 }
 
 const st = themed(() => StyleSheet.create({
-  k: { color: C.text, fontFamily: mono, fontSize: 13 },
-  v: { color: C.text, fontFamily: mono, fontSize: 13 },
+  k: { color: C.text, fontFamily: C.mono, fontSize: 13 },
+  v: { color: C.text, fontFamily: C.mono, fontSize: 13 },
 }));

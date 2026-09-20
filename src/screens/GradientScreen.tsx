@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Path, Polyline, Text as SvgText } from 'react-native-svg';
 import { Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { clamp, fmt } from '../math';
 import HtmlView from '../components/HtmlView';
 import { GD_HTML } from '../gd3d/sceneHtml';
@@ -136,11 +136,11 @@ function Landscape({ theta, path, lr, g }: { theta: number; path: number[]; lr: 
       <Line x1={X(theta - tx)} y1={Y(y0 - slope * tx)} x2={X(theta + tx)} y2={Y(y0 + slope * tx)} stroke={C.neg} strokeWidth={1.5} strokeDasharray="4,3" />
       <Line x1={X(theta)} y1={Y(y0)} x2={X(arrowT)} y2={Y(y0)} stroke={C.pos} strokeWidth={3} />
       <Circle cx={X(theta)} cy={Y(y0)} r={8} fill={C.warn} stroke={C.bg} strokeWidth={2} />
-      <SvgText x={X(-2.2)} y={Y(L(-2.2)) + 16} fill={C.dim} fontSize={9} textAnchor="middle" fontFamily={mono}>global min</SvgText>
-      <SvgText x={X(2.2)} y={Y(L(2.2)) + 16} fill={C.dim} fontSize={9} textAnchor="middle" fontFamily={mono}>local min</SvgText>
-      <SvgText x={W - pad} y={H - 6} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={mono}>θ (weight) →</SvgText>
-      <SvgText x={pad + 2} y={pad - 6} fill={C.dim} fontSize={9} fontFamily={mono}>loss L(θ) ↑</SvgText>
-      <SvgText x={X(theta) + 10} y={Y(y0) - 10} fill={C.neg} fontSize={9} fontFamily={mono}>slope {fmt(slope)}</SvgText>
+      <SvgText x={X(-2.2)} y={Y(L(-2.2)) + 16} fill={C.dim} fontSize={9} textAnchor="middle" fontFamily={C.mono}>global min</SvgText>
+      <SvgText x={X(2.2)} y={Y(L(2.2)) + 16} fill={C.dim} fontSize={9} textAnchor="middle" fontFamily={C.mono}>local min</SvgText>
+      <SvgText x={W - pad} y={H - 6} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={C.mono}>θ (weight) →</SvgText>
+      <SvgText x={pad + 2} y={pad - 6} fill={C.dim} fontSize={9} fontFamily={C.mono}>loss L(θ) ↑</SvgText>
+      <SvgText x={X(theta) + 10} y={Y(y0) - 10} fill={C.neg} fontSize={9} fontFamily={C.mono}>slope {fmt(slope)}</SvgText>
     </Svg>
   );
 }
@@ -156,13 +156,13 @@ function LossChart({ losses }: { losses: number[] }) {
     <Svg width={W} height={H} style={{ alignSelf: 'center' }}>
       <Line x1={pad} y1={Y(0)} x2={W - pad} y2={Y(0)} stroke={C.border} />
       <Polyline points={pts} stroke={C.warn} strokeWidth={2} fill="none" />
-      <SvgText x={W - pad} y={H - 2} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={mono}>step →  ({losses.length - 1} taken)</SvgText>
-      <SvgText x={pad} y={12} fill={C.dim} fontSize={9} fontFamily={mono}>loss {fmt(losses[losses.length - 1])}</SvgText>
+      <SvgText x={W - pad} y={H - 2} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={C.mono}>step →  ({losses.length - 1} taken)</SvgText>
+      <SvgText x={pad} y={12} fill={C.dim} fontSize={9} fontFamily={C.mono}>loss {fmt(losses[losses.length - 1])}</SvgText>
     </Svg>
   );
 }
 
 const st = themed(() => StyleSheet.create({
-  k: { color: C.text, fontFamily: mono, fontSize: 13 },
-  v: { color: C.text, fontFamily: mono, fontSize: 13 },
+  k: { color: C.text, fontFamily: C.mono, fontSize: 13 },
+  v: { color: C.text, fontFamily: C.mono, fontSize: 13 },
 }));

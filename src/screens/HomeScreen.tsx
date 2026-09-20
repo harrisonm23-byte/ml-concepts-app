@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { C, PALETTE_LABELS, PaletteName, S, applyPalette, currentPalette, serif, themed } from '../theme';
+import { C, PALETTE_LABELS, PaletteName, S, applyPalette, currentPalette, themed } from '../theme';
 import { SECTIONS } from '../nav';
 import PdfPane, { PdfPaneHandle } from '../components/PdfPane';
 import SplitHandle from '../components/SplitHandle';
@@ -188,30 +188,30 @@ export default function HomeScreen() {
 }
 
 const st = themed(() => StyleSheet.create({
-  header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.text },
-  headerTitle: { color: C.text, fontFamily: serif, fontSize: 20, lineHeight: 26, fontWeight: '700', textAlign: 'center' },
-  headerEyebrow: { color: C.dim, fontFamily: serif, fontSize: 11, letterSpacing: 1.5, textAlign: 'center' },
-  toc: { marginTop: S.xl, borderWidth: 1, borderColor: C.text, paddingHorizontal: S.lg, paddingVertical: S.md, gap: S.md },
-  tocHeading: { color: C.text, fontFamily: serif, fontSize: 18, fontWeight: '700' },
-  tocLecture: { color: C.text, fontFamily: serif, fontSize: 15, fontWeight: '700', lineHeight: 21 },
+  header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.rule },
+  headerTitle: { color: C.text, fontFamily: C.head, fontSize: 20, lineHeight: 26, fontWeight: C.headWeight, letterSpacing: C.headTracking, textAlign: 'center' },
+  headerEyebrow: { color: C.dim, fontFamily: C.ui, fontSize: 11, letterSpacing: 1.5, textAlign: 'center' },
+  toc: { marginTop: S.xl, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: S.lg, paddingVertical: S.md, gap: S.md },
+  tocHeading: { color: C.text, fontFamily: C.head, fontSize: 18, fontWeight: C.headWeight, letterSpacing: C.headTracking },
+  tocLecture: { color: C.text, fontFamily: C.head, fontSize: 15, fontWeight: C.headWeight, lineHeight: 21 },
   tocItem: { flexDirection: 'row', alignItems: 'baseline', gap: S.sm, paddingLeft: S.lg, paddingVertical: 2 },
-  tocItemText: { color: C.forest, fontFamily: serif, fontSize: 15, textDecorationLine: 'underline' },
-  tocReading: { color: C.dim, fontFamily: serif, fontSize: 12, flexShrink: 1 },
-  abstract: { color: C.text, fontFamily: serif, fontSize: 16, lineHeight: 24 },
-  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.text, borderRadius: 0, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
-  eyebrow: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 1.5 },
-  sectionTitle: { color: C.text, fontFamily: serif, fontSize: 20, lineHeight: 27, fontWeight: '700' },
-  reading: { color: C.dim, fontFamily: serif, fontSize: 12, letterSpacing: 0.5 },
+  tocItemText: { color: C.link, fontFamily: C.serif, fontSize: 15, textDecorationLine: 'underline' },
+  tocReading: { color: C.dim, fontFamily: C.ui, fontSize: 12, flexShrink: 1 },
+  abstract: { color: C.text, fontFamily: C.serif, fontSize: C.bodySize, lineHeight: C.bodyLine },
+  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
+  eyebrow: { color: C.dim, fontFamily: C.ui, fontSize: 12, letterSpacing: 1.5 },
+  sectionTitle: { color: C.text, fontFamily: C.head, fontSize: 22, lineHeight: 28, fontWeight: C.headWeight, letterSpacing: C.headTracking },
+  reading: { color: C.dim, fontFamily: C.ui, fontSize: 12, letterSpacing: 0.5 },
   item: { borderBottomWidth: 1, borderBottomColor: C.border },
   itemHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: S.md, paddingVertical: S.md },
-  itemTitle: { color: C.text, fontFamily: serif, fontSize: 18, fontWeight: '700' },
-  definition: { color: C.dim, fontFamily: serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic' },
+  itemTitle: { color: C.text, fontFamily: C.head, fontSize: 19, fontWeight: C.headWeight, letterSpacing: C.headTracking },
+  definition: { color: C.dim, fontFamily: C.serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic' },
   chevron: { color: C.text, fontSize: 18, paddingTop: 2 },
   body: { paddingTop: S.sm, paddingBottom: S.lg },
   switch: { flexDirection: 'row', gap: 6, marginTop: 6 },
-  switchBtn: { paddingVertical: 3, paddingHorizontal: 10, borderWidth: 1, borderColor: C.border, borderRadius: 2 },
+  switchBtn: { paddingVertical: 3, paddingHorizontal: 10, borderWidth: 1, borderColor: C.border, borderRadius: C.radius },
   switchBtnActive: { backgroundColor: C.forest, borderColor: C.forest },
-  switchText: { color: C.dim, fontFamily: serif, fontSize: 12 },
+  switchText: { color: C.dim, fontFamily: C.ui, fontSize: 12 },
   switchTextActive: { color: C.cream },
   sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
   pdfCol: { paddingTop: S.md, paddingLeft: S.xs, paddingRight: S.md, gap: S.sm },

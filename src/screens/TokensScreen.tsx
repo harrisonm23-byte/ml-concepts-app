@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import VectorSpace3D from '../components/VectorSpace3D';
 import { addv, cosine, pca, project, sub as vsub, mulberry32 } from '../math';
 import { Bar, Card, Chip, Formula, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { fmt, hashStr } from '../math';
 
 // A toy byte-pair-ish tokenizer: whole short words, common suffixes split off,
@@ -185,9 +185,9 @@ function OrderDemo({ words }: { words: string[] }) {
     <View style={{ gap: 3 }}>
       {words.map((w, i) => (
         <Row key={i} style={{ gap: 6 }}>
-          <Text style={{ color: C.dim, fontFamily: mono, fontSize: 11, width: 36 }}>pos {i + 1}</Text>
-          <Text style={{ color: C.text, fontFamily: mono, fontSize: 12, width: 52 }}>{w}</Text>
-          <Text style={{ color: C.faint, fontFamily: mono, fontSize: 11 }}>{hashStr(w) % 50257}</Text>
+          <Text style={{ color: C.dim, fontFamily: C.mono, fontSize: 11, width: 36 }}>pos {i + 1}</Text>
+          <Text style={{ color: C.text, fontFamily: C.mono, fontSize: 12, width: 52 }}>{w}</Text>
+          <Text style={{ color: C.faint, fontFamily: C.mono, fontSize: 11 }}>{hashStr(w) % 50257}</Text>
         </Row>
       ))}
     </View>
@@ -198,6 +198,6 @@ const st = themed(() => StyleSheet.create({
   input: { backgroundColor: C.card2, color: C.text, borderRadius: 10, padding: 10, fontSize: 15, borderWidth: 1, borderColor: C.border, minHeight: 44 },
   tok: { backgroundColor: C.card2, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 4, borderWidth: 1, borderColor: C.border, alignItems: 'center' },
   tokStart: { borderColor: C.accent + '88' },
-  tokText: { color: C.text, fontFamily: mono, fontSize: 13 },
-  tokId: { color: C.faint, fontFamily: mono, fontSize: 9 },
+  tokText: { color: C.text, fontFamily: C.mono, fontSize: 13 },
+  tokId: { color: C.faint, fontFamily: C.mono, fontSize: 9 },
 }));

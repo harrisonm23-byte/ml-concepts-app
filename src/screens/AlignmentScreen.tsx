@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Bar, Btn, Card, Chip, Formula, LabeledSlider, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { entropy, fmt } from '../math';
 
 const STAGES = ['Base (pre-trained)', 'SFT', 'RLHF'] as const;
@@ -93,7 +93,7 @@ function Dist({ label, p }: { label: string; p: number[] }) {
     <View style={{ gap: 4 }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <Small>{label}</Small>
-        <Text style={{ color: C.accent, fontFamily: mono, fontSize: 12 }}>H = {fmt(entropy(p))} nats</Text>
+        <Text style={{ color: C.accent, fontFamily: C.mono, fontSize: 12 }}>H = {fmt(entropy(p))} nats</Text>
       </Row>
       <Row style={{ gap: 3, alignItems: 'flex-end', height: 40 }}>
         {p.map((v, i) => (

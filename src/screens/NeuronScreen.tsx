@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Line, Path, Text as SvgText } from 'react-native-svg';
 import { Card, Chip, Formula, LabeledSlider, Legend, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { fmt, heatColor, relu, sigmoid, signedColor } from '../math';
 
 type Act = 'relu' | 'sigmoid' | 'none';
@@ -107,14 +107,14 @@ function Diagram({ a, w, out, act }: { a: number[]; w: number[]; out: number; ac
       {a.map((ai, j) => (
         <React.Fragment key={j}>
           <Circle cx={xIn} cy={ys[j]} r={15} fill={heatColor(ai)} stroke={C.border} />
-          <SvgText x={xIn} y={ys[j] + 4} fill={ai > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={mono}>{ai.toFixed(2)}</SvgText>
-          <SvgText x={xIn - 24} y={ys[j] + 4} fill={C.dim} fontSize={10} textAnchor="end" fontFamily={mono}>a{sub(j + 1)}</SvgText>
-          <SvgText x={(xIn + xOut) / 2 - 20} y={(ys[j] + yOut) / 2 - 4 + (j - 1.5) * 6} fill={C.dim} fontSize={9} fontFamily={mono}>w{sub(j + 1)}={w[j].toFixed(1)}</SvgText>
+          <SvgText x={xIn} y={ys[j] + 4} fill={ai > 0.5 ? C.bg : C.text} fontSize={10} textAnchor="middle" fontFamily={C.mono}>{ai.toFixed(2)}</SvgText>
+          <SvgText x={xIn - 24} y={ys[j] + 4} fill={C.dim} fontSize={10} textAnchor="end" fontFamily={C.mono}>a{sub(j + 1)}</SvgText>
+          <SvgText x={(xIn + xOut) / 2 - 20} y={(ys[j] + yOut) / 2 - 4 + (j - 1.5) * 6} fill={C.dim} fontSize={9} fontFamily={C.mono}>w{sub(j + 1)}={w[j].toFixed(1)}</SvgText>
         </React.Fragment>
       ))}
       <Circle cx={xOut} cy={yOut} r={26} fill={heatColor(fill)} stroke={C.accent} strokeWidth={2} />
-      <SvgText x={xOut} y={yOut + 4} fill={fill > 0.5 ? C.bg : C.text} fontSize={12} textAnchor="middle" fontFamily={mono}>{out.toFixed(2)}</SvgText>
-      <SvgText x={xOut} y={yOut + 44} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={mono}>{ACT[act].label}(Σ w·a + b)</SvgText>
+      <SvgText x={xOut} y={yOut + 4} fill={fill > 0.5 ? C.bg : C.text} fontSize={12} textAnchor="middle" fontFamily={C.mono}>{out.toFixed(2)}</SvgText>
+      <SvgText x={xOut} y={yOut + 44} fill={C.dim} fontSize={10} textAnchor="middle" fontFamily={C.mono}>{ACT[act].label}(Σ w·a + b)</SvgText>
     </Svg>
   );
 }
@@ -135,12 +135,12 @@ function ActPlot({ act, z }: { act: Act; z: number }) {
       <Path d={d} stroke={C.accent} strokeWidth={2} fill="none" />
       <Line x1={X(zc)} y1={Y(0)} x2={X(zc)} y2={Y(f(zc))} stroke={C.warn} strokeDasharray="3,3" />
       <Circle cx={X(zc)} cy={Y(f(zc))} r={5} fill={C.warn} />
-      <SvgText x={X(zc)} y={H - 4} fill={C.warn} fontSize={9} textAnchor="middle" fontFamily={mono}>z={fmt(z)}</SvgText>
-      <SvgText x={W - pad} y={12} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={mono}>σ(z)</SvgText>
+      <SvgText x={X(zc)} y={H - 4} fill={C.warn} fontSize={9} textAnchor="middle" fontFamily={C.mono}>z={fmt(z)}</SvgText>
+      <SvgText x={W - pad} y={12} fill={C.dim} fontSize={9} textAnchor="end" fontFamily={C.mono}>σ(z)</SvgText>
     </Svg>
   );
 }
 
 const st = themed(() => StyleSheet.create({
-  term: { color: C.text, fontFamily: mono, fontSize: 13, minWidth: 80 },
+  term: { color: C.text, fontFamily: C.mono, fontSize: 13, minWidth: 80 },
 }));

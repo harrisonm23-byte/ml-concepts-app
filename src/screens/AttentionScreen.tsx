@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Line, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { Bar, Card, Chip, Formula, LabeledSlider, Legend, P, Row, Screen, Small } from '../components/ui';
-import { C, S, mono, themed } from '../theme';
+import { C, S, themed } from '../theme';
 import { cellColor, dot, fmt, onFill, softmax } from '../math';
 
 // Hand-designed 4-dim query/key/value vectors. Feature axes:
@@ -76,7 +76,7 @@ export default function AttentionScreen() {
               y={H - 10}
               fill={i === qi ? C.neg : visible[i] ? C.text : C.faint}
               fontSize={9}
-              fontFamily={mono}
+              fontFamily={C.mono}
               textAnchor="middle"
               onPress={() => setQi(i)}
             >
@@ -148,27 +148,27 @@ function BlockDiagram() {
   const box = (y: number, label: string, color: string) => (
     <>
       <Rect x={70} y={y} width={160} height={30} rx={8} fill={color + '33'} stroke={color} />
-      <SvgText x={150} y={y + 20} fill={C.text} fontSize={12} textAnchor="middle" fontFamily={mono}>{label}</SvgText>
+      <SvgText x={150} y={y + 20} fill={C.text} fontSize={12} textAnchor="middle" fontFamily={C.mono}>{label}</SvgText>
     </>
   );
   return (
     <Svg width={W} height={H} style={{ alignSelf: 'center' }}>
       <Rect x={50} y={20} width={200} height={110} rx={12} fill="none" stroke={C.border} strokeDasharray="4,3" />
-      <SvgText x={258} y={40} fill={C.dim} fontSize={10} fontFamily={mono}>× N</SvgText>
+      <SvgText x={258} y={40} fill={C.dim} fontSize={10} fontFamily={C.mono}>× N</SvgText>
       {box(30, 'attention', C.accent2)}
       <Line x1={150} y1={60} x2={150} y2={80} stroke={C.dim} />
       {box(80, 'feed-forward', C.accent)}
       <Line x1={150} y1={110} x2={150} y2={135} stroke={C.dim} />
-      <SvgText x={150} y={155} fill={C.warn} fontSize={12} textAnchor="middle" fontFamily={mono}>logits over vocabulary</SvgText>
-      <SvgText x={150} y={14} fill={C.dim} fontSize={11} textAnchor="middle" fontFamily={mono}>tokens + positions in</SvgText>
+      <SvgText x={150} y={155} fill={C.warn} fontSize={12} textAnchor="middle" fontFamily={C.mono}>logits over vocabulary</SvgText>
+      <SvgText x={150} y={14} fill={C.dim} fontSize={11} textAnchor="middle" fontFamily={C.mono}>tokens + positions in</SvgText>
     </Svg>
   );
 }
 
 const st = themed(() => StyleSheet.create({
-  tok: { color: C.text, fontFamily: mono, fontSize: 12, width: 66 },
-  score: { color: C.dim, fontFamily: mono, fontSize: 11, width: 48, textAlign: 'right' },
-  pct: { color: C.dim, fontFamily: mono, fontSize: 11, width: 56, textAlign: 'right' },
+  tok: { color: C.text, fontFamily: C.mono, fontSize: 12, width: 66 },
+  score: { color: C.dim, fontFamily: C.mono, fontSize: 11, width: 48, textAlign: 'right' },
+  pct: { color: C.dim, fontFamily: C.mono, fontSize: 11, width: 56, textAlign: 'right' },
   cell: { width: 44, height: 22, borderRadius: 4, alignItems: 'center', justifyContent: 'center' },
-  cellText: { color: C.white, fontSize: 9, fontFamily: mono },
+  cellText: { color: C.white, fontSize: 9, fontFamily: C.mono },
 }));
