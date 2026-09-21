@@ -35,7 +35,7 @@ export function Screen({
 }) {
   // Rendered inline inside the accordion, so this is a plain View, not a ScrollView.
   return (
-    <View style={{ gap: S.lg, paddingBottom: S.md }}>
+    <View style={{ gap: C.sp.gap, paddingBottom: S.md }}>
       {intro ? <Text style={st.intro}>{rich(intro)}</Text> : null}
       {children}
     </View>
@@ -220,8 +220,8 @@ const st = themed(() => StyleSheet.create({
   card: {
     backgroundColor: C.card,
     borderRadius: C.cardRadius,
-    padding: S.lg,
-    gap: S.md,
+    padding: C.sp.pad,
+    gap: C.sp.cardGap,
     borderWidth: 1,
     borderColor: C.border,
     ...shadowFor(),

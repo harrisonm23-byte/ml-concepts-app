@@ -136,7 +136,7 @@ export default function HomeScreen() {
           ))}
         </View>
         {SECTIONS.map((sec) => (
-          <View key={sec.lecture} style={{ marginTop: S.xl }} onLayout={(e: LayoutChangeEvent) => { sectionY.current[sec.lecture] = e.nativeEvent.layout.y; }}>
+          <View key={sec.lecture} style={{ marginTop: C.sp.section }} onLayout={(e: LayoutChangeEvent) => { sectionY.current[sec.lecture] = e.nativeEvent.layout.y; }}>
             <View style={st.sectionBox}>
               <Text style={st.eyebrow}>{sec.lecture.toUpperCase()}</Text>
               <Text style={st.sectionTitle}>{sec.theme}</Text>
@@ -188,26 +188,26 @@ export default function HomeScreen() {
 }
 
 const st = themed(() => StyleSheet.create({
-  header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: S.lg, paddingBottom: S.md, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.rule },
+  header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: C.sp.pad, paddingBottom: C.sp.item, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.rule },
   headerTitle: { color: C.text, fontFamily: C.head, fontSize: 20, lineHeight: 26, fontWeight: C.headWeight, letterSpacing: C.headTracking, textAlign: 'center' },
   headerEyebrow: { color: C.dim, fontFamily: C.ui, fontSize: 11, letterSpacing: 1.5, textAlign: 'center' },
-  toc: { marginTop: S.xl, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: S.lg, paddingVertical: S.md, gap: S.md },
+  toc: { marginTop: C.sp.gap, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: C.sp.pad, paddingVertical: C.sp.pad * 0.75, gap: C.sp.cardGap },
   tocHeading: { color: C.text, fontFamily: C.head, fontSize: 18, fontWeight: C.headWeight, letterSpacing: C.headTracking },
   tocLecture: { color: C.text, fontFamily: C.head, fontSize: 15, fontWeight: C.headWeight, lineHeight: 21 },
-  tocItem: { flexDirection: 'row', alignItems: 'baseline', gap: S.sm, paddingLeft: S.lg, paddingVertical: 2 },
+  tocItem: { flexDirection: 'row', alignItems: 'baseline', gap: S.sm, paddingLeft: S.lg, paddingVertical: C.sp.cardGap / 4 },
   tocItemText: { color: C.link, fontFamily: C.serif, fontSize: 15, textDecorationLine: 'underline' },
   tocReading: { color: C.dim, fontFamily: C.ui, fontSize: 12, flexShrink: 1 },
   abstract: { color: C.text, fontFamily: C.serif, fontSize: C.bodySize, lineHeight: C.bodyLine },
-  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: S.lg, paddingVertical: S.md, marginBottom: S.sm, gap: 4 },
+  sectionBox: { backgroundColor: C.card, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: C.sp.pad, paddingVertical: C.sp.pad * 0.75, marginBottom: C.sp.cardGap, gap: 6 },
   eyebrow: { color: C.dim, fontFamily: C.ui, fontSize: 12, letterSpacing: 1.5 },
   sectionTitle: { color: C.text, fontFamily: C.head, fontSize: 22, lineHeight: 28, fontWeight: C.headWeight, letterSpacing: C.headTracking },
   reading: { color: C.dim, fontFamily: C.ui, fontSize: 12, letterSpacing: 0.5 },
   item: { borderBottomWidth: 1, borderBottomColor: C.border },
-  itemHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: S.md, paddingVertical: S.md },
+  itemHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: S.md, paddingVertical: C.sp.item },
   itemTitle: { color: C.text, fontFamily: C.head, fontSize: 19, fontWeight: C.headWeight, letterSpacing: C.headTracking },
   definition: { color: C.dim, fontFamily: C.serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic' },
   chevron: { color: C.text, fontSize: 18, paddingTop: 2 },
-  body: { paddingTop: S.sm, paddingBottom: S.lg },
+  body: { paddingTop: C.sp.bodyTop, paddingBottom: C.sp.bodyBottom },
   switch: { flexDirection: 'row', gap: 6, marginTop: 6 },
   switchBtn: { paddingVertical: 3, paddingHorizontal: 10, borderWidth: 1, borderColor: C.border, borderRadius: C.radius },
   switchBtnActive: { backgroundColor: C.forest, borderColor: C.forest },
@@ -216,5 +216,5 @@ const st = themed(() => StyleSheet.create({
   sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
   pdfCol: { paddingTop: S.md, paddingLeft: S.xs, paddingRight: S.md, gap: S.sm },
   pdfHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2 },
-  sheetBody: { paddingHorizontal: 56, paddingTop: S.xl, minHeight: '100%' },
+  sheetBody: { paddingHorizontal: C.sp.sheetX, paddingTop: C.sp.sheetTop, minHeight: '100%' },
 }));

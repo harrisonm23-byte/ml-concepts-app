@@ -32,12 +32,16 @@ type Palette = {
   serif: string; sans: string; head: string; ui: string; mono: string;
   headWeight: '600' | '700'; headTracking: number; bodySize: number; bodyLine: number;
   radius: number; cardRadius: number; rule: string; link: string;
+  // Spacing scale: card padding, gap between cards, gap inside a card, space above a section, entry header
+  // padding, sheet side and top padding, and padding around an opened entry's body.
+  sp: { pad: number; gap: number; cardGap: number; section: number; item: number; sheetX: number; sheetTop: number; bodyTop: number; bodyBottom: number };
 };
 
 // The essay look: serif everywhere, black rules, square corners.
 const essayType = {
   serif: F.georgia, sans: F.publicSans, head: F.georgia, ui: F.georgia, mono: F.menlo,
   headWeight: '700' as const, headTracking: 0, bodySize: 16, bodyLine: 24, radius: 2, cardRadius: 2,
+  sp: { pad: 16, gap: 16, cardGap: 12, section: 24, item: 12, sheetX: 56, sheetTop: 24, bodyTop: 8, bodyBottom: 16 },
 };
 
 // Paper: white page and black ink like the course essays; Trine forest, sage and gold for controls and plots.
@@ -61,6 +65,7 @@ const report: Palette = {
   statusBar: 'dark', shadow: false,
   serif: F.sourceSerif, sans: F.publicSans, head: F.publicSans, ui: F.publicSans, mono: F.menlo,
   headWeight: '600', headTracking: -0.3, bodySize: 17, bodyLine: 26, radius: 6, cardRadius: 12, rule: '#DEDBD1', link: '#141413',
+  sp: { pad: 24, gap: 28, cardGap: 16, section: 64, item: 20, sheetX: 72, sheetTop: 48, bodyTop: 12, bodyBottom: 36 },
 };
 
 // Trine: cream room, white furniture, forest does the work, gold is decorative.
