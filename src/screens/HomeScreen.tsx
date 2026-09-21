@@ -28,7 +28,8 @@ function EdgeTab({ open, onPress }: { open: boolean; onPress: () => void }) {
     title: label,
     style: {
       position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 3,
-      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '10px 4px',
+      width: 24, boxSizing: 'border-box',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '10px 0',
       border: `1px solid ${C.border}`, borderRadius: C.radius, background: C.card, cursor: 'pointer',
       fontFamily: C.ui, color: C.dim, fontSize: 11, lineHeight: 1, userSelect: 'none', whiteSpace: 'nowrap',
     },
