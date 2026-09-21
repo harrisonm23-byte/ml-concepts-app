@@ -14,6 +14,9 @@ const PDF_MIN = 360; // the lecture PDF column, shown to the right of the notes 
 const PDF_MAX = 600;
 const NOTES_MIN = 600;
 
+// The essay-section cite without its roman numeral, for display; the numbered form still drives the PDF lookup.
+const plainReading = (r: string) => r.split(' · ').map((part) => part.replace(/^[IVX]+\.\s*/, '')).join(' · ');
+
 function initialOpen(): Set<string> {
   // On the web, ?open=key expands a section directly (handy for sharing a link).
   if (Platform.OS === 'web' && typeof window !== 'undefined') {
@@ -129,7 +132,7 @@ export default function HomeScreen() {
               {sec.items.map((it) => (
                 <Pressable key={it.key} onPress={() => jumpTo(sec.lecture, it.key)} style={({ pressed }) => [st.tocItem, pressed && { opacity: 0.6 }]}>
                   <Text style={st.tocItemText}>{it.title}</Text>
-                  <Text style={st.tocReading} numberOfLines={1}>{it.reading}</Text>
+                  <Text style={st.tocReading} numberOfLines={1}>{plainReading(it.reading)}</Text>
                 </Pressable>
               ))}
             </View>
@@ -148,7 +151,7 @@ export default function HomeScreen() {
                 <View key={it.key} style={st.item} onLayout={(e: LayoutChangeEvent) => { itemY.current[it.key] = e.nativeEvent.layout.y; }}>
                   <Pressable onPress={() => toggle(it.key)} style={({ pressed }) => [st.itemHeader, pressed && { opacity: 0.7 }]}>
                     <View style={{ flex: 1, gap: 2 }}>
-                      <Text style={st.reading}>{it.reading}</Text>
+                      <Text style={st.reading}>{plainReading(it.reading)}</Text>
                       <Text style={st.itemTitle}>{it.title}</Text>
                       <Text style={st.definition}>{it.definition}</Text>
                     </View>
