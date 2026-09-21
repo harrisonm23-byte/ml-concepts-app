@@ -121,7 +121,7 @@ export default function TokensScreen() {
       </Card>
 
       <Card title="2. One-hot encoding">
-        <P>The crudest numeric form of a token ID: a vector of zeros with a single 1 at the ID's position. Tap two positions.</P>
+        <P>The basic form of a token ID: a vector of zeros with a single 1 at the ID's position. Tap two positions.</P>
         <Row wrap style={{ gap: 4 }}>
           {Array.from({ length: 12 }, (_, i) => (
             <Chip key={i} label={i === hot ? '1' : i === hot2 ? '1' : '0'} active={i === hot || i === hot2} color={i === hot ? C.accent : C.accent2} onPress={() => (i === hot ? setHot2(i) : setHot(i))} />

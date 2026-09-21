@@ -72,7 +72,13 @@ export default function HomeScreen() {
 
   // Wide web windows show the lecture PDF for the current section in a column to the right of the notes.
   const { width, height } = useWindowDimensions();
-  const showPdf = WEB && width >= NOTES_MIN + PDF_MIN + 40;
+  const canPdf = WEB && width >= NOTES_MIN + PDF_MIN + 40;
+  // The reader can fold the essay column away; the choice is remembered.
+  const [pdfOpen, setPdfOpen] = useState<boolean>(() => {
+    try { return WEB ? window.localStorage.getItem('pdfOpen') !== '0' : true; } catch { return true; }
+  });
+  const togglePdf = (open: boolean) => { setPdfOpen(open); try { window.localStorage.setItem('pdfOpen', open ? '1' : '0'); } catch { /* ignore */ } };
+  const showPdf = canPdf && pdfOpen;
   // Give the notes their letter width when there is room, otherwise share the window between the two columns.
   // Once the reader drags the divider, their chosen PDF width wins (and is remembered).
   const [split, setSplit] = useState<number | null>(() => {
@@ -151,8 +157,8 @@ export default function HomeScreen() {
                 <View key={it.key} style={st.item} onLayout={(e: LayoutChangeEvent) => { itemY.current[it.key] = e.nativeEvent.layout.y; }}>
                   <Pressable onPress={() => toggle(it.key)} style={({ pressed }) => [st.itemHeader, pressed && { opacity: 0.7 }]}>
                     <View style={{ flex: 1, gap: 2 }}>
-                      <Text style={st.reading}>{plainReading(it.reading)}</Text>
                       <Text style={st.itemTitle}>{it.title}</Text>
+                      <Text style={st.reading}>{plainReading(it.reading)}</Text>
                       <Text style={st.definition}>{it.definition}</Text>
                     </View>
                     <Text style={st.chevron}>{isOpen ? '▾' : '▸'}</Text>
@@ -168,6 +174,11 @@ export default function HomeScreen() {
           </View>
         ))}
       </ScrollView>
+      {canPdf && !pdfOpen && (
+        <Pressable onPress={() => togglePdf(true)} style={st.showPdf}>
+          <Text style={st.switchText}>◂ Essay</Text>
+        </Pressable>
+      )}
       </View>
       {showPdf && <SplitHandle onDrag={(dx) => { if (dragBase.current === 0) onDragStartWidth(); onDrag(dx); }} onEnd={() => { dragBase.current = 0; onDragEnd(); }} onReset={resetSplit} />}
       {showPdf && (
@@ -180,6 +191,9 @@ export default function HomeScreen() {
                   <Text style={[st.switchText, pdfId === p.id && st.switchTextActive]}>{p.label}</Text>
                 </Pressable>
               ))}
+              <Pressable onPress={() => togglePdf(false)} style={st.switchBtn}>
+                <Text style={st.switchText}>Hide ▸</Text>
+              </Pressable>
             </View>
           </View>
           <PdfPane ref={pdfRef} id={pdfId} height={height - 120} onReady={syncPdf} />
@@ -218,6 +232,7 @@ const st = themed(() => StyleSheet.create({
   switchTextActive: { color: C.cream },
   sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
   pdfCol: { paddingTop: S.md, paddingLeft: S.xs, paddingRight: S.md, gap: S.sm },
+  showPdf: { position: 'absolute', top: C.sp.pad, right: S.md, paddingVertical: 4, paddingHorizontal: 10, borderWidth: 1, borderColor: C.border, borderRadius: C.radius, backgroundColor: C.card, zIndex: 5 },
   pdfHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2 },
   sheetBody: { paddingHorizontal: C.sp.sheetX, paddingTop: C.sp.sheetTop, minHeight: '100%' },
 }));

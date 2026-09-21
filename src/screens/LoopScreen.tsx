@@ -98,7 +98,7 @@ export default function LoopScreen() {
         ))}
       </Row>
 
-      <Card title={`${stage + 1}. ${STAGES[stage].label}  ·  movement ${STAGES[stage].mov}`}>
+      <Card title={`${stage + 1}. ${STAGES[stage].label}`}>
         {stage === 0 && <TokenizeStage tokens={tokens} />}
         {stage === 1 && <EmbedStage tokens={tokens} />}
         {stage === 2 && <TransformerStage tokens={tokens} />}
