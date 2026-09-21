@@ -124,7 +124,7 @@ export default function HomeScreen() {
           {SECTIONS.map((sec) => (
             <View key={sec.lecture} style={{ gap: 2 }}>
               <Pressable onPress={() => jumpTo(sec.lecture)}>
-                <Text style={st.tocLecture}>{sec.lecture} · {sec.theme}</Text>
+                <Text style={st.tocLecture}>{sec.toc}</Text>
               </Pressable>
               {sec.items.map((it) => (
                 <Pressable key={it.key} onPress={() => jumpTo(sec.lecture, it.key)} style={({ pressed }) => [st.tocItem, pressed && { opacity: 0.6 }]}>

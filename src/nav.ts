@@ -13,12 +13,13 @@ import { ExternalityScreen, FairnessScreen, RaceScreen, ReturnsScreen } from './
 
 export type ConceptEntry = { key: string; title: string; definition: string; reading: string; component: ComponentType };
 export type LecturePdf = { id: string; label: string };
-export type Section = { lecture: string; theme: string; pdfs: LecturePdf[]; items: ConceptEntry[] };
+export type Section = { lecture: string; theme: string; toc: string; pdfs: LecturePdf[]; items: ConceptEntry[] };
 
 export const SECTIONS: Section[] = [
   {
     lecture: 'Language Models',
     theme: 'From Probability to Assistant: How Language Models Work and How They Learn to Help',
+    toc: 'Language Models',
     pdfs: [{ id: 'language-models-essay', label: 'Essay' }, { id: 'language-models-handout', label: 'Handout' }],
     items: [
       { key: 'loop', reading: 'I. The Model Is a Probability Engine', title: 'Autoregressive generation', definition: 'Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.', component: LoopScreen },
@@ -31,6 +32,7 @@ export const SECTIONS: Section[] = [
   {
     lecture: 'Neural Networks',
     theme: 'Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network',
+    toc: 'Neural Networks',
     pdfs: [{ id: 'neural-networks-essay', label: 'Essay' }],
     items: [
       { key: 'neuron', reading: 'V. Anatomy of a Neural Network', title: 'The neuron', definition: 'a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.', component: NeuronScreen },
@@ -41,6 +43,7 @@ export const SECTIONS: Section[] = [
   {
     lecture: 'Training',
     theme: 'Predict, Measure, Update: How Neural Networks Learn',
+    toc: 'Training · Predict, Measure, Update',
     pdfs: [{ id: 'training-essay', label: 'Essay' }],
     items: [
       { key: 'gradient', reading: 'III. The Update Step: Gradient Descent', title: 'Gradient descent', definition: 'θ ← θ − η∇L(θ): step against the slope of the loss.', component: GradientScreen },
@@ -50,6 +53,7 @@ export const SECTIONS: Section[] = [
   {
     lecture: 'Governance',
     theme: 'General Purpose, Information, Intelligence: AI Governance and the Anatomy of a Race',
+    toc: 'AI Governance',
     pdfs: [{ id: 'governance-essay', label: 'Essay' }],
     items: [
       { key: 'returns', reading: 'II. Three Lenses (Lens 2: information technology)', title: 'Increasing returns', definition: 'Fixed cost F to train, marginal cost c to serve: average cost F/n + c falls without limit, so markets concentrate.', component: ReturnsScreen },
