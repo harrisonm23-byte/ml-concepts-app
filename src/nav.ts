@@ -18,7 +18,7 @@ export type Section = { lecture: string; theme: string; toc: string; pdfs: Lectu
 export const SECTIONS: Section[] = [
   {
     lecture: 'Language Models',
-    theme: 'From Probability to Assistant: How Language Models Work and How They Learn to Help',
+    theme: 'From Probability to Assistant',
     toc: 'Language Models',
     pdfs: [{ id: 'language-models-essay', label: 'Essay' }, { id: 'language-models-handout', label: 'Handout' }],
     items: [
@@ -31,7 +31,7 @@ export const SECTIONS: Section[] = [
   },
   {
     lecture: 'Neural Networks',
-    theme: 'Weighted Sum, Bias, Nonlinearity: ML Models and the Anatomy of a Neural Network',
+    theme: 'The Anatomy of a Neural Network',
     toc: 'Neural Networks',
     pdfs: [{ id: 'neural-networks-essay', label: 'Essay' }],
     items: [
@@ -42,7 +42,7 @@ export const SECTIONS: Section[] = [
   },
   {
     lecture: 'Training',
-    theme: 'Predict, Measure, Update: How Neural Networks Learn',
+    theme: 'How Neural Networks Learn',
     toc: 'Training · Predict, Measure, Update',
     pdfs: [{ id: 'training-essay', label: 'Essay' }],
     items: [
@@ -52,7 +52,7 @@ export const SECTIONS: Section[] = [
   },
   {
     lecture: 'Governance',
-    theme: 'General Purpose, Information, Intelligence: AI Governance and the Anatomy of a Race',
+    theme: 'AI Governance Concepts',
     toc: 'AI Governance',
     pdfs: [{ id: 'governance-essay', label: 'Essay' }],
     items: [

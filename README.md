@@ -7,7 +7,6 @@ Interactive mobile app and web page illustrating the ideas from the ML/AI course
 The app displays three lectures' worth of interactive demonstrations, each with live-computed visualizations. Every entry cites the essay section it pairs with, and on wide screens the lecture PDF sits beside the notes and scrolls to that section as you read.
 
 ### Language Models: From Probability to Assistant
-*How Language Models Work and How They Learn to Help*
 
 - **Autoregressive generation** — Predict P(xₜ | x₁,…,xₜ₋₁), append the chosen token, repeat.
 - **Tokenization and embeddings** — Text → token IDs → one-hot vectors → learned vectors in ℝᵈ.
@@ -15,21 +14,18 @@ The app displays three lectures' worth of interactive demonstrations, each with 
 - **Softmax, temperature, and sampling** — Logits → a probability distribution → one drawn token.
 - **Entropy, cross-entropy, and alignment** — The training loss, and the pre-training → SFT → RLHF pipeline.
 
-### Neural Networks: Weighted Sum, Bias, Nonlinearity
-*ML Models and the Anatomy of a Neural Network*
+### Neural Networks: The Anatomy of a Neural Network
 
 - **The neuron** — a = σ(Σⱼ wⱼaⱼ + b): weighted sum, bias, nonlinearity.
 - **Feature detectors** — Why a neuron tuned to the crossbar of a 7 fires on a 5 but not a 6.
 - **The forward pass** — a⁽ᴸ⁾ = σ(W⁽ᴸ⁾a⁽ᴸ⁻¹⁾ + b⁽ᴸ⁾), layer by layer, in a multilayer perceptron.
 
-### Training: Predict, Measure, Update
-*How Neural Networks Learn*
+### Training: How Neural Networks Learn
 
 - **Gradient descent** — θ ← θ − η∇L(θ): step against the slope of the loss.
 - **Loss functions and the training loop** — Predict, measure (MSE or cross-entropy), update.
 
-### Governance: General Purpose, Information, Intelligence
-*AI Governance and the Anatomy of a Race*
+### Governance: AI Governance Concepts
 
 - **Increasing returns** — Fixed cost F to train, marginal cost c to serve: average cost F/n + c falls without limit, so markets concentrate.
 - **Externalities** — A by-product of one actor's behaviour on others; institutions exist to internalize them.
