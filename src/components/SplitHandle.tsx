@@ -51,7 +51,7 @@ export default function SplitHandle({ onDrag, onEnd, onReset }: { onDrag: (dx: n
     onMouseLeave: () => setHover(false),
     title: 'Drag to resize · double-click to reset',
     style: {
-      width: 14, cursor: 'col-resize', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      width: 14, cursor: 'col-resize', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingTop: 96, boxSizing: 'border-box',
       alignSelf: 'stretch', flex: 1, flexShrink: 0, touchAction: 'none',
     },
     children: unstable_createElement('div', {

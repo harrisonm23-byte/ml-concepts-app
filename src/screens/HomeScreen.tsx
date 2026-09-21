@@ -9,13 +9,35 @@ import SplitHandle from '../components/SplitHandle';
 
 // On the web the notes are laid out as a US-letter sheet (8.5 in at 96 px/in), centered on a neutral desk.
 const WEB = Platform.OS === 'web';
-const PAGE_W = 816;
+const PAGE_W = 1040; // the light sheet
+const CONTENT_W = 680; // the text measure inside it
 const PDF_MIN = 360; // the lecture PDF column, shown to the right of the notes when the window is wide enough
 const PDF_MAX = 600;
 const NOTES_MIN = 600;
 
 // The essay-section cite without its roman numeral, for display; the numbered form still drives the PDF lookup.
 const plainReading = (r: string) => r.split(' · ').map((part) => part.replace(/^[IVX]+\.\s*/, '')).join(' · ');
+
+// A slim tab on the divider, centred vertically, that folds the lecture notes away or brings them back.
+function EdgeTab({ open, onPress }: { open: boolean; onPress: () => void }) {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { unstable_createElement } = require('react-native-web');
+  const label = open ? 'Hide lecture notes' : 'Show lecture notes';
+  return unstable_createElement('div', {
+    onClick: onPress,
+    title: label,
+    style: {
+      position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 3,
+      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '10px 4px',
+      border: `1px solid ${C.border}`, borderRadius: C.radius, background: C.card, cursor: 'pointer',
+      fontFamily: C.ui, color: C.dim, fontSize: 11, lineHeight: 1, userSelect: 'none', whiteSpace: 'nowrap',
+    },
+    children: [
+      unstable_createElement('span', { key: 'arrow', style: { fontSize: 15 }, children: open ? '›' : '‹' }),
+      unstable_createElement('span', { key: 'label', style: { writingMode: 'vertical-rl', letterSpacing: 0.4 }, children: label }),
+    ],
+  });
+}
 
 function initialOpen(): Set<string> {
   // On the web, ?open=key expands a section directly (handy for sharing a link).
@@ -125,6 +147,7 @@ export default function HomeScreen() {
         </View>
       </View>
       <ScrollView ref={scrollRef} onScroll={onScroll} scrollEventThrottle={64} style={{ flex: 1 }} contentContainerStyle={[{ padding: S.lg, paddingBottom: 64, backgroundColor: C.bg }, WEB && st.sheet, WEB && st.sheetBody]} keyboardShouldPersistTaps="handled">
+        <View style={WEB && st.measure}>
         <Text style={st.abstract}>
           Each entry below is a definition from the course, followed by a demonstration you can operate. Every number on screen is computed live from the stated formula; the models are small enough to see through.
         </Text>
@@ -173,13 +196,12 @@ export default function HomeScreen() {
             })}
           </View>
         ))}
+        </View>
       </ScrollView>
       </View>
       {canPdf && (
         <View style={st.edge}>
-          <Pressable onPress={() => togglePdf(!pdfOpen)} hitSlop={6} style={st.edgeBtn}>
-            <Text style={st.edgeArrow}>{pdfOpen ? '›' : '‹'}</Text>
-          </Pressable>
+          <EdgeTab open={pdfOpen} onPress={() => togglePdf(!pdfOpen)} />
           {showPdf && <SplitHandle onDrag={(dx) => { if (dragBase.current === 0) onDragStartWidth(); onDrag(dx); }} onEnd={() => { dragBase.current = 0; onDragEnd(); }} onReset={resetSplit} />}
         </View>
       )}
@@ -231,9 +253,8 @@ const st = themed(() => StyleSheet.create({
   switchTextActive: { color: C.cream },
   sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
   pdfCol: { paddingTop: S.md, paddingLeft: S.xs, paddingRight: S.md, gap: S.sm },
-  edge: { width: 20, alignItems: 'center', alignSelf: 'stretch' },
-  edgeBtn: { marginTop: C.sp.pad + 2, width: 20, height: 26, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: C.border, borderRadius: C.radius, backgroundColor: C.card },
-  edgeArrow: { color: C.dim, fontFamily: C.ui, fontSize: 16, lineHeight: 18 },
+  edge: { width: 22, alignSelf: 'stretch' },
+  measure: { width: '100%', maxWidth: CONTENT_W, alignSelf: 'center' },
   pdfHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2 },
   sheetBody: { paddingHorizontal: C.sp.sheetX, paddingTop: C.sp.sheetTop, minHeight: '100%' },
 }));
