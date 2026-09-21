@@ -52,7 +52,7 @@ export default function SplitHandle({ onDrag, onEnd, onReset }: { onDrag: (dx: n
     title: 'Drag to resize · double-click to reset',
     style: {
       width: 14, cursor: 'col-resize', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      alignSelf: 'stretch', flexShrink: 0, touchAction: 'none',
+      alignSelf: 'stretch', flex: 1, flexShrink: 0, touchAction: 'none',
     },
     children: unstable_createElement('div', {
       style: { width: 4, height: 44, borderRadius: 2, background: active ? C.forest : C.border, transition: 'background 120ms' },
@@ -61,7 +61,7 @@ export default function SplitHandle({ onDrag, onEnd, onReset }: { onDrag: (dx: n
   return (
     <>
       {handle}
-      {dragging && <View pointerEvents="auto" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, cursor: 'col-resize' } as any} />}
+      {dragging && <View pointerEvents="auto" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, cursor: 'col-resize', zIndex: 50 } as any} />}
     </>
   );
 }

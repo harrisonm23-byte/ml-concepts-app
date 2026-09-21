@@ -110,7 +110,7 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: WEB ? C.card2 : C.bg }} edges={['top']}>
       <StatusBar style={C.statusBar} />
       <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-      <View style={{ flex: 1, maxWidth: WEB && split === null ? PAGE_W : undefined, minWidth: showPdf ? NOTES_MIN : undefined }}>
+      <View style={{ flex: 1, maxWidth: WEB ? PAGE_W : undefined, minWidth: showPdf ? NOTES_MIN : undefined }}>
       <View style={[st.header, WEB && st.sheet, WEB && { borderTopWidth: 0 }]}>
         <Pressable onPress={() => scrollRef.current?.scrollTo({ y: 0, animated: true })} style={{ alignSelf: 'stretch' }}>
           {headerSec && <Text style={st.headerEyebrow}>{headerSec.lecture.toUpperCase()}</Text>}
@@ -157,8 +157,8 @@ export default function HomeScreen() {
                 <View key={it.key} style={st.item} onLayout={(e: LayoutChangeEvent) => { itemY.current[it.key] = e.nativeEvent.layout.y; }}>
                   <Pressable onPress={() => toggle(it.key)} style={({ pressed }) => [st.itemHeader, pressed && { opacity: 0.7 }]}>
                     <View style={{ flex: 1, gap: 2 }}>
-                      <Text style={st.itemTitle}>{it.title}</Text>
                       <Text style={st.reading}>{plainReading(it.reading)}</Text>
+                      <Text style={st.itemTitle}>{it.title}</Text>
                       <Text style={st.definition}>{it.definition}</Text>
                     </View>
                     <Text style={st.chevron}>{isOpen ? '▾' : '▸'}</Text>
@@ -174,13 +174,15 @@ export default function HomeScreen() {
           </View>
         ))}
       </ScrollView>
-      {canPdf && !pdfOpen && (
-        <Pressable onPress={() => togglePdf(true)} style={st.showPdf}>
-          <Text style={st.switchText}>◂ Essay</Text>
-        </Pressable>
-      )}
       </View>
-      {showPdf && <SplitHandle onDrag={(dx) => { if (dragBase.current === 0) onDragStartWidth(); onDrag(dx); }} onEnd={() => { dragBase.current = 0; onDragEnd(); }} onReset={resetSplit} />}
+      {canPdf && (
+        <View style={st.edge}>
+          <Pressable onPress={() => togglePdf(!pdfOpen)} hitSlop={6} style={st.edgeBtn}>
+            <Text style={st.edgeArrow}>{pdfOpen ? '›' : '‹'}</Text>
+          </Pressable>
+          {showPdf && <SplitHandle onDrag={(dx) => { if (dragBase.current === 0) onDragStartWidth(); onDrag(dx); }} onEnd={() => { dragBase.current = 0; onDragEnd(); }} onReset={resetSplit} />}
+        </View>
+      )}
       {showPdf && (
         <View style={[st.pdfCol, { width: pdfW }]}>
           <View style={st.pdfHead}>
@@ -191,9 +193,6 @@ export default function HomeScreen() {
                   <Text style={[st.switchText, pdfId === p.id && st.switchTextActive]}>{p.label}</Text>
                 </Pressable>
               ))}
-              <Pressable onPress={() => togglePdf(false)} style={st.switchBtn}>
-                <Text style={st.switchText}>Hide ▸</Text>
-              </Pressable>
             </View>
           </View>
           <PdfPane ref={pdfRef} id={pdfId} height={height - 120} onReady={syncPdf} />
@@ -232,7 +231,9 @@ const st = themed(() => StyleSheet.create({
   switchTextActive: { color: C.cream },
   sheet: { width: '100%', maxWidth: PAGE_W, alignSelf: 'center', backgroundColor: C.bg, borderLeftWidth: 1, borderRightWidth: 1, borderColor: C.border },
   pdfCol: { paddingTop: S.md, paddingLeft: S.xs, paddingRight: S.md, gap: S.sm },
-  showPdf: { position: 'absolute', top: C.sp.pad, right: S.md, paddingVertical: 4, paddingHorizontal: 10, borderWidth: 1, borderColor: C.border, borderRadius: C.radius, backgroundColor: C.card, zIndex: 5 },
+  edge: { width: 20, alignItems: 'center', alignSelf: 'stretch' },
+  edgeBtn: { marginTop: C.sp.pad + 2, width: 20, height: 26, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: C.border, borderRadius: C.radius, backgroundColor: C.card },
+  edgeArrow: { color: C.dim, fontFamily: C.ui, fontSize: 16, lineHeight: 18 },
   pdfHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 2 },
   sheetBody: { paddingHorizontal: C.sp.sheetX, paddingTop: C.sp.sheetTop, minHeight: '100%' },
 }));
