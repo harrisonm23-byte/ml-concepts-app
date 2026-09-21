@@ -52,7 +52,7 @@ Every number on screen is computed live from the stated formula; the models are 
 
 - `src/screens/` — One interactive component per concept (LoopScreen, TokensScreen, AttentionScreen, etc.)
 - `src/components/ui.tsx` — Shared UI cards, sliders, bars, and chips
-- `src/theme.ts` — Palettes (Paper, Trine, Dark) and style helpers
+- `src/theme.ts` — Palettes (Report, Paper, Forest, Dark) and style helpers
 - `src/nav.ts` — Navigation structure mapping concepts to screens
 - `src/toyLM.ts` — The tiny bigram language model used in demonstrations
 - `src/math.ts` — Softmax, ReLU, entropy, sampling, seeded PRNG
@@ -66,7 +66,7 @@ Switch between four themes directly in the app header:
 
 - **Report** — The default: warm off-white ground, sans headings, serif body, soft rules and rounded panels, in the manner of a research report page
 - **Paper** — White page and black ink like the course PDFs, serif throughout
-- **Trine** — Medium, geometric, balanced
+- **Forest** — Cream room, white cards with a soft shadow, forest and gold accents
 - **Dark** — Dark mode, comfortable for low-light viewing
 
-On web, use `?theme=report|paper|trine|dark` in the URL.
+On web, use `?theme=report|paper|forest|dark` in the URL.

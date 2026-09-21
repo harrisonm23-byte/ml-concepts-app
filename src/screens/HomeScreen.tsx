@@ -30,7 +30,7 @@ function initialOpen(): Set<string> {
 export default function HomeScreen() {
   const [open, setOpen] = useState<Set<string>>(initialOpen);
   const [palette, setPalette] = useState<PaletteName>(() => {
-    // On the web, ?theme=paper|trine|dark picks the palette up front.
+    // On the web, ?theme=paper|forest|dark picks the palette up front.
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       const t = new URLSearchParams(window.location.search).get('theme') as PaletteName | null;
       if (t && PALETTE_LABELS[t]) { applyPalette(t); return t; }
@@ -194,7 +194,7 @@ const st = themed(() => StyleSheet.create({
   header: { backgroundColor: C.bg, paddingHorizontal: S.lg, paddingTop: C.sp.pad, paddingBottom: C.sp.item, gap: 4, alignItems: 'center', borderBottomWidth: 1, borderBottomColor: C.rule },
   headerTitle: { color: C.text, fontFamily: C.head, fontSize: 20, lineHeight: 26, fontWeight: C.headWeight, letterSpacing: C.headTracking, textAlign: 'center' },
   headerEyebrow: { color: C.dim, fontFamily: C.ui, fontSize: 11, letterSpacing: 1.5, textAlign: 'center' },
-  toc: { marginTop: C.sp.gap, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: C.sp.pad, paddingVertical: C.sp.pad * 0.75, gap: C.sp.cardGap },
+  toc: { marginTop: C.sp.gap, backgroundColor: C.panel, borderWidth: 1, borderColor: C.rule, borderRadius: C.cardRadius, paddingHorizontal: C.sp.pad, paddingVertical: C.sp.pad * 0.75, gap: C.sp.cardGap },
   tocHeading: { color: C.text, fontFamily: C.head, fontSize: 18, fontWeight: C.headWeight, letterSpacing: C.headTracking },
   tocLecture: { color: C.text, fontFamily: C.head, fontSize: 15, fontWeight: C.headWeight, lineHeight: 21 },
   tocItem: { flexDirection: 'row', alignItems: 'baseline', gap: S.sm, paddingLeft: S.lg, paddingVertical: C.sp.cardGap / 4 },

@@ -1,7 +1,7 @@
 import { Platform, StyleSheet } from 'react-native';
 
 // Four palettes, switchable at runtime from the header.
-export type PaletteName = 'report' | 'paper' | 'trine' | 'dark';
+export type PaletteName = 'report' | 'paper' | 'forest' | 'dark';
 
 // Font families per platform. On the web these are CSS stacks (the first two are loaded from Google Fonts below).
 const fam = (web: string, ios: string, android: string) => Platform.select({ web, ios, android, default: web }) as string;
@@ -31,7 +31,7 @@ type Palette = {
   // Typography and shape.
   serif: string; sans: string; head: string; ui: string; mono: string;
   headWeight: '600' | '700'; headTracking: number; bodySize: number; bodyLine: number;
-  radius: number; cardRadius: number; rule: string; link: string;
+  radius: number; cardRadius: number; rule: string; link: string; panel: string;
   // Spacing scale: card padding, gap between cards, gap inside a card, space above a section, entry header
   // padding, sheet side and top padding, and padding around an opened entry's body.
   sp: { pad: number; gap: number; cardGap: number; section: number; item: number; sheetX: number; sheetTop: number; bodyTop: number; bodyBottom: number };
@@ -44,14 +44,14 @@ const essayType = {
   sp: { pad: 16, gap: 16, cardGap: 12, section: 24, item: 12, sheetX: 56, sheetTop: 24, bodyTop: 8, bodyBottom: 16 },
 };
 
-// Paper: white page and black ink like the course essays; Trine forest, sage and gold for controls and plots.
+// Paper: white page and black ink like the course essays; Forest, sage and gold for controls and plots.
 const paper: Palette = {
   bg: '#FFFFFF', card: '#FFFFFF', card2: '#F4F4F4', border: '#D9D9D9',
   text: '#000000', dim: '#444444', faint: '#9A9A9A',
   accent: '#1E4D3A', accent2: '#7BA388', pos: '#1E4D3A', neg: '#8B4A2F', warn: '#C9A344', gold: '#D4A84B',
   cream: '#FFFFFF', forest: '#1E4D3A', ink: '#2D4739', white: '#FFFFFF',
   heatLo: [240, 240, 240], heatHi: [30, 77, 58], posRGB: '30,77,58', negRGB: '139,74,47', onHi: '#FFFFFF', onLo: '#000000',
-  statusBar: 'dark', shadow: false, ...essayType, rule: '#000000', link: '#1E4D3A',
+  statusBar: 'dark', shadow: false, ...essayType, rule: '#000000', link: '#1E4D3A', panel: '#FFFFFF',
 };
 
 // Report: the look of a research report page. Warm off-white ground, near-black ink, sans headings with tight
@@ -64,18 +64,18 @@ const report: Palette = {
   heatLo: [240, 238, 230], heatHi: [30, 77, 58], posRGB: '30,77,58', negRGB: '139,74,47', onHi: '#FAF9F5', onLo: '#141413',
   statusBar: 'dark', shadow: false,
   serif: F.sourceSerif, sans: F.publicSans, head: F.publicSans, ui: F.publicSans, mono: F.menlo,
-  headWeight: '600', headTracking: -0.3, bodySize: 17, bodyLine: 26, radius: 6, cardRadius: 12, rule: '#DEDBD1', link: '#141413',
+  headWeight: '600', headTracking: -0.3, bodySize: 17, bodyLine: 26, radius: 6, cardRadius: 12, rule: '#DEDBD1', link: '#141413', panel: '#FEFDFB',
   sp: { pad: 24, gap: 28, cardGap: 16, section: 64, item: 20, sheetX: 72, sheetTop: 48, bodyTop: 12, bodyBottom: 36 },
 };
 
-// Trine: cream room, white furniture, forest does the work, gold is decorative.
-const trine: Palette = {
+// Forest: cream room, white furniture, forest does the work, gold is decorative.
+const forest: Palette = {
   bg: '#FAF7F2', card: '#FFFFFF', card2: '#F0EDE6', border: '#E6E0D6',
   text: '#1A1A1A', dim: '#7E8C85', faint: '#B8A99A',
   accent: '#1E4D3A', accent2: '#7BA388', pos: '#1E4D3A', neg: '#8B4A2F', warn: '#C9A344', gold: '#D4A84B',
   cream: '#FAF7F2', forest: '#1E4D3A', ink: '#2D4739', white: '#FFFFFF',
   heatLo: [237, 234, 229], heatHi: [30, 77, 58], posRGB: '30,77,58', negRGB: '139,74,47', onHi: '#FAF7F2', onLo: '#1A1A1A',
-  statusBar: 'dark', shadow: true, ...essayType, rule: '#1A1A1A', link: '#1E4D3A',
+  statusBar: 'dark', shadow: true, ...essayType, rule: '#1A1A1A', link: '#1E4D3A', panel: '#FFFFFF',
 };
 
 // Dark: the original look; activations read as brightness.
@@ -85,11 +85,11 @@ const dark: Palette = {
   accent: '#5b8def', accent2: '#a78bfa', pos: '#4cc38a', neg: '#ef6b73', warn: '#f5a524', gold: '#f5a524',
   cream: '#ffffff', forest: '#5b8def', ink: '#ffffff', white: '#ffffff',
   heatLo: [30, 40, 70], heatHi: [230, 220, 255], posRGB: '76,195,138', negRGB: '239,107,115', onHi: '#0e1016', onLo: '#e9ecf3',
-  statusBar: 'light', shadow: false, ...essayType, rule: '#e9ecf3', link: '#5b8def',
+  statusBar: 'light', shadow: false, ...essayType, rule: '#e9ecf3', link: '#5b8def', panel: '#181b25',
 };
 
-export const PALETTES: Record<PaletteName, Palette> = { report, paper, trine, dark };
-export const PALETTE_LABELS: Record<PaletteName, string> = { report: 'Report', paper: 'Paper', trine: 'Trine', dark: 'Dark' };
+export const PALETTES: Record<PaletteName, Palette> = { report, paper, forest, dark };
+export const PALETTE_LABELS: Record<PaletteName, string> = { report: 'Report', paper: 'Paper', forest: 'Forest', dark: 'Dark' };
 
 let current: PaletteName = 'report';
 export const currentPalette = () => current;
